@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VirtuesTech Security Scanner</title>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+           <!-- Header Section -->
+    <header>
+        <div class="container">
+            <div class="logo">
+                <a href="/"><img src="https://virtuestech.com/wp-content/uploads/2021/08/VirtuesTech-VST-1.png" alt="VirtuesTech Logo"></a>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li class="dropdown-container">
+                        <a href="/services">Services <span class="dropdown-arrow">▼</span></a>
+                        <ul class="dropdown">
+                            <li><a href="/software-testing">Software Testing</a></li>
+                            <li><a href="/cybersecurity">Cybersecurity</a></li>
+                            <li><a href="/digital-transformation">Digital Transformation</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="/industries">Industries</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+<!-- Main Content -->
+    <main>
+        <section id="hero" class="hero" data-aos="fade-up">
+            <h1>Advanced Security Scanner</h1>
+            <p>Comprehensive vulnerability assessment for your digital assets</p>
+        </section>
+
+        <section id="scanner" class="scanner-section" data-aos="fade-up">
+            <div class="scan-options">
+                <button class="scan-type active" data-type="network">Network Scanning</button>
+                <button class="scan-type active" data-type="application">Application Scanning</button>
+            </div>
+
+            <form id="scanForm" class="scan-form">
+                <div class="input-group">
+                    <input type="url" id="targetUrl" placeholder="Enter target URL (e.g., example.com)" required>
+                    <button type="submit" id="scanButton">
+                        <span class="button-text">Start Scan</span>
+                        <div class="loader"></div>
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <section id="results" class="results hidden">
+            <div class="results-header">
+                <h2>Scan Results</h2>
+                <button id="requestFullReport" class="report-btn">Request Full Report</button>
+            </div>
+
+            <div class="vulnerability-stats">
+                <div class="stat-card high">
+                    <h3>High Risk</h3>
+                    <span class="count">0</span>
+                    <p>Critical vulnerabilities detected</p>
+                </div>
+                <div class="stat-card medium">
+                    <h3>Medium Risk</h3>
+                    <span class="count">0</span>
+                    <p>Moderate vulnerabilities detected</p>
+                </div>
+                <div class="stat-card low">
+                    <h3>Low Risk</h3>
+                    <span class="count">0</span>
+                    <p>Minor vulnerabilities detected</p>
+                </div>
+            </div>
+
+            <div class="low-vulnerabilities">
+                <h3>Low Risk Findings</h3>
+                <div id="lowRiskList" class="vulnerability-list"></div>
+            </div>
+        </section>
+
+        <div id="reportModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2>Request Full Vulnerability Report</h2>
+                <form id="reportForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Work Email</label>
+                        <input type="email" id="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="organization">Organization Name</label>
+                        <input type="text" id="organization" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="size">Organization Size</label>
+                        <select id="size" required>
+                            <option value="">Select size</option>
+                            <option value="1-50">1-50 employees</option>
+                            <option value="51-200">51-200 employees</option>
+                            <option value="201-1000">201-1000 employees</option>
+                            <option value="1000+">1000+ employees</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="purpose">Purpose of Security Assessment</label>
+                        <textarea id="purpose" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Submit Request</button>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h2>Company</h2>
+                <ul>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/industries">Industries</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h2>Services</h2>
+                <ul>
+                    <li><a href="/software-testing">Software Testing</a></li>
+                    <li><a href="/cybersecurity">Cybersecurity</a></li>
+                    <li><a href="/digital-transformation">Digital Transformation</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h2>Contact</h2>
+                <p>Phone: +91 733 746 2335</p>
+                <p>Email: info@virtuestech.com</p>
+                <p>Address: Hyderabad, India</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 VirtuesTech. All rights reserved.</p>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+{
+    "summary": {
+        "Informational": 7,
+        "Low": 7,
+        "Medium": 6
+    },
+    "vulnerabilities_by_type": [
+        {
+            "risk": "Informational",
+            "description": "The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.",
+            "count": 292,
+            "affected_urls": [
+                "https://virtuestech.com/robots.txt",
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com/wp-json/",
+                "and 289 other sites"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.",
+            "count": 640,
+            "affected_urls": [
+                "https://virtuestech.com/robots.txt",
+                "https://virtuestech.com/sitemap_index.xml",
+                "https://virtuestech.com/wp-admin/admin-ajax.php",
+                "and 637 other sites"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.",
+            "count": 181,
+            "affected_urls": [
+                "https://virtuestech.com/sitemap.xml",
+                "https://virtuestech.com/wp-admin/admin-ajax.php",
+                "https://virtuestech.com/wp-admin/",
+                "and 178 other sites"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
+            "count": 181,
+            "affected_urls": [
+                "https://virtuestech.com/sitemap.xml",
+                "https://virtuestech.com/wp-admin/",
+                "https://virtuestech.com/wp-admin/admin-ajax.php",
+                "and 178 other sites"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.",
+            "count": 448,
+            "affected_urls": [
+                "https://virtuestech.com/robots.txt",
+                "https://virtuestech.com/sitemap_index.xml",
+                "https://virtuestech.com/post-sitemap.xml",
+                "and 445 other sites"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "The web/application server is leaking information via one or more \"X-Powered-By\" HTTP response headers. Access to such information may facilitate attackers identifying other frameworks/components your web application is reliant upon and the vulnerabilities such components may be subject to.",
+            "count": 379,
+            "affected_urls": [
+                "https://virtuestech.com/robots.txt",
+                "https://virtuestech.com/sitemap.xml",
+                "https://virtuestech.com/sitemap_index.xml",
+                "and 376 other sites"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.",
+            "count": 3,
+            "affected_urls": [
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com/wp-login.php?action=lostpassword",
+                "https://virtuestech.com/wp-login.php"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.",
+            "count": 3,
+            "affected_urls": [
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com/wp-login.php?action=lostpassword",
+                "https://virtuestech.com/wp-login.php"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.",
+            "count": 36,
+            "affected_urls": [
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com",
+                "https://virtuestech.com/wp-login.php?action=lostpassword",
+                "and 33 other sites"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "The response appears to contain suspicious comments which may help an attacker.",
+            "count": 30,
+            "affected_urls": [
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com/importance-of-performance-testing-and-monitoring/",
+                "https://virtuestech.com/vulnerability-assessments-penetration-testing-cybersecurity/",
+                "and 27 other sites"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.",
+            "count": 47,
+            "affected_urls": [
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com/?liquid-footer=footer",
+                "https://virtuestech.com/?liquid-footer=vst-main-footer",
+                "and 44 other sites"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.",
+            "count": 312,
+            "affected_urls": [
+                "https://virtuestech.com/wp-content/uploads/2021/08/VirtuesTech-VST-1.png",
+                "https://virtuestech.com/wp-content/uploads/2024/11/Performance-post_02.jpeg",
+                "https://virtuestech.com/wp-content/uploads/2024/10/Cloud-Security-Testing-Blog-e1730117154990.jpg",
+                "and 309 other sites"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "The response does not protect against 'ClickJacking' attacks. It should include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options.",
+            "count": 98,
+            "affected_urls": [
+                "https://virtuestech.com/?liquid-footer=vst-main-footer",
+                "https://virtuestech.com/?liquid-footer=footer",
+                "https://virtuestech.com/?liquid-header=vst-main-header",
+                "and 95 other sites"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.",
+            "count": 3,
+            "affected_urls": [
+                "https://virtuestech.com/wp-login.php?action=lostpassword",
+                "https://virtuestech.com/wp-login.php?reauth=1&redirect_to=https%3A%2F%2Fvirtuestech.com%2Fwp-admin%2F",
+                "https://virtuestech.com/wp-login.php"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.",
+            "count": 82,
+            "affected_urls": [
+                "https://virtuestech.com/?liquid-footer=vst-main-footer",
+                "https://virtuestech.com/?liquid-footer=footer",
+                "https://virtuestech.com/?liquid-header=new-header",
+                "and 79 other sites"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "A timestamp was disclosed by the application/web server. - Unix",
+            "count": 87,
+            "affected_urls": [
+                "https://virtuestech.com/?liquid-footer=footer",
+                "https://virtuestech.com/?liquid-footer=vst-main-footer",
+                "https://virtuestech.com/?liquid-header=new-header",
+                "and 84 other sites"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "The page includes one or more script files from a third-party domain.",
+            "count": 33,
+            "affected_urls": [
+                "https://virtuestech.com",
+                "https://virtuestech.com/",
+                "https://virtuestech.com/contact/",
+                "and 30 other sites"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
+            "count": 2,
+            "affected_urls": [
+                "https://virtuestech.com/xmlrpc.php",
+                "https://virtuestech.com/xmlrpc.php?rsd"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "This check identifies responses where the HTTP Content-Type header declares a charset different from the charset defined by the body of the HTML or XML. When there's a charset mismatch between the HTTP header and content body Web browsers can be forced into an undesirable content-sniffing mode to determine the content's correct character set.\n\nAn attacker could manipulate content on the page to be interpreted in an encoding of their choice. For example, if an attacker can control content at the beginning of the page, they could inject script using UTF-7 encoded text and manipulate some browsers into interpreting that text.",
+            "count": 59,
+            "affected_urls": [
+                "https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fwhy-cloud-security-testing-is-essential%2F",
+                "https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2F%3Fliquid-header%3Dvst-main-header",
+                "https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2F%3Fliquid-header%3Dnew-header",
+                "and 56 other sites"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "The identified library appears to be vulnerable.",
+            "count": 1,
+            "affected_urls": [
+                "https://virtuestech.com/wp-content/themes/hub/assets/vendors/jquery-ui/jquery-ui.min.js"
+            ]
+        }
+    ]
+}

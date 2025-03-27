@@ -1,0 +1,349 @@
+nohup: ignoring input
+Found Java version 17.0.6
+Available memory: 7804 MB
+Using JVM args: -Xmx1951m
+616 [main] INFO  org.zaproxy.zap.DaemonBootstrap - ZAP 2.16.0 started 26/03/2025, 06:41:58 with home: /home/edith/.ZAP/ cores: 6 maxMemory: 1 GB
+1432 [ZAP-daemon] INFO  org.zaproxy.zap.control.ExtensionFactory - Installed add-ons: [[id=alertFilters, version=23.0.0], [id=ascanrules, version=71.0.0], [id=authhelper, version=0.25.0], [id=automation, version=0.49.0], [id=bruteforce, version=17.0.0], [id=callhome, version=0.14.0], [id=client, version=0.15.0], [id=commonlib, version=1.31.0], [id=database, version=0.8.0], [id=diff, version=17.0.0], [id=directorylistv1, version=9.0.0], [id=domxss, version=21.0.0], [id=encoder, version=1.6.0], [id=exim, version=0.14.0], [id=formhandler, version=6.7.0], [id=fuzz, version=13.15.0], [id=gettingStarted, version=19.0.0], [id=graaljs, version=0.9.0], [id=graphql, version=0.27.0], [id=help, version=20.0.0], [id=hud, version=0.19.0], [id=invoke, version=16.0.0], [id=network, version=0.21.0], [id=oast, version=0.21.0], [id=onlineMenu, version=14.0.0], [id=openapi, version=45.0.0], [id=postman, version=0.6.0], [id=pscan, version=0.2.1], [id=pscanrules, version=64.0.0], [id=quickstart, version=51.0.0], [id=replacer, version=20.0.0], [id=reports, version=0.38.0], [id=requester, version=7.8.0], [id=retest, version=0.11.0], [id=retire, version=0.46.0], [id=reveal, version=9.0.0], [id=scanpolicies, version=0.2.0], [id=scripts, version=45.9.0], [id=selenium, version=15.36.0], [id=sequence, version=8.0.0], [id=soap, version=24.0.0], [id=spider, version=0.14.0], [id=spiderAjax, version=23.23.0], [id=tips, version=14.0.0], [id=webdriverlinux, version=131.0.0], [id=websocket, version=32.0.0], [id=zest, version=48.5.0]]
+1433 [ZAP-daemon] INFO  org.zaproxy.zap.control.ExtensionFactory - Loading extensions
+1924 [ZAP-daemon] INFO  org.zaproxy.addon.network.internal.TlsUtils - Using supported SSL/TLS protocols: [TLSv1.2, TLSv1.3]
+2122 [ZAP-daemon] INFO  org.zaproxy.zap.control.ExtensionFactory - Extensions loaded
+3072 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Auto-update Extension - Allows ZAP to check for updates
+3076 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Options Extension - Options Extension
+3077 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Edit Menu Extension - Edit Menu Extension
+3077 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing API Extension - Provides a rest based API for controlling and accessing ZAP
+3084 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing History Extension - History Extension
+3085 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionReveal - Show hidden fields and enable disabled fields
+3086 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Search Extension - Search messages for strings and regular expressions
+3087 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Breakpoint Extension - Allows you to intercept and modify requests and responses
+3089 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scan Extension - Passive scanner
+3090 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Alerts Extension - Allows you to view and manage alerts
+3092 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Active Scan Extension - Active scanner, heavily based on the original Paros active scanner, but with additional tests added
+3099 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionSequence - ExtensionSequence
+3100 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Standard Menus Extension - A set of common popup menus for miscellaneous tasks
+3100 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionBruteForce - Forced browsing of files and directories using code from the OWASP DirBuster tool
+3102 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Compare Extension - Compares 2 sessions and generates an HTML file showing the differences
+3102 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionInvoke - Invoke external applications passing context related information such as URLs and parameters
+3103 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Anti-CSRF Extension - Handles anti cross site request forgery (CSRF) tokens
+3106 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authentication Extension - Authentication Extension
+3113 [ZAP-daemon] INFO  org.zaproxy.zap.extension.authentication.ExtensionAuthentication - Loaded authentication method types: [Form-based Authentication, HTTP/NTLM Authentication, Manual Authentication, Script-based Authentication, JSON-based Authentication]
+3117 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Users Extension - Users Extension
+3120 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Parameters Extension - Summarise and analyse FORM and URL parameters as well as cookies
+3121 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Script Extension - Script integration
+3127 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionScripts - Scripting console, supports all JSR 223 scripting languages
+3140 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Forced User Extension - Forced User Extension
+3141 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Sessions Extension - Extension handling HTTP sessions
+3143 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionZest - Zest is a specialized scripting language, originally, from Mozilla specifically designed to be used in security tools
+3242 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionDiff - ExtensionDiff
+3243 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Post Table View Extension - HTTP Panel Post Table View Extension
+3243 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Encoder Addon - Adds support for scriptable encoders to ZAP.
+3244 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Session Management Extension - Session Management Extension
+3247 [ZAP-daemon] INFO  org.zaproxy.zap.extension.sessions.ExtensionSessionManagement - Loaded session management method types: [Cookie-based Session Management, HTTP Authentication Session Management, Script-based Session Management]
+3249 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Form Table View Extension - HTTP Panel Form Table View Extension
+3250 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebSockets Support - Capture messages from WebSockets with the ability to set breakpoints.
+3263 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing SOAP/WSDL Support - Allows you to import a WSDL file containing operations which ZAP will access, adding them to the Sites tree.
+3265 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Core UI Extension - Core UI related functionality.
+3266 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authorization Extension - Authorization Extension
+3266 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Requester - Allows to manually edit and send messages.
+3270 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing AJAX Spider - AJAX Spider, uses Crawljax
+3276 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebDriver Provider - Provides WebDrivers to control several browsers using Selenium and includes HtmlUnit browser.
+3312 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Refresh Sites Tree Extension - Adds menu item to refresh the Sites tree
+3313 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Help Extension - ZAP User Guide
+3314 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Call Home - Handles all of the calls to ZAP services
+3315 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Network Extension - Provides core networking capabilities.
+3643 [ZAP-daemon] INFO  org.zaproxy.addon.network.ConnectionOptions - Unsafe SSL/TLS renegotiation disabled.
+3645 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Extension Configuration Extension - Allows you to configure which extensions are loaded when ZAP starts
+3646 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Combined HTTP Panels Extension - Combined HTTP Panels Extension
+3646 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Hex View Extension - HTTP Panel Hex View Extension
+3647 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Image View Extension - HTTP Panel Image View Extension
+3647 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Query Table View Extension - HTTP Panel Query Table View Extension
+3648 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Panel Syntax Highlighter View Extension - HTTP Panel Syntax Highlighter View Extension
+3648 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Keyboard Configuration Extension - Adds support for configurable keyboard shortcuts for all of the ZAP menus.
+3649 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Scanner Rule Configuration Extension - Active and passive rule configuration
+3650 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Statistics Extension - Statistics
+3651 [ZAP-daemon] INFO  org.zaproxy.zap.extension.stats.ExtensionStats - Start recording in memory stats
+3653 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Custom Pages Extension - Custom Pages Definition
+3653 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionAlertFilters - Context alert rules filter
+3655 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Alert Filters Automation - Alert Filters Automation Framework Integration
+3657 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Out-of-band Application Security Testing - Adds Out-of-band Application Security Testing functionality.
+3663 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OAST Scripts - Adds OAST scripts.
+3664 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start panel  - Adds the Quick Start panel for scanning and exploring applications
+3666 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start Ajax Spider integration - Add the option to use the Ajax Spider in the Quick Start scan
+3666 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start HUD Integration - HUD integration for the quick start panel
+3667 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start Browser Launcher - Launch browsers preset proxying through ZAP
+3667 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Quick Start Spider Integration - Adds the option to use the traditional Spider in the Quick Start scan.
+3669 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing GraalVM JavaScript Engine Extension - Provides the GraalVM JavaScript engine for ZAP scripting.
+3940 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Sequence Automation - Sequence Automation Framework Integration
+3946 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Match and Replace - Easy way to replace strings in requests and responses
+3952 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Replacer Automation - Replacer Automation Framework Integration
+3955 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebSocket Fuzzer - Allows to fuzz WebSocket messages.
+3956 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing WebSocket Message Editor - Provides the WebSocket Message Editor dialogues.
+3957 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionOnlineMenu - The Online menu links
+3957 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionTipsAndTricks - Tips and Tricks
+3958 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionGettingStarted - The ZAP Getting Started Guide
+3958 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionDomXSS - DOM XSS Active Scan Rule
+4053 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing SOAP Automation - SOAP Automation Framework Integration
+4055 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing SOAP Spider - SOAP Spider Integration
+4056 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionHUD - Heads Up Display
+4305 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionHUDlaunch - ExtensionHUDlaunch
+4307 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Advance Fuzzer - Provides the foundation for concrete message types (for example, HTTP, WebSockets) expose fuzzer implementations.
+4308 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing HTTP Fuzzer - Allows to fuzz HTTP messages.
+4309 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Retest - Facilitates the verification of presence/absence of certain alerts.
+4310 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionFormHandler - This extension allows a user to change the default values used for generated content (e.g. spiders, importers).
+4311 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Spider Extension - Spider used for automatically finding URIs on a site.
+4337 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Spider Automation - Spider Automation Integration
+4341 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Automation Framework - Provides functionality to simplify using ZAP in an automated manner
+4344 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Database Extension - Provides databases and persistence capabilities.
+4345 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scanner Extension - Provides core passive scanning capabilities.
+4376 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scanner Automation Framework Extension - Provides jobs and result data related to the passive scanner.
+4377 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionGraphQl - Allows you to inspect and attack GraphQL endpoints.
+4384 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing GraphQL Automation - GraphQL Automation Framework Integration
+4386 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing GraphQL Spider - GraphQL Spider Integration
+4387 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Passive Scan Rules - Release status passive scan rules.
+4389 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authentication Helper - Authentication Helper
+4399 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Client Spider Browser Based Authentication Support - Enables browser based authentication when performing an authenticated Client Spider scan.
+4401 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Authentication Helper Reports - Authentication Helper Reports
+4403 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing AJAX Spider Browser Based Authentication Support - Enables browser based authentication when performing an authenticated AJAX Spider scan.
+4404 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing ExtensionClientIntegration - Client Side Integration
+4409 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Client Spider Automation - Client Spider Automation Framework Integration
+4412 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Client Zest Script Recording Support - Allows recording client events as Zest scripts.
+4415 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OpenAPI Import - Allows you to spider and import OpenAPI (Swagger) definitions 
+4417 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OpenAPI Automation - OpenAPI Automation Framework Integration
+4420 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing OpenAPI Spider - OpenAPI Spider Integration
+4424 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Report Generator - Templated and themed report generation functionality
+4426 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Report Generation Automation Integration - Report Generation Automation Integration
+4430 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Common Library - A library of shared functionality
+4431 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Active Scan Rules - Release status active scan rules
+4432 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Postman Import - Allows you to spider and import Postman collections
+4435 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Postman Automation - Postman Automation Framework Integration
+4437 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Scripts Automation Framework Integration - Scripts Automation
+4447 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Import/Export - Import and Export functionality supporting multiple formats.
+4450 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Import/Export Automation - Import/Export Automation Framework Integration
+4456 [ZAP-daemon] INFO  org.parosproxy.paros.extension.ExtensionLoader - Initializing Ajax Spider Automation - Ajax Spider Automation Framework Integration
+4757 [ZAP-daemon] INFO  org.zaproxy.addon.oast.services.callback.CallbackService - Started callback service on 0.0.0.0:34823
+4767 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: WSDL File Detection
+4845 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Anti-clickjacking Header
+4846 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Application Error Disclosure
+4846 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Big Redirect Detected (Potential Sensitive Information Leak)
+4846 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Re-examine Cache-control Directives
+4847 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Charset Mismatch
+4847 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Content Security Policy (CSP) Header Not Set
+4848 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: CSP
+4848 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Content-Type Header Missing
+4848 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie No HttpOnly Flag
+4848 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Loosely Scoped Cookie
+4849 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie without SameSite Attribute
+4849 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie Without Secure Flag
+4849 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cross-Domain Misconfiguration
+4850 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cross-Domain JavaScript Source File Inclusion
+4850 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Absence of Anti-CSRF Tokens
+4850 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Directory Browsing
+4850 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Hash Disclosure
+4851 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Heartbleed OpenSSL Vulnerability (Indicative)
+4851 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Private IP Disclosure
+4851 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Session ID in URL Rewrite
+4852 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Debug Error Messages
+4852 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Sensitive Information in URL
+4853 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Sensitive Information in HTTP Referrer Header
+4854 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Information Disclosure - Suspicious Comments
+4854 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Weak Authentication Method
+4854 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: HTTP to HTTPS Insecure Transition in Form Post
+4854 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: HTTPS to HTTP Insecure Transition in Form Post
+4855 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Insecure JSF ViewState
+4855 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Reverse Tabnabbing
+4856 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Secure Pages Include Mixed Content
+4856 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Modern Web Application
+4856 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: PII Disclosure
+4857 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Script Served From Malicious Domain (polyfill)
+4857 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Retrieved from Cache
+4858 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: HTTP Server Response Header
+4859 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Strict-Transport-Security Header
+4860 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Timestamp Disclosure
+4860 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: User Controllable Charset
+4862 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Cookie Poisoning
+4863 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: User Controllable HTML Element Attribute (Potential XSS)
+4863 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: User Controllable JavaScript Event (XSS)
+4864 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Open Redirect
+4864 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Username Hash Found
+4865 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Viewstate
+4865 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-AspNet-Version Response Header
+4865 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-Backend-Server Header Information Leak
+4866 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-ChromeLogger-Data (XCOLD) Header Information Leak
+4866 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-Content-Type-Options Header Missing
+4866 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: X-Debug-Token Information Leak
+4866 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s)
+4871 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Authentication Request Identified
+4878 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Session Management Response Identified
+4878 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Verification Request Identified
+4887 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Vulnerable JS Library (Powered by Retire.js)
+4891 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Script Passive Scan Rules
+4893 [ZAP-daemon] INFO  org.zaproxy.addon.pscan.internal.ScanRuleManager - Loaded passive scan rule: Stats Passive Scan Rule
+4945 [ZAP-daemon] INFO  org.zaproxy.addon.network.ExtensionNetwork - ZAP is now listening on 127.0.0.1:8080
+21786 [ZAP-SpiderInitThread-0] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T06:42:19.219-0400
+21790 [ZAP-SpiderInitThread-0] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+21802 [ZAP-SpiderInitThread-0] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+91747 [ZAP-SpiderThreadPool-0-thread-7] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+91754 [ZAP-SpiderShutdownThread-0] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T06:43:29.187-0400
+428836 [ZAP-SpiderInitThread-1] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T06:49:06.270-0400
+428837 [ZAP-SpiderInitThread-1] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+429028 [ZAP-SpiderInitThread-1] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+508863 [ZAP-SpiderThreadPool-1-thread-1] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+508866 [ZAP-SpiderShutdownThread-1] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T06:50:26.300-0400
+10221219 [ZAP-SpiderInitThread-2] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T09:32:18.628-0400
+10221229 [ZAP-SpiderInitThread-2] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+10222924 [ZAP-SpiderInitThread-2] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+10234667 [ZAP-SpiderInitThread-3] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T09:32:32.100-0400
+10234667 [ZAP-SpiderInitThread-3] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+10238149 [ZAP-SpiderInitThread-3] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+10373169 [ZAP-SpiderThreadPool-2-thread-9] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+10373172 [ZAP-SpiderShutdownThread-2] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T09:34:50.605-0400
+10389677 [ZAP-SpiderThreadPool-3-thread-12] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+10389679 [ZAP-SpiderShutdownThread-3] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T09:35:07.113-0400
+10848086 [ZAP-SpiderInitThread-4] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T09:42:45.519-0400
+10848087 [ZAP-SpiderInitThread-4] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+10848577 [ZAP-SpiderInitThread-4] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+10998996 [ZAP-SpiderThreadPool-4-thread-2] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+10998998 [ZAP-SpiderShutdownThread-4] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T09:45:16.432-0400
+11416642 [ZAP-SpiderInitThread-5] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T09:52:14.075-0400
+11416642 [ZAP-SpiderInitThread-5] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+11417351 [ZAP-SpiderInitThread-5] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+11550347 [ZAP-SpiderThreadPool-5-thread-2] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+11550363 [ZAP-SpiderShutdownThread-5] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T09:54:27.797-0400
+15845539 [ZAP-SpiderInitThread-6] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T11:06:02.970-0400
+15845547 [ZAP-SpiderInitThread-6] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+15846725 [ZAP-SpiderInitThread-6] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+15888813 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule PII Disclosure took 9 seconds to scan https://virtuestech.com/category/software-testing/ text/html; charset=UTF-8 250715
+16044319 [ZAP-SpiderThreadPool-6-thread-7] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+16044321 [ZAP-SpiderShutdownThread-6] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T11:09:21.755-0400
+16055769 [ZAP-SpiderInitThread-7] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T11:09:33.203-0400
+16055770 [ZAP-SpiderInitThread-7] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+16061077 [ZAP-SpiderInitThread-7] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+16116620 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/roboto-kfo5cnqeu92fr1mu53zec9_vu3r1gihoszmkbxkawzu.woff2 font/woff2 18800
+16118447 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/?p=22708 text/html; charset=UTF-8 0
+16158416 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlm81xvgdeoceg.woff2 font/woff2 5812
+16185562 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/inter-ucc73fwrk3iltehus_nvmrmxcp50sjia1zl7.woff2 font/woff2 48444
+16187924 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrlej6z1xlfq.woff2 font/woff2 8000
+16188044 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/opensans-memvyags126mizpba-uvwbx2vvnxbbobj2ovtscmu1ab.woff2 font/woff2 16552
+16277948 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule X-Content-Type-Options Header Missing took 6 seconds to scan https://virtuestech.com/about/ text/html; charset=UTF-8 367338
+16280200 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/about/embed/ text/html; charset=UTF-8 21490
+16280442 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/sitemap.xml text/html; charset=UTF-8 0
+16280524 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Session Management Response Identified took 11 seconds to scan https://virtuestech.com/wp-json/ application/json; charset=UTF-8 268387
+16280730 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Absence of Anti-CSRF Tokens took 8 seconds to scan https://virtuestech.com text/html; charset=UTF-8 636423
+16280741 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Strict-Transport-Security Header took 7 seconds to scan https://virtuestech.com/ text/html; charset=UTF-8 636423
+16331125 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/category/quality-engineering/feed/ application/rss+xml; charset=UTF-8 51100
+16331376 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/?p=21974 text/html; charset=UTF-8 0
+16339091 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/services/ text/html; charset=UTF-8 441098
+16340478 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 7 seconds to scan https://virtuestech.com/wp-content/plugins/elementor/assets/lib/font-awesome/css/v4-shims.min.css?ver=3.28.1 text/css 26702
+16340701 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/css/roboto.css?ver=1742222587 text/css 107244
+16354417 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fvirtuestech.com%2F%3Fliquid-header%3Dnew-header application/json; charset=UTF-8 2153
+16357401 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/plugins/revslider/sr6/assets/css/rs6.css?ver=6.7.19 text/css 58327
+16357636 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fabout%2F text/xml; charset=UTF-8 2327
+16369505 [ZAP-SpiderThreadPool-7-thread-4] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+16369555 [ZAP-SpiderShutdownThread-7] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T11:14:46.988-0400
+16633032 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fvirtuestech.com%2F%3Fliquid-mega-menu%3Delementor-1025 application/json; charset=UTF-8 2153
+16956248 [ZAP-SpiderInitThread-8] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T11:24:33.682-0400
+16956250 [ZAP-SpiderInitThread-8] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+16956593 [ZAP-SpiderInitThread-8] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+16967949 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/?p=20365 text/html; charset=UTF-8 0
+16968649 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 7 seconds to scan https://virtuestech.com/sitemap.xml text/html; charset=UTF-8 0
+16982845 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com text/html; charset=UTF-8 636423
+16983159 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/advisorytransformation text/html; charset=UTF-8 243024
+16983426 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/ai-driven-test-automation-2/ text/html; charset=UTF-8 720587
+16983574 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/ai-driven-test-automation-2/embed/ text/html; charset=UTF-8 21725
+16994804 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/best-practices-for-effective-software-testing text/html; charset=UTF-8 0
+16994805 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/author text/html; charset=UTF-8 243024
+17027830 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/comments text/html; charset=UTF-8 243024
+17028523 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 7 seconds to scan https://virtuestech.com/contact/ text/html; charset=UTF-8 273176
+17028674 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/contact/embed text/html; charset=UTF-8 0
+17146683 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fabout%2F text/xml; charset=UTF-8 2327
+17146683 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-includes/js/imagesloaded.min.js?ver=5.0.0 application/x-javascript 5520
+17244217 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 6 seconds to scan https://virtuestech.com/ai-driven-test-automation-2/ text/html; charset=UTF-8 720922
+17257620 [ZAP-SpiderThreadPool-8-thread-7] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+17257650 [ZAP-SpiderShutdownThread-8] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T11:29:35.083-0400
+18134334 [ZAP-SpiderInitThread-9] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T11:44:11.767-0400
+18134336 [ZAP-SpiderInitThread-9] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+18135444 [ZAP-SpiderInitThread-9] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+18308590 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2021/08/VirtuesTech-VST-1-1536x414.png image/png 85535
+18309888 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/2023/07/VST-Home-0005-2-1-320x320.jpg image/jpeg 27008
+18311690 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 8 seconds to scan https://virtuestech.com/wp-content/uploads/2024/11/octalFrames_logo.png image/png 9281
+18313792 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 7 seconds to scan https://virtuestech.com/wp-content/uploads/2023/07/VST-Home-0005-2-1-150x150.jpg image/jpeg 8397
+18315427 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/2024/11/AccelESG-logo.png image/png 5788
+18316443 [ZAP-SpiderInitThread-10] INFO  org.zaproxy.addon.spider.SpiderThread - Starting spidering scan on https://virtuestech.com at 2025-03-26T11:47:13.877-0400
+18316445 [ZAP-SpiderInitThread-10] INFO  org.zaproxy.addon.spider.Spider - Spider initializing...
+18335429 [ZAP-SpiderInitThread-10] INFO  org.zaproxy.addon.spider.Spider - Starting spider...
+18359225 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Timestamp Disclosure took 5 seconds to scan https://virtuestech.com/what-is-integration-testing-and-types-approach/ text/html; charset=UTF-8 260159
+18393296 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/ai-driven-test-automation-2/ text/html; charset=UTF-8 720922
+18419070 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/2023/03/Data-loss-prevention-1-300x150.png image/png 45741
+18419391 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/2023/03/Data-loss-prevention-1-480x300.png image/png 127475
+18419728 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/services/mobile-security-testing text/html; charset=UTF-8 0
+18422527 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/wp-json/wp/v2/posts/13428 application/json; charset=UTF-8 8332
+18428341 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule CSP took 5 seconds to scan https://virtuestech.com/services/penetration-testing/embed text/html; charset=UTF-8 0
+18428776 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule CSP took 5 seconds to scan https://virtuestech.com/services/penetration-testing text/html; charset=UTF-8 0
+18446313 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Findustries%2F text/xml; charset=UTF-8 2352
+18447117 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2021/10/Virtues_BG-e1678973301100.jpg text/html; charset=UTF-8 239167
+18448693 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 8 seconds to scan https://virtuestech.com/wp-content/uploads/2024/11/Importance-of-Performance-Testing-and-Monitoring-1024x549.jpeg image/jpeg 29521
+18448955 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/E-commerce-and-Retail-e1730958682357.webp image/webp 11904
+18449540 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/EDTech-e1730958663954.jpeg image/jpeg 22592
+18486785 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2023/05/Engineering-Home-1-1.jpg image/jpeg 41677
+18488002 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/?p=19359 text/html; charset=UTF-8 0
+18491285 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2F text/xml; charset=UTF-8 2369
+18492064 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fagile-and-devops-testing%2F application/json; charset=UTF-8 2285
+18498096 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 12 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fvirtuestech.com%2Fservices%2F application/json; charset=UTF-8 2212
+18498296 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Re-examine Cache-control Directives took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2F text/xml; charset=UTF-8 2369
+18498303 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule html_tag_script took 6 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fagile-and-devops-testing%2F application/json; charset=UTF-8 2285
+18500154 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 11 seconds to scan https://virtuestech.com/services/shift-left-and-shift-right-testing/embed text/html; charset=UTF-8 0
+18502680 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 11 seconds to scan https://virtuestech.com/wp-content/uploads/2023/07/Accelerate005-e1690732096817-1-300x153.jpg image/jpeg 8843
+18503052 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 12 seconds to scan https://virtuestech.com/services/advisory-and-transformation/ text/html; charset=UTF-8 434651
+18512892 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/wp-json/wp/v2/pages/20738 application/json; charset=UTF-8 124094
+18512895 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 8 seconds to scan https://virtuestech.com/?p=20738 text/html; charset=UTF-8 0
+18512897 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fagile-and-devops-testing%2F text/xml; charset=UTF-8 2440
+18525189 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 6 seconds to scan https://virtuestech.com/services/advisory-and-transformation/ text/html; charset=UTF-8 434651
+18534212 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/?p=14382 text/html; charset=UTF-8 0
+18534212 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule CSP took 7 seconds to scan https://virtuestech.com/services/test-center-of-excellence text/html; charset=UTF-8 0
+18544456 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 7 seconds to scan https://virtuestech.com/services/agile-and-devops-testing/ text/html; charset=UTF-8 432942
+18544735 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 8 seconds to scan https://virtuestech.com/services/accessibility-usability-testing/ text/html; charset=UTF-8 420702
+18545641 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fmanual-testing-services%2F text/xml; charset=UTF-8 2435
+18546567 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/services/vulnerability-assessment/embed/ text/html; charset=UTF-8 21830
+18546756 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/WhatsApp-Image-2024-10-29-at-16.22.27.jpeg image/jpeg 20682
+18556038 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 10 seconds to scan https://virtuestech.com/?p=22561 text/html; charset=UTF-8 0
+18558721 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 8 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/WhatsApp-Image-2024-10-25-at-11.23.26.jpeg image/jpeg 157953
+18560034 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 8 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/WhatsApp-Image-2024-10-25-at-11.24.25.jpeg image/jpeg 155946
+18561958 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/services/vulnerability-assessment/embed text/html; charset=UTF-8 0
+18567544 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule CSP took 5 seconds to scan https://virtuestech.com/services/vulnerability-assessment/embed text/html; charset=UTF-8 0
+18576667 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fperformance-engineering-monitoring%2F text/xml; charset=UTF-8 2508
+18576982 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2024/09/Image-2@2x.jpg text/html; charset=UTF-8 239167
+18579217 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 6 seconds to scan https://virtuestech.com/services/api-security-testing/ text/html; charset=UTF-8 395328
+18580570 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Timestamp Disclosure took 8 seconds to scan https://virtuestech.com/services/ai-driven-test-automation/ text/html; charset=UTF-8 435038
+18585886 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/WhatsApp-Image-2024-10-25-at-11.30.16.jpeg image/jpeg 135445
+18589829 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule CSP took 5 seconds to scan https://virtuestech.com/?p=20587 text/html; charset=UTF-8 0
+18591865 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/?p=14364 text/html; charset=UTF-8 0
+18592467 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 6 seconds to scan https://virtuestech.com/wp-content/uploads/2023/07/Accelerate004-1-e1727692153719-300x158.jpg image/jpeg 14536
+18596292 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 10 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fcomprehensive-test-automation-framework%2F text/xml; charset=UTF-8 2515
+18596774 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/services/manual-testing-services/ text/html; charset=UTF-8 396665
+18601842 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 11 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fperformance-engineering-monitoring%2F application/json; charset=UTF-8 2356
+18602162 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 7 seconds to scan https://virtuestech.com/services/zero-trust-network-assessments/embed/ text/html; charset=UTF-8 21876
+18602450 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 11 seconds to scan https://virtuestech.com/?p=22571 text/html; charset=UTF-8 0
+18603695 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 7 seconds to scan https://virtuestech.com/tag/automation-testing text/html; charset=UTF-8 0
+18614273 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 8 seconds to scan https://virtuestech.com/services/performance-Engineering-Monitoring/ text/html; charset=UTF-8 400916
+18615729 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 9 seconds to scan https://virtuestech.com/?p=22576 text/html; charset=UTF-8 0
+18615797 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule html_comment1 took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/WhatsApp-Image-2024-10-24-at-3.27.28-PM-3.jpeg image/jpeg 125579
+18615879 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Re-examine Cache-control Directives took 5 seconds to scan https://virtuestech.com/wp-json/oembed/1.0/embed?format=xml&url=https%3A%2F%2Fvirtuestech.com%2Fservices%2Fcontinuous-quality-engineering%2F text/xml; charset=UTF-8 2470
+18619690 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 9 seconds to scan https://virtuestech.com/services/manual-testing-services/ text/html; charset=UTF-8 396665
+18635841 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 7 seconds to scan https://virtuestech.com/services/performance-engineering-monitoring/ text/html; charset=UTF-8 400916
+18636444 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Timestamp Disclosure took 7 seconds to scan https://virtuestech.com/services/performance-Engineering-Monitoring/ text/html; charset=UTF-8 400916
+18641407 [ZAP-SpiderThreadPool-9-thread-3] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+18641411 [ZAP-SpiderShutdownThread-9] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T11:52:38.844-0400
+18677060 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/tag/test-automation/ text/html; charset=UTF-8 242304
+18677403 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/services/penetration-testing/ text/html; charset=UTF-8 392322
+18785660 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule User Controllable HTML Element Attribute (Potential XSS) took 6 seconds to scan https://virtuestech.com/services/cyber-resilience-testing/ text/html; charset=UTF-8 392803
+18830806 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/services/secure-code-validation/ text/html; charset=UTF-8 391425
+18831938 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlmy15vf9eo.woff2 font/woff2 8596
+18838534 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxidyp8kv8jhgfvrjjlmr19vgdeoceg.woff2 font/woff2 6012
+18839272 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 5 seconds to scan https://virtuestech.com/wp-content/uploads/2024/10/Cloud-Security-Testing-Blog-e1730117154990.jpg image/jpeg 363466
+18839697 [ZAP-SpiderThreadPool-10-thread-7] INFO  org.zaproxy.addon.spider.Spider - Spidering process is complete. Shutting down...
+18839724 [ZAP-SpiderShutdownThread-10] INFO  org.zaproxy.addon.spider.SpiderThread - Spider scanning complete: true on https://virtuestech.com at 2025-03-26T11:55:57.144-0400
+18948899 [ZAP-PassiveScan-6] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule html_comment1 took 97 seconds to scan https://virtuestech.com/category/cyber-security/ text/html; charset=UTF-8 243845
+18950340 [ZAP-PassiveScan-4] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Strict-Transport-Security Header took 99 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrldz8z1xlfq.woff2 font/woff2 7840
+18950341 [ZAP-PassiveScan-2] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule X-Content-Type-Options Header Missing took 99 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxibyp8kv8jhgfvrlgt9z1xlfq.woff2 font/woff2 7748
+18950340 [ZAP-PassiveScan-3] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Retrieved from Cache took 99 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxieyp8kv8jhgfvrjjnecmne.woff2 font/woff2 5644
+18950441 [ZAP-PassiveScan-1] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 102 seconds to scan https://virtuestech.com/wp-content/uploads/elementor/google-fonts/fonts/poppins-pxieyp8kv8jhgfvrjjfecg.woff2 font/woff2 7884
+18950475 [ZAP-PassiveScan-5] WARN  org.zaproxy.addon.pscan.internal.scanner.PassiveScanTask - Passive Scan rule Parameter Scanner took 99 seconds to scan https://virtuestech.com/ai-driven-test-automation-2/embed text/html; charset=UTF-8 0
