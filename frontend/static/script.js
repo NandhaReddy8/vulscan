@@ -1,6 +1,17 @@
 // Load Backend URL (Update manually if using a remote server)
 const BACKEND_URL = "http://127.0.0.1:5000";  // Change this if backend runs on a different machine
 
+// WebSocket Connection
+const socket = new WebSocket(`ws://127.0.0.1:5000/ws`);
+
+// Handle WebSocket messages
+socket.onmessage = (event) => {
+    console.log("Received message from server:", event.data);
+    if (event.data === "scan_complete") {
+        fetchScanResults();
+    }
+};
+
 // Initialize AOS (Animations)
 AOS.init({
     duration: 800,
@@ -68,6 +79,45 @@ function updateResults(results) {
 }
 
 // Handle scan request
+scanForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('targetUrl').value.trim();
+
+    if (!url) {
+        alert("Please enter a valid URL.");
+        return;
+    }
+
+    scanButton.classList.add('loading');
+    scanButton.disabled = true;
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/scan`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Scan request submitted successfully!");
+            resultsSection.classList.remove('hidden');
+            resultsSection.classList.add('visible');
+            updateResults(data);  // Update UI with scan results
+        } else {
+            alert("Error: " + (data.error || "Failed to submit scan request"));
+        }
+    } catch (error) {
+        console.error('Error submitting scan request:', error);
+        alert("Error: Unable to connect to the server.");
+    } finally {
+        scanButton.classList.remove('loading');
+        scanButton.disabled = false;
+    }
+});
+
+// New scan request handling (merged correctly)
 scanForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const url = document.getElementById('targetUrl').value.trim();

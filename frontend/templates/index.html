@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-           <!-- Header Section -->
     <header>
         <div class="container">
             <div class="logo">
@@ -33,7 +32,6 @@
         </div>
     </header>
 
-<!-- Main Content -->
     <main>
         <section id="hero" class="hero" data-aos="fade-up">
             <h1>Advanced Security Scanner</h1>
@@ -42,8 +40,8 @@
 
         <section id="scanner" class="scanner-section" data-aos="fade-up">
             <div class="scan-options">
-                <button class="scan-type active" data-type="network">Network Scanning</button>
-                <button class="scan-type active" data-type="application">Application Scanning</button>
+                <button class="scan-type" data-type="network">Network Scanning</button>
+                <button class="scan-type" data-type="application">Application Scanning</button>
             </div>
 
             <form id="scanForm" class="scan-form">
@@ -51,7 +49,7 @@
                     <input type="url" id="targetUrl" placeholder="Enter target URL (e.g., example.com)" required>
                     <button type="submit" id="scanButton">
                         <span class="button-text">Start Scan</span>
-                        <div class="loader"></div>
+                        <div class="loader hidden"></div>
                     </button>
                 </div>
             </form>
@@ -87,7 +85,7 @@
             </div>
         </section>
 
-        <div id="reportModal" class="modal">
+        <div id="reportModal" class="modal hidden">
             <div class="modal-content">
                 <span class="close">&times;</span>
                 <h2>Request Full Vulnerability Report</h2>
@@ -124,7 +122,6 @@
         </div>
     </main>
 
-    <!-- Footer Section -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
