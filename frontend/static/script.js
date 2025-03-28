@@ -53,8 +53,8 @@ function updateResults(results) {
         low: document.querySelector('.stat-card.low .count')
     };
 
-    animateCount(counters.high, results.high);
-    animateCount(counters.medium, results.medium);
+    animateCount(counters.high, results.high.length);
+    animateCount(counters.medium, results.medium.length);
     animateCount(counters.low, results.low.length);
 
     // Update low vulnerability list
