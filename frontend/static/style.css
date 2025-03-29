@@ -468,3 +468,88 @@ button.loading .loader {
 .fade-in {
     animation: fadeIn 0.5s ease forwards;
 }
+
+/* Style1 Loading Section Styles */
+.loading-section {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  text-align: center;
+}
+
+.loading-bar-container {
+  width: 100%;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 20px;
+}
+
+.loading-bar {
+  width: 0%;
+  height: 100%;
+  background: #646cff;
+  border-radius: 10px;
+  transition: width 0.3s ease-in-out;
+  animation: loading 2s infinite;
+}
+
+.loading-text {
+  color: white;
+  font-size: 1.2em;
+  margin-bottom: 1em;
+}
+@keyframes loading {
+  0% { width: 0%; }
+  50% { width: 70%; }
+  100% { width: 100%; }
+}
+
+.console {
+  background: #1a1a1a;
+  border-radius: 8px;
+  padding: 1rem;
+  font-family: monospace;
+  height: 300px;
+  overflow-y: auto;
+  margin-bottom: 1rem;
+}
+
+.console-line {
+  margin: 0.5rem 0;
+  color: #00ff00;
+}
+
+.pdf-preview {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.pdf-content {
+  font-family: monospace;
+  white-space: pre-wrap;
+  margin: 10px 0;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  .console {
+    background: #f1f1f1;
+  }
+  .console-line {
+    color: #0a5a00;
+  }
+  .loading-section {
+    background: rgba(0, 0, 0, 0.05);
+  }
+}

@@ -1,12 +1,18 @@
+
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VirtuesTech Security Scanner</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>VirtuesTech Security Scanner</title>
+    
+        <!-- External Library -->
+        <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+        <!-- Corrected CSS Path -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    </head>
+    
 <body>
     <header>
         <div class="container">
@@ -52,9 +58,14 @@
                         <div class="loader hidden"></div>
                     </button>
                 </div>
+<div class="loading-section" id="loadingSection" style="display: none;">
+      <div class="loading-text">Scanning Target...</div>
+      <div class="loading-bar-container">
+        <div class="loading-bar"></div>
+      </div>
+    </div>
             </form>
         </section>
-
         <section id="results" class="results hidden">
             <div class="results-header">
                 <h2>Scan Results</h2>
@@ -84,6 +95,69 @@
                 <div id="lowRiskList" class="vulnerability-list"></div>
             </div>
         </section>
+<div class="console" id="console"></div>
+
+    <div class="pdf-preview" id="pdfPreview">
+      <h3>Scan Report Preview</h3>
+      <div class="pdf-content" id="pdfContent"></div>
+      <button id="downloadButton" style="display: none;">Download Full Report</button>
+    </div>
+  </div>
+<script>
+
+const loadingSection = document.getElementById('loadingSection');
+const consoleElement = document.getElementById('console');
+const downloadButton = document.getElementById('downloadButton');
+const pdfContent = document.getElementById('pdfContent');
+// Console logging function
+function logToConsole(message) {
+  const line = document.createElement('div');
+  line.className = 'console-line';
+  line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+  consoleElement.appendChild(line);
+  consoleElement.scrollTop = consoleElement.scrollHeight;
+}
+
+  // Show PDF preview
+  pdfContent.textContent = generatePdfPreview(vulns);
+
+  logToConsole('Scan completed! Download the full report for details.');
+}
+
+// Event listeners
+scanButton.addEventListener('click', () => {
+  const url = urlInput.value.trim();
+  const email = emailInput.value.trim();
+
+  if (!url || !email) {
+    alert('Please enter both URL and email');
+    return;
+  }
+
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
+    alert('Please enter a valid URL starting with http:// or https://');
+    return;
+  }
+
+  if (!email.includes('@')) {
+    alert('Please enter a valid email address');
+    return;
+  }
+
+  // Reset console and PDF content
+  consoleElement.innerHTML = '';
+  pdfContent.textContent = '';
+  downloadButton.style.display = 'none';
+
+  logToConsole(`Starting scan for ${url}`);
+  simulateScan();
+});
+
+downloadButton.addEventListener('click', () => {
+  // In a real application, this would trigger the PDF download
+  alert('In a real application, this would download the full PDF report.');
+});
+</script>
 
         <div id="reportModal" class="modal hidden">
             <div class="modal-content">
@@ -154,5 +228,6 @@
     </footer>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
+   <script type="module" src="/script.js"></script>
 </body>
 </html>
