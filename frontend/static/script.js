@@ -189,7 +189,7 @@ scanForm.addEventListener('submit', async (e) => {
     const url = document.getElementById('targetUrl').value.trim();
 
     if (!url) {
-        alert("Please enter a valid URL.");
+        showToast("Please enter a valid URL.", "warning");
         return;
     }
 
@@ -206,16 +206,16 @@ scanForm.addEventListener('submit', async (e) => {
         const data = await response.json();
 
         if (response.ok) {
-            alert("Scan request submitted successfully!");
+            showToast("Scan request submitted successfully!", "success");
             resultsSection.classList.remove('hidden');
             resultsSection.classList.add('visible');
             updateResults(data);  // Update UI with scan results
         } else {
-            alert("Error: " + (data.error || "Failed to submit scan request"));
+            showToast("Error: " + (data.error || "Failed to submit scan request"), "error");
         }
     } catch (error) {
         console.error('Error submitting scan request:', error);
-        alert("Error: Unable to connect to the server.");
+        showToast("Error: Unable to connect to the server.", "error");
     } finally {
         scanButton.classList.remove('loading');
         scanButton.disabled = false;
