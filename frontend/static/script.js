@@ -183,45 +183,6 @@ scanForm.addEventListener('submit', async (e) => {
     }
 });
 
-// New scan request handling (merged correctly)
-scanForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const url = document.getElementById('targetUrl').value.trim();
-
-    if (!url) {
-        showToast("Please enter a valid URL.", "warning");
-        return;
-    }
-
-    scanButton.classList.add('loading');
-    scanButton.disabled = true;
-
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/scan`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            showToast("Scan request submitted successfully!", "success");
-            resultsSection.classList.remove('hidden');
-            resultsSection.classList.add('visible');
-            updateResults(data);  // Update UI with scan results
-        } else {
-            showToast("Error: " + (data.error || "Failed to submit scan request"), "error");
-        }
-    } catch (error) {
-        console.error('Error submitting scan request:', error);
-        showToast("Error: Unable to connect to the server.", "error");
-    } finally {
-        scanButton.classList.remove('loading');
-        scanButton.disabled = false;
-    }
-});
-
 // Modal handling
 requestFullReport.addEventListener('click', () => {
     reportModal.style.display = 'block';
