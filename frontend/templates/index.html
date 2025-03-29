@@ -6,6 +6,8 @@
     <title>VirtuesTech Security Scanner</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- Add Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 <body>
            <!-- Header Section -->
@@ -76,6 +78,11 @@
                 </div>
                 <div class="stat-card low">
                     <h3>Low Risk</h3>
+                    <span class="count">0</span>
+                    <p>Minor vulnerabilities detected</p>
+                </div>
+                <div class="stat-card informational">
+                    <h3>Informational Risk</h3>
                     <span class="count">0</span>
                     <p>Minor vulnerabilities detected</p>
                 </div>
@@ -156,6 +163,9 @@
         </div>
     </footer>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js"></script>
+    <!-- Add Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
 </body>
 </html>

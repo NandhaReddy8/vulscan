@@ -35,7 +35,7 @@ def scan_target(target_url, socketio):
         while int(zap.spider.status(scan_id)) < 100:
             progress = int(zap.spider.status(scan_id))
             print(f"[*] Spider progress: {progress}%")
-            socketio.emit("scan_progress", {"message": "Spidering in progress...", "progress": progress})
+            socketio.emit("scan_progress", {"message": f"[{progress}%] Spidering in progress...", "progress": progress})
             time.sleep(5)
 
         print("[*] Spidering completed! Starting Passive Scan...")
@@ -98,7 +98,7 @@ def scan_target(target_url, socketio):
             json.dump(final_results, file, indent=4)
 
         print(f"\n[*] Vulnerability scan completed! Results saved to '{output_file}'.")
-        socketio.emit("scan_completed", {"message": "Scan Completed!", "file": output_file})
+        socketio.emit("scan_completed", {"message": "Scan Completed!", "result": final_results})
 
         return final_results
 

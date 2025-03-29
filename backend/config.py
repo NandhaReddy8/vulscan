@@ -9,7 +9,7 @@ MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017/security_scanner")
 
 # ZAP API Configuration
 ZAP_URL = os.getenv("ZAP_URL", "http://127.0.0.1:8080")
-ZAP_API_KEY = os.getenv("ZAP_API_KEY", "l73evs1395k61htfduf35f79ss")
+ZAP_API_KEY = os.getenv("ZAP_API_KEY", "n9reqbm7ih7vh81e76e6cfrdce")
 
 # Flask Configuration
 FLASK_HOST = os.getenv("FLASK_HOST", "127.0.0.1")

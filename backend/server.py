@@ -1,12 +1,12 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask_cors import CORS
-from flask_socketio import SocketIO
+from flask_socketio import SocketIO, emit
 import os
 import time
 import threading
 import csv
 from database import save_scan_request, save_report_request, get_scan_requests
-from zap_scan import scan_target  # Import scan function
+from zap_scan import scan_target
 
 # Load environment variables
 FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "127.0.0.1")
@@ -15,8 +15,16 @@ FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
-CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")  # Enables real-time communication
+CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Configure Socket.IO with explicit settings
+socketio = SocketIO(
+    app, 
+    cors_allowed_origins="*",
+    async_mode='threading',
+    ping_timeout=60,  # Increase ping timeout
+    ping_interval=25  # Adjust ping interval
+)
 
 # Check if URL is already scanned
 def is_duplicate_url(target_url):
@@ -52,12 +60,27 @@ def scan():
     # Run ZAP Scan in a separate thread (to avoid blocking)
     def run_scan():
         print(f"[*] Triggering scan for {target_url}...")
-        scan_target(target_url, socketio)  # Pass socketio for real-time updates
+        try:
+            scan_target(target_url, socketio)  # Pass socketio for real-time updates
+        except Exception as e:
+            print(f"[ERROR] Scan failed: {e}")
+            socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url})
 
     scan_thread = threading.Thread(target=run_scan)
+    scan_thread.daemon = True  # Make thread daemon so it exits when main thread exits
     scan_thread.start()
 
     return jsonify({"message": "Scan started!", "target_url": target_url})
+
+# Socket.IO connection event handlers
+@socketio.on('connect')
+def handle_connect():
+    print(f"Client connected: {request.sid}")
+    emit('server_update', {'message': 'Connected to server successfully'})
+
+@socketio.on('disconnect')
+def handle_disconnect():
+    print(f"Client disconnected: {request.sid}")
 
 # Start the Flask Server
 if __name__ == "__main__":
