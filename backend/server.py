@@ -13,6 +13,8 @@ FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "127.0.0.1")
 FLASK_RUN_PORT = int(os.getenv("FLASK_RUN_PORT", 5000))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 
+RESULTS_DIR = "./zap_results"  # Directory where ZAP scan results are stored
+
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -26,7 +28,6 @@ socketio = SocketIO(
     ping_interval=25  # Adjust ping interval
 )
 
-# Check if URL is already scanned
 def is_duplicate_url(target_url):
     """Check if the given URL has already been submitted for scanning"""
     try:
@@ -36,12 +37,11 @@ def is_duplicate_url(target_url):
                 if row["url"] == target_url:
                     return True
     except FileNotFoundError:
-        return False  # If the CSV doesn't exist, no scans have been submitted yet
+        return False  # If CSV doesn't exist, no scans have been submitted yet
     except Exception as e:
         print(f"[ERROR] Failed to read scan_requests.csv: {e}")
     return False
 
-# API Endpoint: Handle Scan Request & Trigger Scan Immediately
 @app.route("/api/scan", methods=["POST"])
 def scan():
     data = request.get_json()
@@ -57,7 +57,15 @@ def scan():
     timestamp = time.time()
     save_scan_request(target_url, timestamp)
 
-    # Run ZAP Scan in a separate thread (to avoid blocking)
+    # **Step 1: Delete old JSON results if they exist**
+    sanitized_url = target_url.replace("://", "_").replace("/", "_")
+    json_filename = f"{RESULTS_DIR}/{sanitized_url}.json"
+
+    if os.path.exists(json_filename):
+        os.remove(json_filename)
+        print(f"[*] Deleted old scan results: {json_filename}")
+
+    # **Step 2: Run ZAP Scan in a separate thread**
     def run_scan():
         print(f"[*] Triggering scan for {target_url}...")
         try:

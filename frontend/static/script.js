@@ -183,6 +183,45 @@ scanForm.addEventListener('submit', async (e) => {
     }
 });
 
+// New scan request handling (merged correctly)
+scanForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = document.getElementById('targetUrl').value.trim();
+
+    if (!url) {
+        alert("Please enter a valid URL.");
+        return;
+    }
+
+    scanButton.classList.add('loading');
+    scanButton.disabled = true;
+
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/scan`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+            alert("Scan request submitted successfully!");
+            resultsSection.classList.remove('hidden');
+            resultsSection.classList.add('visible');
+            updateResults(data);  // Update UI with scan results
+        } else {
+            alert("Error: " + (data.error || "Failed to submit scan request"));
+        }
+    } catch (error) {
+        console.error('Error submitting scan request:', error);
+        alert("Error: Unable to connect to the server.");
+    } finally {
+        scanButton.classList.remove('loading');
+        scanButton.disabled = false;
+    }
+});
+
 // Modal handling
 requestFullReport.addEventListener('click', () => {
     reportModal.style.display = 'block';
