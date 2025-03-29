@@ -1,6 +1,6 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,11 +10,13 @@
     <!-- Add Toastify CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
+
 <body>
     <header>
         <div class="container">
             <div class="logo">
-                <a href="/"><img src="https://virtuestech.com/wp-content/uploads/2021/08/VirtuesTech-VST-1.png" alt="VirtuesTech Logo"></a>
+                <a href="/"><img src="https://virtuestech.com/wp-content/uploads/2021/08/VirtuesTech-VST-1.png"
+                        alt="VirtuesTech Logo"></a>
             </div>
             <nav>
                 <ul>
@@ -55,12 +57,12 @@
                         <div class="loader hidden"></div>
                     </button>
                 </div>
-<div class="loading-section" id="loadingSection" style="display: none;">
-      <div class="loading-text">Scanning Target...</div>
-      <div class="loading-bar-container">
-        <div class="loading-bar"></div>
-      </div>
-    </div>
+                <div class="loading-section" id="loadingSection" style="display: none;">
+                    <div class="loading-text">Scanning Target...</div>
+                    <div class="loading-bar-container">
+                        <div class="loading-bar"></div>
+                    </div>
+                </div>
             </form>
         </section>
         <section id="results" class="results hidden">
@@ -97,69 +99,68 @@
                 <div id="lowRiskList" class="vulnerability-list"></div>
             </div>
         </section>
-<div class="console" id="console"></div>
+        <div class="console" id="console"></div>
 
-    <div class="pdf-preview" id="pdfPreview">
-      <h3>Scan Report Preview</h3>
-      <div class="pdf-content" id="pdfContent"></div>
-      <button id="downloadButton" style="display: none;">Download Full Report</button>
-    </div>
-  </div>
-<script>
+        <div class="pdf-preview" id="pdfPreview">
+            <h3>Scan Report Preview</h3>
+            <div class="pdf-content" id="pdfContent"></div>
+            <button id="downloadButton" style="display: none;">Download Full Report</button>
+        </div>
+        </div>
+        <script>
 
-const loadingSection = document.getElementById('loadingSection');
-const consoleElement = document.getElementById('console');
-const downloadButton = document.getElementById('downloadButton');
-const pdfContent = document.getElementById('pdfContent');
-// Console logging function
-function logToConsole(message) {
-  const line = document.createElement('div');
-  line.className = 'console-line';
-  line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-  consoleElement.appendChild(line);
-  consoleElement.scrollTop = consoleElement.scrollHeight;
-}
+            const loadingSection = document.getElementById('loadingSection');
+            const consoleElement = document.getElementById('console');
+            const downloadButton = document.getElementById('downloadButton');
+            const pdfContent = document.getElementById('pdfContent');
+            // Console logging function
+            function logToConsole(message) {
+                const line = document.createElement('div');
+                line.className = 'console-line';
+                line.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+                consoleElement.appendChild(line);
+                consoleElement.scrollTop = consoleElement.scrollHeight;
+            }
 
-  // Show PDF preview
-  pdfContent.textContent = generatePdfPreview(vulns);
+            // Show PDF preview
+            pdfContent.textContent = generatePdfPreview(vulns);
 
-  logToConsole('Scan completed! Download the full report for details.');
-}
+            logToConsole('Scan completed! Download the full report for details.');
 
-// Event listeners
-scanButton.addEventListener('click', () => {
-  const url = urlInput.value.trim();
-  const email = emailInput.value.trim();
+            // Event listeners
+            scanButton.addEventListener('click', () => {
+                const url = urlInput.value.trim();
+                const email = emailInput.value.trim();
 
-  if (!url || !email) {
-    alert('Please enter both URL and email');
-    return;
-  }
+                if (!url || !email) {
+                    alert('Please enter both URL and email');
+                    return;
+                }
 
-  if (!url.startsWith('http://') && !url.startsWith('https://')) {
-    alert('Please enter a valid URL starting with http:// or https://');
-    return;
-  }
+                if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                    alert('Please enter a valid URL starting with http:// or https://');
+                    return;
+                }
 
-  if (!email.includes('@')) {
-    alert('Please enter a valid email address');
-    return;
-  }
+                if (!email.includes('@')) {
+                    alert('Please enter a valid email address');
+                    return;
+                }
 
-  // Reset console and PDF content
-  consoleElement.innerHTML = '';
-  pdfContent.textContent = '';
-  downloadButton.style.display = 'none';
+                // Reset console and PDF content
+                consoleElement.innerHTML = '';
+                pdfContent.textContent = '';
+                downloadButton.style.display = 'none';
 
-  logToConsole(`Starting scan for ${url}`);
-  simulateScan();
-});
+                logToConsole(`Starting scan for ${url}`);
+                simulateScan();
+            });
 
-downloadButton.addEventListener('click', () => {
-  // In a real application, this would trigger the PDF download
-  alert('In a real application, this would download the full PDF report.');
-});
-</script>
+            downloadButton.addEventListener('click', () => {
+                // In a real application, this would trigger the PDF download
+                alert('In a real application, this would download the full PDF report.');
+            });
+        </script>
 
         <div id="reportModal" class="modal hidden">
             <div class="modal-content">
@@ -233,6 +234,7 @@ downloadButton.addEventListener('click', () => {
     <!-- Add Toastify JS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <script src="{{ url_for('static', filename='script.js') }}" defer></script>
-   <script type="module" src="/script.js"></script>
+    <script type="module" src="/script.js"></script>
 </body>
+
 </html>
