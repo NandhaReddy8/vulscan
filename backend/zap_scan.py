@@ -182,10 +182,14 @@ def scan_target_old(target_url, socketio):
         return {"error": str(e)}
 
 def process_scan_results(alerts):
-    """Process ZAP alerts into a structured format"""
+    """Process ZAP alerts into a structured format with detailed vulnerability information"""
     vulnerabilities_by_type = defaultdict(lambda: {
         "risk": None,
+        "alert_tags": None,
+        "parameter": None,
+        "evidence": None,
         "description": None,
+        "solution": None,
         "count": 0,
         "affected_urls": []
     })
@@ -195,23 +199,46 @@ def process_scan_results(alerts):
         risk = alert.get("risk", "Info").capitalize()
         url = alert.get("url", "No URL")
 
+        # Extract and format CWE and WASC IDs safely
+        cwe_id = alert.get("cweid", "Unknown")
+        wasc_id = alert.get("wascid", "Unknown")
+        
+        # Format alert tags safely
+        if wasc_id != "Unknown" and wasc_id.isdigit():
+            alert_tags = f"CWE-{cwe_id}, OWASP 2021 A{int(wasc_id):02d}"
+        else:
+            alert_tags = f"CWE-{cwe_id}"
+
         vuln_data = vulnerabilities_by_type[description]
-        vuln_data["risk"] = risk
-        vuln_data["description"] = description
-        vuln_data["count"] += 1
+        vuln_data.update({
+            "risk": risk,
+            "alert_tags": alert_tags,
+            "parameter": alert.get("param", "Not specified"),
+            "evidence": alert.get("evidence", "Not available"),
+            "description": description,
+            "solution": alert.get("solution", "No solution provided"),
+            "count": vuln_data["count"] + 1
+        })
+
         if url not in vuln_data["affected_urls"]:
             vuln_data["affected_urls"].append(url)
 
+    # Process summary statistics
     summary = defaultdict(int)
     for vulnerability in vulnerabilities_by_type.values():
         summary[vulnerability["risk"]] += 1
 
+    # Format final results
     return {
         "summary": dict(summary),
         "vulnerabilities_by_type": [
             {
                 "risk": vuln["risk"],
+                "alert_tags": vuln["alert_tags"],
+                "parameter": vuln["parameter"],
+                "evidence": vuln["evidence"],
                 "description": vuln["description"],
+                "solution": vuln["solution"],
                 "count": len(vuln["affected_urls"]),
                 "affected_urls": vuln["affected_urls"][:3] + (
                     ["...and {} more".format(len(vuln["affected_urls"]) - 3)]

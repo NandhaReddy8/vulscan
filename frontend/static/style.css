@@ -13,6 +13,11 @@
     --low-risk: #2563eb;
     --success: #059669;
     --danger: #dc2626;
+    --info-risk: #3b82f6;  /* Brighter blue for informational */
+    --info-bg: #f0f9ff;    /* Light blue background */
+    --low-bg: #f0f7ff;     /* Light background for low risk */
+    --heading-color: #1e293b;  /* Darker text for headings */
+    --border-light: #e5e7eb;   /* Lighter border color */
 }
 
 * {
@@ -297,12 +302,104 @@ button:hover {
 }
 
 .vulnerability-item {
-    padding: 1rem;
-    border-bottom: 1px solid var(--border);
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+    border-left: 5px solid transparent;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.vulnerability-item:last-child {
-    border-bottom: none;
+.vulnerability-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+.vulnerability-item.low-risk {
+    background-color: var(--low-bg);
+    border-left-color: var(--low-risk);
+}
+
+.vulnerability-item.informational-risk {
+    background-color: var(--info-bg);
+    border-left-color: var(--info-risk);
+}
+
+.vuln-header {
+    padding: 16px 24px;
+    background: linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
+    border-bottom: 2px solid var(--border-light);
+}
+
+.risk-badge {
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    color: white;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.risk-badge.low {
+    background: linear-gradient(135deg, var(--low-risk) 0%, #60a5fa 100%);
+}
+
+.risk-badge.informational {
+    background: linear-gradient(135deg, var(--info-risk) 0%, #93c5fd 100%);
+}
+
+.vuln-details {
+    padding: 24px;
+}
+
+.detail-row {
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-light);
+    padding-bottom: 20px;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: var(--heading-color);
+    margin-bottom: 8px;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    color: #374151;
+    line-height: 1.6;
+    font-size: 15px;
+    background: rgba(255,255,255,0.7);
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid var(--border-light);
+}
+
+/* Add subtle hover effect for detail rows */
+.detail-row:hover .detail-value {
+    background: rgba(255,255,255,0.9);
+}
+
+/* Update affected URLs styling */
+.affected-urls {
+    list-style: none;
+    padding: 0;
+    margin: 8px 0 0 0;
+}
+
+.affected-urls li {
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.5);
+    border-radius: 4px;
+    margin-bottom: 4px;
+    font-family: monospace;
+    font-size: 13px;
+    color: #2563eb;
+    border: 1px solid var(--border-light);
 }
 
 /* Modal */
@@ -552,4 +649,70 @@ button.loading .loader {
   .loading-section {
     background: rgba(0, 0, 0, 0.05);
   }
+}
+
+.vulnerability-item {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    border-left: 4px solid transparent;
+}
+
+.vulnerability-item.low-risk {
+    border-left-color: var(--low-risk);
+}
+
+.vulnerability-item.informational-risk {
+    border-left-color: var(--info-risk);
+}
+
+.vuln-header {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #eee;
+}
+
+.risk-badge {
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-weight: 600;
+    color: white;
+    font-size: 14px;
+}
+
+.risk-badge.low {
+    background-color: var(--low-risk);
+}
+
+.risk-badge.informational {
+    background-color: var(--info-risk);
+}
+
+.vuln-details {
+    padding: 20px;
+}
+
+.detail-row {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 15px;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 5px;
+}
+
+.detail-value {
+    color: #333;
+    line-height: 1.6;
+    font-size: 14px;
 }

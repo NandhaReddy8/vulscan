@@ -208,35 +208,51 @@ function animateCount(element, target) {
 
 // Update results display
 function updateResults(results) {
-    console.log('Updating results:', results);
-    
-    // Update counters if summary is available
+    // Update vulnerability counters
     if (results.summary) {
-        const counters = {
-            high: document.querySelector('.stat-card.high .count'),
-            medium: document.querySelector('.stat-card.medium .count'),
-            low: document.querySelector('.stat-card.low .count'),
-            informational: document.querySelector('.stat-card.informational .count')
-        };
-
-        // Animate counters only if elements exist
-        if (counters.high) animateCount(counters.high, results.summary["High"] || 0);
-        if (counters.medium) animateCount(counters.medium, results.summary["Medium"] || 0);
-        if (counters.low) animateCount(counters.low, results.summary["Low"] || 0);
-        if (counters.informational) animateCount(counters.informational, results.summary["Informational"] || 0);
+        Object.entries(results.summary).forEach(([risk, count]) => {
+            const counter = document.querySelector(`.stat-card.${risk.toLowerCase()} .count`);
+            if (counter) animateCount(counter, count);
+        });
     }
 
-    // Update vulnerability list if available
+    // Filter and display only Low and Informational vulnerabilities
     if (results.vulnerabilities_by_type) {
-        const lowRiskList = document.getElementById('lowRiskList');
-        if (lowRiskList) {
-            lowRiskList.innerHTML = results.vulnerabilities_by_type
-                .filter(vuln => vuln.risk.toLowerCase() === 'low')
+        const vulnContainer = document.getElementById('vulnerabilityList');
+        if (vulnContainer) {
+            // Filter vulnerabilities
+            const filteredVulns = results.vulnerabilities_by_type.filter(vuln => 
+                ['Low', 'Informational'].includes(vuln.risk)
+            );
+
+            vulnContainer.innerHTML = filteredVulns
                 .map(vuln => `
-                    <div class="vulnerability-item fade-in">
-                        <p>${vuln.description}</p>
-                        <p>Count: ${vuln.count}</p>
-                        <p class="affected-urls">${vuln.affected_urls.join('<br>')}</p>
+                    <div class="vulnerability-item ${vuln.risk.toLowerCase()}-risk">
+                        <div class="vuln-header">
+                            <span class="risk-badge ${vuln.risk.toLowerCase()}">${vuln.risk}</span>
+                        </div>
+                        <div class="vuln-details">
+                            <div class="detail-row">
+                                <div class="detail-label">Alert Tags</div>
+                                <div class="detail-value">${vuln.alert_tags}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Parameter</div>
+                                <div class="detail-value">${vuln.parameter || 'N/A'}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Evidence</div>
+                                <div class="detail-value">${vuln.evidence || 'N/A'}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Alert Description</div>
+                                <div class="detail-value">${vuln.description}</div>
+                            </div>
+                            <div class="detail-row">
+                                <div class="detail-label">Solution</div>
+                                <div class="detail-value">${vuln.solution}</div>
+                            </div>
+                        </div>
                     </div>
                 `)
                 .join('');
