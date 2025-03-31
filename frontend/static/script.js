@@ -26,6 +26,10 @@ function resetUI() {
     const progressIndicator = document.querySelector('.progress-indicator');
     const resultsSection = document.getElementById('results');
     const vulnerabilityList = document.getElementById('vulnerabilityList');
+    const errorsection = document.querySelector('.error-container');
+    if (errorsection) {
+        errorsection.innerHTML = '';
+    }
 
     // Reset progress bar
     if (progressIndicator) {
@@ -157,6 +161,54 @@ document.addEventListener('DOMContentLoaded', () => {
 
     socket.io.on("error", (error) => {
         console.error('Transport error:', error);
+    });
+
+    // Add this socket event listener with your other socket handlers
+    socket.on('scan_error', (data) => {
+        // Hide progress indicator if visible
+        const progressIndicator = document.querySelector('.progress-indicator');
+        if (progressIndicator) {
+            progressIndicator.style.display = 'none';
+        }
+
+        // Reset scan button
+        const scanButton = document.getElementById('scanButton');
+        if (scanButton) {
+            scanButton.classList.remove('loading');
+            scanButton.disabled = false;
+        }
+
+        // Create error message element
+        const errorContainer = document.createElement('div');
+        errorContainer.className = 'scan-error-container';
+        
+        errorContainer.innerHTML = `
+            <div class="error-message ${data.type}">
+                <div class="error-header">
+                    <span class="error-icon">${data.type === 'validation_error' ? '⚠️' : '❌'}</span>
+                    <h3>${data.type === 'validation_error' ? 'URL Validation Error' : 'Scan Error'}</h3>
+                </div>
+                <p class="error-text">${data.error}</p>
+                <button class="retry-button" onclick="document.getElementById('scanForm').reset()">
+                    Try Another URL
+                </button>
+            </div>
+        `;
+
+        // Show error in results section
+        const resultsSection = document.getElementById('results');
+        const errorsection = document.querySelector('.error-container');
+        if (errorsection) {
+            resultsSection.classList.add('hidden');
+            resultsSection.classList.remove('visible');
+            errorsection.innerHTML = '';
+            errorsection.appendChild(errorContainer);
+            errorsection.classList.remove('hidden');
+            
+        }
+
+        // Show toast notification
+        showToast(data.error, "error");
     });
 
     // Make socket available globally (optional)

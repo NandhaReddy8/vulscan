@@ -6,6 +6,8 @@ import csv
 from zapv2 import ZAPv2
 from collections import defaultdict
 from config import ZAP_URL, ZAP_API_KEY
+from urllib.parse import urlparse
+import socket
 
 # Initialize ZAP API
 zap = ZAPv2(proxies={"http": ZAP_URL, "https": ZAP_URL}, apikey=ZAP_API_KEY)
@@ -18,11 +20,45 @@ def check_zap_running():
     except requests.exceptions.ConnectionError:
         return False
 
+def is_valid_url(url):
+    """Validate if URL is accessible"""
+    try:
+        parsed = urlparse(url)
+        if not all([parsed.scheme, parsed.netloc]):
+            return False, "Invalid URL structure"
+            
+        # Try to resolve the domain
+        try:
+            socket.gethostbyname(parsed.netloc)
+        except socket.gaierror:
+            return False, "Unable to resolve domain name"
+            
+        return True, None
+    except Exception as e:
+        return False, str(e)
+
 def scan_target(target_url, socketio, scan_id, active_scans):
     try:
         session_id = active_scans.get(scan_id)
         if not session_id:
             raise Exception("No session ID found for scan")
+
+        # Enhanced URL validation
+        is_valid, error_msg = is_valid_url(target_url)
+        if not is_valid:
+            raise ValueError(f"Invalid URL: {error_msg}")
+
+        # Test ZAP connection to URL
+        try:
+            print(f"[*] Testing connection to: {target_url}")
+            zap.urlopen(target_url)
+            print("[+] Successfully connected to target")
+        except Exception as e:
+            print(f"[ERROR] Failed to connect: {str(e)}")
+            raise ValueError(f"Cannot reach {target_url}. Please verify the URL is accessible.")
+
+        # Continue with scan only if validation passes
+        print(f"[+] Starting scan for: {target_url}")
 
         # Spider Scan Phase
         socketio.emit('scan_progress', {
@@ -31,7 +67,15 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             'phase': 'Spider Scan'
         }, room=session_id)
 
-        spider_scan_id = zap.spider.scan(target_url)
+        try:
+            spider_scan_id = zap.spider.scan(target_url)
+            if not spider_scan_id:
+                raise Exception("Failed to initiate spider scan")
+            print(f"[+] Spider scan initiated: {spider_scan_id}")
+        except Exception as e:
+            print(f"[ERROR] Spider scan failed: {str(e)}")
+            raise Exception(f"Failed to start scan: {str(e)}")
+
         time.sleep(2)
 
         while int(zap.spider.status(spider_scan_id)) < 100:
@@ -84,12 +128,23 @@ def scan_target(target_url, socketio, scan_id, active_scans):
 
         return results
 
+    except ValueError as ve:
+        error_msg = str(ve)
+        print(f"[ERROR] Validation failed: {error_msg}")
+        if session_id:
+            socketio.emit('scan_error', {
+                'error': error_msg,
+                'type': 'validation_error'
+            }, room=session_id)
     except Exception as e:
-        print(f"[ERROR] Scan failed: {str(e)}")
-        raise
-
+        error_msg = str(e)
+        print(f"[ERROR] Scan failed: {error_msg}")
+        if session_id:
+            socketio.emit('scan_error', {
+                'error': error_msg,
+                'type': 'scan_error'
+            }, room=session_id)
     finally:
-        # Clean up scan entry
         active_scans.pop(scan_id, None)
 
 def scan_target_old(target_url, socketio):

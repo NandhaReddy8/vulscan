@@ -972,14 +972,16 @@ button.loading .loader {
 }
 
 .alert-type {
-    font-size: 0.9rem;
+    font-size: 1.2rem;  /* Increased font size */
+    font-weight: bold;  /* Makes text bolder */
     color: #4b5563;
     background: rgba(0,0,0,0.05);
-    padding: 4px 8px;
-    border-radius: 4px;
+    padding: 6px 10px;  /* Slightly increased padding */
+    border-radius: 6px;  /* More rounded edges */
     margin-left: 10px;
     font-family: monospace;
 }
+
 
 .progress-indicator {
     margin: 20px 0;
@@ -1022,4 +1024,66 @@ button.loading .loader {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
+}
+
+.scan-error-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+.error-message {
+    background: #fff5f5;
+    border: 2px solid #fc8181;
+    border-radius: 8px;
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.error-message.validation_error {
+    border-color: #f6ad55;
+    background: #fffaf0;
+}
+
+.error-header {
+    margin-bottom: 1rem;
+}
+
+.error-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.error-message h3 {
+    color: #e53e3e;
+    font-size: 1.2rem;
+    margin: 0.5rem 0;
+}
+
+.error-message.validation_error h3 {
+    color: #dd6b20;
+}
+
+.error-text {
+    color: #4a5568;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+.retry-button {
+    background: #3182ce;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.retry-button:hover {
+    background: #2c5282;
 }
