@@ -1,8 +1,8 @@
 {
     "summary": {
-        "Low": 5,
-        "Informational": 4,
-        "Medium": 3
+        "Medium": 3,
+        "Low": 3,
+        "Informational": 4
     },
     "vulnerabilities_by_type": [
         {
@@ -16,7 +16,7 @@
             "count": 42,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/hpp/",
+                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
                 "http://testphp.vulnweb.com/AJAX/index.php",
                 "...and 39 more"
             ]
@@ -33,7 +33,7 @@
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
                 "http://testphp.vulnweb.com/AJAX/index.php",
-                "http://testphp.vulnweb.com/disclaimer.php",
+                "http://testphp.vulnweb.com/artists.php",
                 "...and 26 more"
             ]
         },
@@ -45,12 +45,12 @@
             "evidence": "",
             "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
             "solution": "Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.",
-            "count": 47,
+            "count": 46,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
+                "http://testphp.vulnweb.com/sitemap.xml",
                 "http://testphp.vulnweb.com/privacy.php",
-                "http://testphp.vulnweb.com/robots.txt",
-                "...and 44 more"
+                "...and 43 more"
             ]
         },
         {
@@ -64,8 +64,8 @@
             "count": 27,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
+                "http://testphp.vulnweb.com/categories.php",
                 "http://testphp.vulnweb.com/disclaimer.php",
-                "http://testphp.vulnweb.com/index.php",
                 "...and 24 more"
             ]
         },
@@ -81,7 +81,7 @@
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
                 "http://testphp.vulnweb.com/userinfo.php",
-                "http://testphp.vulnweb.com/robots.txt",
+                "http://testphp.vulnweb.com/Flash/add.swf",
                 "...and 68 more"
             ]
         },
@@ -96,8 +96,8 @@
             "count": 66,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/hpp/",
-                "http://testphp.vulnweb.com/style.css",
+                "http://testphp.vulnweb.com/Flash/add.swf",
+                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
                 "...and 63 more"
             ]
         },
@@ -122,14 +122,14 @@
             "alert_type": "Modern Web Application (1)",
             "alert_tags": "CWE--1",
             "parameter": "",
-            "evidence": "<a href='#' onClick=\"window.open('./comment.php?pid=7','comment','width=500,height=400')\">comment on this picture</a>",
+            "evidence": "<a href='#' onClick=\"window.open('./comment.php?pid=1','comment','width=500,height=400')\">comment on this picture</a>",
             "description": "The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.",
             "solution": "This is an informational alert and so no changes are required.",
             "count": 9,
             "affected_urls": [
                 "http://testphp.vulnweb.com/AJAX/index.php",
                 "http://testphp.vulnweb.com/artists.php",
-                "http://testphp.vulnweb.com/artists.php?artist=1",
+                "http://testphp.vulnweb.com/listproducts.php?cat=1",
                 "...and 6 more"
             ]
         },
@@ -158,38 +158,6 @@
             "count": 1,
             "affected_urls": [
                 "http://testphp.vulnweb.com/secured/newuser.php"
-            ]
-        },
-        {
-            "risk": "Low",
-            "alert_type": "Application Error Disclosure (1)",
-            "alert_tags": "CWE-550, OWASP 2021 A13",
-            "parameter": "",
-            "evidence": "HTTP/1.1 500 Internal Server Error",
-            "description": "This page contains an error/warning message that may disclose sensitive information like the location of the file that produced the unhandled exception. This information can be used to launch further attacks against the web application. The alert could be a false positive if the error message is found inside a documentation page.",
-            "solution": "Review the source code of this page. Implement custom error pages. Consider implementing a mechanism to provide a unique error reference/identifier to the client (browser) while logging the details on the server side and not exposing them to the user.",
-            "count": 6,
-            "affected_urls": [
-                "http://testphp.vulnweb.com/artists.php?artist=2",
-                "http://testphp.vulnweb.com/guestbook.php",
-                "http://testphp.vulnweb.com/hpp/?pp=12",
-                "...and 3 more"
-            ]
-        },
-        {
-            "risk": "Low",
-            "alert_type": "Information Disclosure - Debug Error Messages (1)",
-            "alert_tags": "CWE-1295, OWASP 2021 A13",
-            "parameter": "",
-            "evidence": "Internal Server Error",
-            "description": "The response appeared to contain common error messages returned by platforms such as ASP.NET, and Web-servers such as IIS and Apache. You can configure the list of common debug messages.",
-            "solution": "Disable debugging messages before pushing to production.",
-            "count": 6,
-            "affected_urls": [
-                "http://testphp.vulnweb.com/artists.php?artist=2",
-                "http://testphp.vulnweb.com/guestbook.php",
-                "http://testphp.vulnweb.com/hpp/?pp=12",
-                "...and 3 more"
             ]
         }
     ]

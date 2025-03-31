@@ -119,6 +119,8 @@ def scan_target(target_url, socketio, scan_id, active_scans):
 
         # Save results
         save_scan_results(target_url, results)
+        
+        results["vulnerabilities_by_type"] = [vuln for vuln in results["vulnerabilities_by_type"] if vuln["risk"] == "Low"]
 
         # Emit completion event
         socketio.emit("scan_completed", {
