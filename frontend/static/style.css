@@ -302,17 +302,11 @@ button:hover {
 }
 
 .vulnerability-item {
-    background: #ffffff;
+    background: white;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0,0,0,0.05);
     margin-bottom: 24px;
     border-left: 5px solid transparent;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.vulnerability-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
 }
 
 .vulnerability-item.low-risk {
@@ -329,6 +323,28 @@ button:hover {
     padding: 16px 24px;
     background: linear-gradient(to right, rgba(255,255,255,0.9), rgba(255,255,255,0.7));
     border-bottom: 2px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Changed to space-between */
+}
+
+/* New styles for alert type in header */
+.vuln-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.alert-type {
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    color: #1a202c;
+    padding: 4px 12px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+    border: 1px solid var(--border-light);
+    font-weight: 600;  /* Make it bold */
+    letter-spacing: 0.2px;  /* Improve readability */
 }
 
 .risk-badge {
@@ -352,6 +368,34 @@ button:hover {
 
 .vuln-details {
     padding: 24px;
+}
+
+.vuln-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vuln-details tr {
+    border-bottom: 1px solid var(--border-light);
+}
+
+.vuln-details tr:last-child {
+    border-bottom: none;
+}
+
+.vuln-details th {
+    width: 150px;
+    text-align: left;
+    padding: 12px;
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.vuln-details td {
+    padding: 12px;
+    color: #333;
+    line-height: 1.6;
 }
 
 .detail-row {
@@ -653,10 +697,10 @@ button.loading .loader {
 
 .vulnerability-item {
     background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    border-left: 4px solid transparent;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    margin-bottom: 24px;
+    border-left: 5px solid transparent;
 }
 
 .vulnerability-item.low-risk {
@@ -668,9 +712,31 @@ button.loading .loader {
 }
 
 .vuln-header {
-    padding: 15px 20px;
+    padding: 16px 24px;
     background: #f8f9fa;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--border-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Changed to space-between */
+}
+
+/* New styles for alert type in header */
+.vuln-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.alert-type {
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    color: #1a202c;
+    padding: 4px 12px;
+    background: rgba(0,0,0,0.05);
+    border-radius: 4px;
+    border: 1px solid var(--border-light);
+    font-weight: 600;  /* Make it bold */
+    letter-spacing: 0.2px;  /* Improve readability */
 }
 
 .risk-badge {
@@ -691,6 +757,34 @@ button.loading .loader {
 
 .vuln-details {
     padding: 20px;
+}
+
+.vuln-details table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vuln-details tr {
+    border-bottom: 1px solid var(--border-light);
+}
+
+.vuln-details tr:last-child {
+    border-bottom: none;
+}
+
+.vuln-details th {
+    width: 150px;
+    text-align: left;
+    padding: 12px;
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #495057;
+}
+
+.vuln-details td {
+    padding: 12px;
+    color: #333;
+    line-height: 1.6;
 }
 
 .detail-row {
@@ -715,4 +809,217 @@ button.loading .loader {
     color: #333;
     line-height: 1.6;
     font-size: 14px;
+}
+
+.findings-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 24px;
+    margin-top: 2rem;
+}
+
+.report-notice {
+    background: linear-gradient(145deg, #2563eb, #3b82f6);
+    border-radius: 12px;
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 24px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+}
+
+.notice-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.notice-icon {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+}
+
+.notice-icon svg {
+    display: block;
+    color: white;
+}
+
+.report-notice h4 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.report-notice p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.notice-cta {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.notice-cta:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.notice-cta .arrow {
+    transition: transform 0.3s ease;
+}
+
+.notice-cta:hover .arrow {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .findings-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .report-notice {
+        position: static;
+    }
+}
+
+.full-report-alert {
+    background: linear-gradient(145deg, #2563eb, #3b82f6);
+    border-radius: 12px;
+    padding: 24px;
+    height: fit-content;
+    position: sticky;
+    top: 24px;
+    color: white;
+    box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+}
+
+.alert-icon {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 10px;
+    border-radius: 50%;
+    margin-bottom: 16px;
+    width: fit-content;
+}
+
+.alert-icon svg {
+    display: block;
+    color: white;
+}
+
+.full-report-alert h4 {
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.full-report-alert p {
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    opacity: 0.9;
+}
+
+.alert-cta {
+    background: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.alert-cta:hover {
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.alert-cta .arrow {
+    transition: transform 0.3s ease;
+}
+
+.alert-cta:hover .arrow {
+    transform: translateX(4px);
+}
+
+@media (max-width: 768px) {
+    .findings-wrapper {
+        grid-template-columns: 1fr;
+    }
+    
+    .full-report-alert {
+        position: static;
+    }
+}
+
+.alert-type {
+    font-size: 0.9rem;
+    color: #4b5563;
+    background: rgba(0,0,0,0.05);
+    padding: 4px 8px;
+    border-radius: 4px;
+    margin-left: 10px;
+    font-family: monospace;
+}
+
+.progress-indicator {
+    margin: 20px 0;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.progress-bar {
+    height: 20px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background: linear-gradient(to right, #2193b0, #6dd5ed);
+    transition: width 0.3s ease;
+    background-size: 200% auto;
+    animation: gradient 2s linear infinite;
+}
+
+.progress-message {
+    margin-top: 10px;
+    color: #666;
+    font-size: 14px;
+}
+
+.scan-phase {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+@keyframes gradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }

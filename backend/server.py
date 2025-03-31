@@ -8,6 +8,7 @@ import csv
 import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target
+from datetime import datetime, timedelta
 
 # Load environment variables
 FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "127.0.0.1")
@@ -31,22 +32,25 @@ socketio = SocketIO(
 
 # Maintain a mapping of scan_id -> session_id
 active_scans = {}
+SCAN_COOLDOWN = timedelta(minutes=5)  # Adjust cooldown period as needed
+running_scans = {}  # Track currently running scans with their start times
 
 def is_duplicate_url(target_url):
-    """Check if the given URL has already been submitted for scanning"""
-    try:
-        if not os.path.exists("scan_requests.csv"):
-            with open("scan_requests.csv", "w", newline='') as file:
-                writer = csv.writer(file)
-                writer.writerow(["url", "timestamp"])
-            return False
-
-        with open("scan_requests.csv", "r") as file:
-            reader = csv.DictReader(file)
-            return any(row.get("url") == target_url for row in reader)
-    except Exception as e:
-        print(f"[ERROR] Failed to read scan_requests.csv: {e}")
-        return False
+    """Check if the URL is currently being scanned or was scanned very recently"""
+    current_time = datetime.now()
+    
+    # Clean up old entries
+    expired_urls = [url for url, start_time in running_scans.items() 
+                   if current_time - start_time > SCAN_COOLDOWN]
+    for url in expired_urls:
+        running_scans.pop(url)
+    
+    # Check if URL is currently being scanned
+    if target_url in running_scans:
+        time_elapsed = current_time - running_scans[target_url]
+        if time_elapsed < SCAN_COOLDOWN:
+            return True
+    return False
 
 @app.route("/api/scan", methods=["POST"])
 def scan():
@@ -62,7 +66,10 @@ def scan():
 
     # Check for duplicate URL
     if is_duplicate_url(target_url):
-        return jsonify({"error": "This URL has already been submitted for scanning!"}), 400
+        return jsonify({"error": "This URL is currently being scanned. Please wait a few minutes before trying again."}), 400
+
+    # Add URL to running scans
+    running_scans[target_url] = datetime.now()
 
     timestamp = time.time()
     scan_id = str(uuid.uuid4())  # Generate a unique scan ID
@@ -90,6 +97,9 @@ def scan():
             session_id = active_scans.get(scan_id)
             if session_id:
                 socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url}, room=session_id)
+        finally:
+            # Remove URL from running scans when complete
+            running_scans.pop(target_url, None)
 
     scan_thread = threading.Thread(target=run_scan)
     scan_thread.daemon = True  # Make thread daemon so it exits when main thread exits

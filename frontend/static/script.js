@@ -21,6 +21,44 @@ function showToast(message, type = 'info') {
     }).showToast();
 }
 
+// Add this function at the top level
+function resetUI() {
+    const progressIndicator = document.querySelector('.progress-indicator');
+    const resultsSection = document.getElementById('results');
+    const vulnerabilityList = document.getElementById('vulnerabilityList');
+
+    // Reset progress bar
+    if (progressIndicator) {
+        progressIndicator.style.display = 'block';
+        progressIndicator.innerHTML = `
+            <div class="progress-bar">
+                <div class="progress" style="width: 0%"></div>
+            </div>
+            <p class="progress-message">Starting scan...</p>
+            <p class="scan-phase">Initializing...</p>
+        `;
+    }
+
+    // Reset results section
+    if (resultsSection) {
+        resultsSection.classList.add('hidden');
+        // Reset vulnerability counters
+        const counters = resultsSection.querySelectorAll('.stat-card .count');
+        counters.forEach(counter => counter.textContent = '0');
+    }
+
+    // Clear vulnerability findings
+    if (vulnerabilityList) {
+        vulnerabilityList.innerHTML = '';
+    }
+
+    // Reset full report alert if present
+    const fullReportAlert = document.querySelector('.full-report-alert');
+    if (fullReportAlert) {
+        fullReportAlert.classList.add('hidden');
+    }
+}
+
 // Modified frontend code for better Socket.IO connection
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -53,19 +91,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Server event handlers
     socket.on('scan_completed', (data) => {
-        console.log('Scan completed:', data);
-        
+        const progressIndicator = document.querySelector('.progress-indicator');
+        const resultsSection = document.getElementById('results');
+        const fullReportAlert = document.querySelector('.full-report-alert');
+
         // Hide progress indicator
-        progressIndicator.style.display = 'none';
-        
+        if (progressIndicator) {
+            progressIndicator.style.display = 'none';
+        }
+
+        // Show results section
+        if (resultsSection) {
+            resultsSection.classList.remove('hidden');
+        }
+
+        // Show full report alert
+        if (fullReportAlert) {
+            fullReportAlert.classList.remove('hidden');
+        }
+
         // Show completion toast
         showToast("Scan completed successfully!", "success");
-        
+
         // Update results if available
         if (data.result) {
             updateResults(data.result);
         }
-        
+
         // Handle error if present
         if (data.error) {
             showToast("Error: " + data.error, "error");
@@ -74,25 +126,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Update the scan_progress event handler
     socket.on('scan_progress', (data) => {
-        console.log('Scan progress:', data);
-        
+        const progressIndicator = document.querySelector('.progress-indicator');
+        if (!progressIndicator) return;
+
         let displayProgress = data.progress;
         let message = data.message;
-        
-        // If it's passive scan, keep progress at 99%
+
         if (message.includes('Passive Scan')) {
             displayProgress = 99;
             message = `${message} (Overall Progress: 99%)`;
         } else if (data.progress === 100) {
-            // Only show 100% when everything is complete
             displayProgress = 100;
         } else {
-            // For spider scan, scale progress to 0-95%
             displayProgress = Math.min(95, Math.floor(data.progress * 0.95));
             message = `Spider Scan: ${message} (Overall Progress: ${displayProgress}%)`;
         }
 
-        // Update progress indicator
         progressIndicator.innerHTML = `
             <div class="progress-bar">
                 <div class="progress" style="width: ${displayProgress}%"></div>
@@ -100,17 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="progress-message">${message}</p>
             <p class="scan-phase">${data.phase || 'Scanning...'}</p>
         `;
-        
-        // Show toast only for major progress updates
-        if (data.progress % 20 === 0 || message.includes('Completed') || message.includes('Starting')) {
-            showToast(message, "info");
-        }
-        
-        // Only show results section when truly complete
-        if (displayProgress === 100) {
-            resultsSection.classList.remove('hidden');
-            resultsSection.classList.add('visible');
-        }
     });
 
     socket.on('server_update', (data) => {
@@ -134,6 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
+        // Reset UI before starting new scan
+        resetUI();
         scanButton.classList.add('loading');
         scanButton.disabled = true;
 
@@ -147,7 +187,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             if (response.ok) {
-                showToast("Scan request submitted successfully!", "success");
+                showToast("Scan started successfully!", "success");
                 resultsSection.classList.remove('hidden');
                 resultsSection.classList.add('visible');
             } else {
@@ -220,7 +260,6 @@ function updateResults(results) {
     if (results.vulnerabilities_by_type) {
         const vulnContainer = document.getElementById('vulnerabilityList');
         if (vulnContainer) {
-            // Filter vulnerabilities
             const filteredVulns = results.vulnerabilities_by_type.filter(vuln => 
                 ['Low', 'Informational'].includes(vuln.risk)
             );
@@ -229,29 +268,34 @@ function updateResults(results) {
                 .map(vuln => `
                     <div class="vulnerability-item ${vuln.risk.toLowerCase()}-risk">
                         <div class="vuln-header">
-                            <span class="risk-badge ${vuln.risk.toLowerCase()}">${vuln.risk}</span>
+                            <div class="vuln-header-left">
+                                <span class="risk-badge ${vuln.risk.toLowerCase()}">${vuln.risk}</span>
+                                <span class="alert-type"><strong>${vuln.alert_type}</strong></span>
+                            </div>
                         </div>
                         <div class="vuln-details">
-                            <div class="detail-row">
-                                <div class="detail-label">Alert Tags</div>
-                                <div class="detail-value">${vuln.alert_tags}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Parameter</div>
-                                <div class="detail-value">${vuln.parameter || 'N/A'}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Evidence</div>
-                                <div class="detail-value">${vuln.evidence || 'N/A'}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Alert Description</div>
-                                <div class="detail-value">${vuln.description}</div>
-                            </div>
-                            <div class="detail-row">
-                                <div class="detail-label">Solution</div>
-                                <div class="detail-value">${vuln.solution}</div>
-                            </div>
+                            <table>
+                                <tr>
+                                    <th>Alert Tags</th>
+                                    <td>${vuln.alert_tags}</td>
+                                </tr>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <td>${vuln.parameter || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <th>Evidence</th>
+                                    <td>${vuln.evidence || 'N/A'}</td>
+                                </tr>
+                                <tr>
+                                    <th>Description</th>
+                                    <td>${vuln.description}</td>
+                                </tr>
+                                <tr>
+                                    <th>Solution</th>
+                                    <td>${vuln.solution}</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 `)

@@ -1,12 +1,13 @@
 {
     "summary": {
-        "Low": 3,
         "Medium": 3,
-        "Informational": 4
+        "Informational": 4,
+        "Low": 3
     },
     "vulnerabilities_by_type": [
         {
             "risk": "Low",
+            "alert_type": "Server Leaks Version Information via \"Server\" HTTP Response Header Field (1)",
             "alert_tags": "CWE-497, OWASP 2021 A13",
             "parameter": "",
             "evidence": "nginx/1.19.0",
@@ -22,6 +23,7 @@
         },
         {
             "risk": "Medium",
+            "alert_type": "Content Security Policy (CSP) Header Not Set (1)",
             "alert_tags": "CWE-693, OWASP 2021 A15",
             "parameter": "",
             "evidence": "",
@@ -37,6 +39,7 @@
         },
         {
             "risk": "Low",
+            "alert_type": "Server Leaks Information via \"X-Powered-By\" HTTP Response Header Field(s) (1)",
             "alert_tags": "CWE-497, OWASP 2021 A13",
             "parameter": "",
             "evidence": "X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1",
@@ -52,6 +55,7 @@
         },
         {
             "risk": "Low",
+            "alert_type": "X-Content-Type-Options Header Missing (1)",
             "alert_tags": "CWE-693, OWASP 2021 A15",
             "parameter": "x-content-type-options",
             "evidence": "",
@@ -67,6 +71,7 @@
         },
         {
             "risk": "Medium",
+            "alert_type": "Missing Anti-clickjacking Header (1)",
             "alert_tags": "CWE-1021, OWASP 2021 A15",
             "parameter": "x-frame-options",
             "evidence": "",
@@ -82,6 +87,7 @@
         },
         {
             "risk": "Informational",
+            "alert_type": "Charset Mismatch (Header Versus Meta Content-Type Charset) (1)",
             "alert_tags": "CWE-436, OWASP 2021 A15",
             "parameter": "",
             "evidence": "",
@@ -97,6 +103,7 @@
         },
         {
             "risk": "Medium",
+            "alert_type": "Absence of Anti-CSRF Tokens (1)",
             "alert_tags": "CWE-352, OWASP 2021 A09",
             "parameter": "",
             "evidence": "<form action=\"search.php?test=query\" method=\"post\">",
@@ -112,6 +119,7 @@
         },
         {
             "risk": "Informational",
+            "alert_type": "Modern Web Application (1)",
             "alert_tags": "CWE--1",
             "parameter": "",
             "evidence": "<a href='#' onClick=\"window.open('./comment.php?pid=7','comment','width=500,height=400')\">comment on this picture</a>",
@@ -127,6 +135,7 @@
         },
         {
             "risk": "Informational",
+            "alert_type": "User Controllable HTML Element Attribute (Potential XSS) (1)",
             "alert_tags": "CWE-20, OWASP 2021 A20",
             "parameter": "submit",
             "evidence": "",
@@ -140,6 +149,7 @@
         },
         {
             "risk": "Informational",
+            "alert_type": "Authentication Request Identified (1)",
             "alert_tags": "CWE--1",
             "parameter": "uemail",
             "evidence": "upass",

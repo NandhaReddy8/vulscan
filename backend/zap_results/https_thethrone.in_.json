@@ -1,0 +1,39 @@
+{
+    "summary": {
+        "Low": 1,
+        "Medium": 1
+    },
+    "vulnerabilities_by_type": [
+        {
+            "risk": "Low",
+            "alert_type": "Strict-Transport-Security Header Not Set (1)",
+            "alert_tags": "CWE-319, OWASP 2021 A15",
+            "parameter": "",
+            "evidence": "",
+            "description": "HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.",
+            "solution": "Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.",
+            "count": 5,
+            "affected_urls": [
+                "https://thethrone.in/cdn-cgi/styles/cf.errors.ie.css",
+                "https://thethrone.in/cdn-cgi/styles/cf.errors.css",
+                "https://thethrone.in/robots.txt",
+                "...and 2 more"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "alert_type": "Content Security Policy (CSP) Header Not Set (1)",
+            "alert_tags": "CWE-693, OWASP 2021 A15",
+            "parameter": "",
+            "evidence": "",
+            "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
+            "solution": "Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.",
+            "count": 3,
+            "affected_urls": [
+                "https://thethrone.in/robots.txt",
+                "https://thethrone.in/",
+                "https://thethrone.in/sitemap.xml"
+            ]
+        }
+    ]
+}

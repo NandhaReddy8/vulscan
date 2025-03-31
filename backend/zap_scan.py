@@ -185,6 +185,7 @@ def process_scan_results(alerts):
     """Process ZAP alerts into a structured format with detailed vulnerability information"""
     vulnerabilities_by_type = defaultdict(lambda: {
         "risk": None,
+        "alert_type": None,  # Added alert_type field
         "alert_tags": None,
         "parameter": None,
         "evidence": None,
@@ -198,6 +199,11 @@ def process_scan_results(alerts):
         description = alert.get("description", "No description available")
         risk = alert.get("risk", "Info").capitalize()
         url = alert.get("url", "No URL")
+        
+        # Get alert name/type and instance count
+        alert_name = alert.get("name", "Unknown Alert")
+        instance_count = alert.get("count", 1)
+        alert_type = f"{alert_name} ({instance_count})"
 
         # Extract and format CWE and WASC IDs safely
         cwe_id = alert.get("cweid", "Unknown")
@@ -212,6 +218,7 @@ def process_scan_results(alerts):
         vuln_data = vulnerabilities_by_type[description]
         vuln_data.update({
             "risk": risk,
+            "alert_type": alert_type,  # Added alert type
             "alert_tags": alert_tags,
             "parameter": alert.get("param", "Not specified"),
             "evidence": alert.get("evidence", "Not available"),
@@ -223,17 +230,16 @@ def process_scan_results(alerts):
         if url not in vuln_data["affected_urls"]:
             vuln_data["affected_urls"].append(url)
 
-    # Process summary statistics
-    summary = defaultdict(int)
-    for vulnerability in vulnerabilities_by_type.values():
-        summary[vulnerability["risk"]] += 1
-
     # Format final results
     return {
-        "summary": dict(summary),
+        "summary": dict(defaultdict(int, {
+            risk: sum(1 for v in vulnerabilities_by_type.values() if v["risk"] == risk)
+            for risk in set(v["risk"] for v in vulnerabilities_by_type.values())
+        })),
         "vulnerabilities_by_type": [
             {
                 "risk": vuln["risk"],
+                "alert_type": vuln["alert_type"],  # Added to output
                 "alert_tags": vuln["alert_tags"],
                 "parameter": vuln["parameter"],
                 "evidence": vuln["evidence"],
