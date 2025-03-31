@@ -4,3 +4,4 @@ backend/vaenv/
 
 backend/__pycache__/
 
+backend/.env/

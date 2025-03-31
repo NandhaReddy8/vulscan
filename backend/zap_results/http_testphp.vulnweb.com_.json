@@ -1,0 +1,114 @@
+{
+    "summary": {
+        "Low": 3,
+        "Medium": 3,
+        "Informational": 4
+    },
+    "vulnerabilities_by_type": [
+        {
+            "risk": "Low",
+            "description": "The web/application server is leaking version information via the \"Server\" HTTP response header. Access to such information may facilitate attackers identifying other vulnerabilities your web/application server is subject to.",
+            "count": 71,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/userinfo.php",
+                "http://testphp.vulnweb.com/images/logo.gif",
+                "http://testphp.vulnweb.com/style.css",
+                "...and 68 more"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
+            "count": 46,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/high",
+                "http://testphp.vulnweb.com/privacy.php",
+                "http://testphp.vulnweb.com/sitemap.xml",
+                "...and 43 more"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "The web/application server is leaking information via one or more \"X-Powered-By\" HTTP response headers. Access to such information may facilitate attackers identifying other frameworks/components your web application is reliant upon and the vulnerabilities such components may be subject to.",
+            "count": 59,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/userinfo.php",
+                "http://testphp.vulnweb.com/privacy.php",
+                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
+                "...and 56 more"
+            ]
+        },
+        {
+            "risk": "Low",
+            "description": "The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.",
+            "count": 66,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/images/logo.gif",
+                "http://testphp.vulnweb.com/style.css",
+                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
+                "...and 63 more"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "The response does not protect against 'ClickJacking' attacks. It should include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options.",
+            "count": 42,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/artists.php",
+                "http://testphp.vulnweb.com/",
+                "http://testphp.vulnweb.com/login.php",
+                "...and 39 more"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "This check identifies responses where the HTTP Content-Type header declares a charset different from the charset defined by the body of the HTML or XML. When there's a charset mismatch between the HTTP header and content body Web browsers can be forced into an undesirable content-sniffing mode to determine the content's correct character set.\n\nAn attacker could manipulate content on the page to be interpreted in an encoding of their choice. For example, if an attacker can control content at the beginning of the page, they could inject script using UTF-7 encoded text and manipulate some browsers into interpreting that text.",
+            "count": 29,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/login.php",
+                "http://testphp.vulnweb.com/artists.php",
+                "http://testphp.vulnweb.com/cart.php",
+                "...and 26 more"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "description": "No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.",
+            "count": 27,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/",
+                "http://testphp.vulnweb.com/artists.php",
+                "http://testphp.vulnweb.com/guestbook.php",
+                "...and 24 more"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.",
+            "count": 9,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/AJAX/index.php",
+                "http://testphp.vulnweb.com/artists.php",
+                "http://testphp.vulnweb.com/artists.php?artist=1",
+                "...and 6 more"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.",
+            "count": 2,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/search.php?test=query",
+                "http://testphp.vulnweb.com/guestbook.php"
+            ]
+        },
+        {
+            "risk": "Informational",
+            "description": "The given request has been identified as an authentication request. The 'Other Info' field contains a set of key=value lines which identify any relevant fields. If the request is in a context which has an Authentication Method set to \"Auto-Detect\" then this rule will change the authentication to match the request identified.",
+            "count": 1,
+            "affected_urls": [
+                "http://testphp.vulnweb.com/secured/newuser.php"
+            ]
+        }
+    ]
+}

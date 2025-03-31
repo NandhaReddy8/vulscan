@@ -18,7 +18,81 @@ def check_zap_running():
     except requests.exceptions.ConnectionError:
         return False
 
-def scan_target(target_url, socketio):
+def scan_target(target_url, socketio, scan_id, active_scans):
+    try:
+        session_id = active_scans.get(scan_id)
+        if not session_id:
+            raise Exception("No session ID found for scan")
+
+        # Spider Scan Phase
+        socketio.emit('scan_progress', {
+            'message': 'Starting Spider Scan...',
+            'progress': 0,
+            'phase': 'Spider Scan'
+        }, room=session_id)
+
+        spider_scan_id = zap.spider.scan(target_url)
+        time.sleep(2)
+
+        while int(zap.spider.status(spider_scan_id)) < 100:
+            progress = int(zap.spider.status(spider_scan_id))
+            socketio.emit('scan_progress', {
+                'message': f'Discovering site structure...',
+                'progress': progress,
+                'phase': 'Spider Scan'
+            }, room=session_id)
+            time.sleep(2)
+
+        # Passive Scan Phase
+        socketio.emit('scan_progress', {
+            'message': 'Starting Passive Scan...',
+            'progress': 95,
+            'phase': 'Passive Scan'
+        }, room=session_id)
+
+        zap.pscan.enable_all_scanners()
+        time.sleep(2)
+
+        while int(zap.pscan.records_to_scan) > 0:
+            records_left = int(zap.pscan.records_to_scan)
+            socketio.emit('scan_progress', {
+                'message': f'Analyzing {records_left} records...',
+                'progress': 99,
+                'phase': 'Passive Scan'
+            }, room=session_id)
+            time.sleep(2)
+
+        # Final completion
+        socketio.emit('scan_progress', {
+            'message': 'Scan Complete! Processing results...',
+            'progress': 100,
+            'phase': 'Completed'
+        }, room=session_id)
+
+        # Process and emit results
+        alerts = zap.core.alerts(baseurl=target_url)
+        results = process_scan_results(alerts)
+
+        # Save results
+        save_scan_results(target_url, results)
+
+        # Emit completion event
+        socketio.emit("scan_completed", {
+            "message": "Scan Completed!",
+            "result": results
+        }, room=session_id)
+
+        return results
+
+    except Exception as e:
+        print(f"[ERROR] Scan failed: {str(e)}")
+        raise
+
+    finally:
+        # Clean up scan entry
+        active_scans.pop(scan_id, None)
+
+def scan_target_old(target_url, socketio):
     """Performs a ZAP Spider and Passive Scan on the given target URL with real-time progress updates"""
     if not check_zap_running():
         print("[ERROR] ZAP Proxy is not running! Start ZAP before running scans.")
@@ -106,3 +180,56 @@ def scan_target(target_url, socketio):
         print(f"[ERROR] An issue occurred: {e}")
         socketio.emit("scan_error", {"error": str(e)})
         return {"error": str(e)}
+
+def process_scan_results(alerts):
+    """Process ZAP alerts into a structured format"""
+    vulnerabilities_by_type = defaultdict(lambda: {
+        "risk": None,
+        "description": None,
+        "count": 0,
+        "affected_urls": []
+    })
+
+    for alert in alerts:
+        description = alert.get("description", "No description available")
+        risk = alert.get("risk", "Info").capitalize()
+        url = alert.get("url", "No URL")
+
+        vuln_data = vulnerabilities_by_type[description]
+        vuln_data["risk"] = risk
+        vuln_data["description"] = description
+        vuln_data["count"] += 1
+        if url not in vuln_data["affected_urls"]:
+            vuln_data["affected_urls"].append(url)
+
+    summary = defaultdict(int)
+    for vulnerability in vulnerabilities_by_type.values():
+        summary[vulnerability["risk"]] += 1
+
+    return {
+        "summary": dict(summary),
+        "vulnerabilities_by_type": [
+            {
+                "risk": vuln["risk"],
+                "description": vuln["description"],
+                "count": len(vuln["affected_urls"]),
+                "affected_urls": vuln["affected_urls"][:3] + (
+                    ["...and {} more".format(len(vuln["affected_urls"]) - 3)]
+                    if len(vuln["affected_urls"]) > 3
+                    else []
+                )
+            } for vuln in vulnerabilities_by_type.values()
+        ]
+    }
+
+def save_scan_results(target_url, results):
+    """Save scan results to JSON file"""
+    safe_filename = target_url.replace("://", "_").replace("/", "_")
+    output_dir = "./zap_results"
+    os.makedirs(output_dir, exist_ok=True)
+    
+    output_file = f"{output_dir}/{safe_filename}.json"
+    with open(output_file, "w") as f:
+        json.dump(results, f, indent=4)
+    
+    print(f"[*] Results saved to {output_file}")

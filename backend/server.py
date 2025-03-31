@@ -5,6 +5,7 @@ import os
 import time
 import threading
 import csv
+import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target
 
@@ -28,36 +29,49 @@ socketio = SocketIO(
     ping_interval=25  # Adjust ping interval
 )
 
+# Maintain a mapping of scan_id -> session_id
+active_scans = {}
+
 def is_duplicate_url(target_url):
     """Check if the given URL has already been submitted for scanning"""
     try:
+        if not os.path.exists("scan_requests.csv"):
+            with open("scan_requests.csv", "w", newline='') as file:
+                writer = csv.writer(file)
+                writer.writerow(["url", "timestamp"])
+            return False
+
         with open("scan_requests.csv", "r") as file:
             reader = csv.DictReader(file)
-            for row in reader:
-                if row["url"] == target_url:
-                    return True
-    except FileNotFoundError:
-        return False  # If CSV doesn't exist, no scans have been submitted yet
+            return any(row.get("url") == target_url for row in reader)
     except Exception as e:
         print(f"[ERROR] Failed to read scan_requests.csv: {e}")
-    return False
+        return False
 
 @app.route("/api/scan", methods=["POST"])
 def scan():
     data = request.get_json()
     target_url = data.get("url")
+    session_id = data.get("session_id")  # Get session_id from the request
 
     if not target_url:
         return jsonify({"error": "No URL provided"}), 400
+
+    if not session_id:
+        return jsonify({"error": "No session_id provided"}), 400
 
     # Check for duplicate URL
     if is_duplicate_url(target_url):
         return jsonify({"error": "This URL has already been submitted for scanning!"}), 400
 
     timestamp = time.time()
+    scan_id = str(uuid.uuid4())  # Generate a unique scan ID
     save_scan_request(target_url, timestamp)
 
-    # **Step 1: Delete old JSON results if they exist**
+    # Map scan_id to session_id
+    active_scans[scan_id] = session_id
+
+    # Delete old JSON results if they exist
     sanitized_url = target_url.replace("://", "_").replace("/", "_")
     json_filename = f"{RESULTS_DIR}/{sanitized_url}.json"
 
@@ -65,20 +79,23 @@ def scan():
         os.remove(json_filename)
         print(f"[*] Deleted old scan results: {json_filename}")
 
-    # **Step 2: Run ZAP Scan in a separate thread**
+    # Run ZAP Scan in a separate thread
     def run_scan():
+        nonlocal scan_id, target_url  # Use nonlocal instead of global
         print(f"[*] Triggering scan for {target_url}...")
         try:
-            scan_target(target_url, socketio)  # Pass socketio for real-time updates
+            scan_target(target_url, socketio, scan_id, active_scans)  # Pass active_scans as parameter
         except Exception as e:
             print(f"[ERROR] Scan failed: {e}")
-            socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url})
+            session_id = active_scans.get(scan_id)
+            if session_id:
+                socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url}, room=session_id)
 
     scan_thread = threading.Thread(target=run_scan)
     scan_thread.daemon = True  # Make thread daemon so it exits when main thread exits
     scan_thread.start()
 
-    return jsonify({"message": "Scan started!", "target_url": target_url})
+    return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
 
 # Socket.IO connection event handlers
 @socketio.on('connect')
@@ -89,6 +106,11 @@ def handle_connect():
 @socketio.on('disconnect')
 def handle_disconnect():
     print(f"Client disconnected: {request.sid}")
+    # Remove any scans associated with this session
+    disconnected_scans = [scan_id for scan_id, session_id in active_scans.items() 
+                         if session_id == request.sid]
+    for scan_id in disconnected_scans:
+        active_scans.pop(scan_id, None)
 
 # Start the Flask Server
 if __name__ == "__main__":

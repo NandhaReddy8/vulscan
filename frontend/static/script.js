@@ -24,6 +24,10 @@ function showToast(message, type = 'info') {
 // Modified frontend code for better Socket.IO connection
 
 document.addEventListener('DOMContentLoaded', () => {
+    const progressIndicator = document.createElement('div');
+    progressIndicator.className = 'progress-indicator';
+    resultsSection.insertBefore(progressIndicator, resultsSection.firstChild);
+
     // Configure Socket.IO with explicit options
     const socket = io(BACKEND_URL, {
         reconnection: true,
@@ -36,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Connection event handlers
     socket.on('connect', () => {
         console.log('Connected to WebSocket server with ID:', socket.id);
+        window.sessionId = socket.id; // Store session ID globally
     });
 
     socket.on('disconnect', (reason) => {
@@ -49,16 +54,63 @@ document.addEventListener('DOMContentLoaded', () => {
     // Server event handlers
     socket.on('scan_completed', (data) => {
         console.log('Scan completed:', data);
-        // Update UI with scan results
+        
+        // Hide progress indicator
+        progressIndicator.style.display = 'none';
+        
+        // Show completion toast
+        showToast("Scan completed successfully!", "success");
+        
+        // Update results if available
         if (data.result) {
             updateResults(data.result);
         }
+        
+        // Handle error if present
+        if (data.error) {
+            showToast("Error: " + data.error, "error");
+        }
     });
 
+    // Update the scan_progress event handler
     socket.on('scan_progress', (data) => {
         console.log('Scan progress:', data);
-        showToast(data.message, "info");
-        // Update UI with scan progress
+        
+        let displayProgress = data.progress;
+        let message = data.message;
+        
+        // If it's passive scan, keep progress at 99%
+        if (message.includes('Passive Scan')) {
+            displayProgress = 99;
+            message = `${message} (Overall Progress: 99%)`;
+        } else if (data.progress === 100) {
+            // Only show 100% when everything is complete
+            displayProgress = 100;
+        } else {
+            // For spider scan, scale progress to 0-95%
+            displayProgress = Math.min(95, Math.floor(data.progress * 0.95));
+            message = `Spider Scan: ${message} (Overall Progress: ${displayProgress}%)`;
+        }
+
+        // Update progress indicator
+        progressIndicator.innerHTML = `
+            <div class="progress-bar">
+                <div class="progress" style="width: ${displayProgress}%"></div>
+            </div>
+            <p class="progress-message">${message}</p>
+            <p class="scan-phase">${data.phase || 'Scanning...'}</p>
+        `;
+        
+        // Show toast only for major progress updates
+        if (data.progress % 20 === 0 || message.includes('Completed') || message.includes('Starting')) {
+            showToast(message, "info");
+        }
+        
+        // Only show results section when truly complete
+        if (displayProgress === 100) {
+            resultsSection.classList.remove('hidden');
+            resultsSection.classList.add('visible');
+        }
     });
 
     socket.on('server_update', (data) => {
@@ -71,6 +123,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Make socket available globally (optional)
     window.socket = socket;
+
+    // Handle scan request
+    scanForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const url = document.getElementById('targetUrl').value.trim();
+
+        if (!url) {
+            showToast("Please enter a valid URL.", "warning");
+            return;
+        }
+
+        scanButton.classList.add('loading');
+        scanButton.disabled = true;
+
+        try {
+            const response = await fetch(`${BACKEND_URL}/api/scan`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ url, session_id: window.sessionId }) // Include session_id
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                showToast("Scan request submitted successfully!", "success");
+                resultsSection.classList.remove('hidden');
+                resultsSection.classList.add('visible');
+            } else {
+                showToast("Error: " + (data.error || "Failed to submit scan request"), "error");
+            }
+        } catch (error) {
+            console.error('Error submitting scan request:', error);
+            showToast("Error: Unable to connect to the server.", "error");
+        } finally {
+            scanButton.classList.remove('loading');
+            scanButton.disabled = false;
+        }
+    });
 });
 
 // Initialize AOS (Animations)
@@ -118,70 +208,41 @@ function animateCount(element, target) {
 
 // Update results display
 function updateResults(results) {
-    // Update counters
-    const counters = {
-        high: document.querySelector('.stat-card.high .count'),
-        medium: document.querySelector('.stat-card.medium .count'),
-        low: document.querySelector('.stat-card.low .count'),
-        informational: document.querySelector('.stat-card.informational .count')
-    };
+    console.log('Updating results:', results);
+    
+    // Update counters if summary is available
+    if (results.summary) {
+        const counters = {
+            high: document.querySelector('.stat-card.high .count'),
+            medium: document.querySelector('.stat-card.medium .count'),
+            low: document.querySelector('.stat-card.low .count'),
+            informational: document.querySelector('.stat-card.informational .count')
+        };
 
-    animateCount(counters.high, results.summary["High"] || 0);
-    animateCount(counters.medium, results.summary["Medium"] || 0);
-    animateCount(counters.low, results.summary["Low"] || 0);
-    animateCount(counters.informational, results.summary["Informational"] || 0);
-
-    // Update low vulnerability list
-    const lowRiskList = document.getElementById('lowRiskList');
-    lowRiskList.innerHTML = results.vulnerabilities_by_type
-    .filter(vuln => vuln.risk.toLowerCase() === 'low')
-    .map(vuln => `
-      <div class="vulnerability-item fade-in">
-        <p>${vuln.description}</p>
-        <p>Count: ${vuln.count}</p>
-      </div>
-    `)
-    .join('');
-}
-
-// Handle scan request
-scanForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const url = document.getElementById('targetUrl').value.trim();
-
-    if (!url) {
-        showToast("Please enter a valid URL.", "warning");
-        return;
+        // Animate counters only if elements exist
+        if (counters.high) animateCount(counters.high, results.summary["High"] || 0);
+        if (counters.medium) animateCount(counters.medium, results.summary["Medium"] || 0);
+        if (counters.low) animateCount(counters.low, results.summary["Low"] || 0);
+        if (counters.informational) animateCount(counters.informational, results.summary["Informational"] || 0);
     }
 
-    scanButton.classList.add('loading');
-    scanButton.disabled = true;
-
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/scan`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ url })
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-            showToast("Scan request submitted successfully!", "success");
-            resultsSection.classList.remove('hidden');
-            resultsSection.classList.add('visible');
-            // updateResults(data);  // Update UI with scan results
-        } else {
-            showToast("Error: " + (data.error || "Failed to submit scan request"), "error");
+    // Update vulnerability list if available
+    if (results.vulnerabilities_by_type) {
+        const lowRiskList = document.getElementById('lowRiskList');
+        if (lowRiskList) {
+            lowRiskList.innerHTML = results.vulnerabilities_by_type
+                .filter(vuln => vuln.risk.toLowerCase() === 'low')
+                .map(vuln => `
+                    <div class="vulnerability-item fade-in">
+                        <p>${vuln.description}</p>
+                        <p>Count: ${vuln.count}</p>
+                        <p class="affected-urls">${vuln.affected_urls.join('<br>')}</p>
+                    </div>
+                `)
+                .join('');
         }
-    } catch (error) {
-        console.error('Error submitting scan request:', error);
-        showToast("Error: Unable to connect to the server.", "error");
-    } finally {
-        scanButton.classList.remove('loading');
-        scanButton.disabled = false;
     }
-});
+}
 
 // Modal handling
 requestFullReport.addEventListener('click', () => {
@@ -236,3 +297,64 @@ reportForm.addEventListener('submit', async (e) => {
         showToast("Error: Unable to connect to the server.", "error");
     }
 });
+
+// Add CSS for progress indicator
+const style = document.createElement('style');
+style.textContent = `
+    .progress-indicator {
+        margin: 20px 0;
+        padding: 15px;
+        background: #f5f5f5;
+        border-radius: 8px;
+    }
+
+    .progress-bar {
+        height: 20px;
+        background: #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress {
+        height: 100%;
+        background: linear-gradient(to right, #2193b0, #6dd5ed);
+        transition: width 0.3s ease;
+    }
+
+    .progress-message {
+        margin-top: 10px;
+        color: #666;
+        font-size: 14px;
+    }
+`;
+
+// Add some additional styling for the progress indicator
+const additionalStyle = `
+    .scan-phase {
+        font-size: 12px;
+        color: #888;
+        margin-top: 5px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .progress {
+        background: linear-gradient(to right, 
+            #2193b0 0%, 
+            #6dd5ed 50%, 
+            #2193b0 100%);
+        background-size: 200% auto;
+        animation: gradient 2s linear infinite;
+    }
+
+    @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+`;
+
+// Add the new styles
+style.textContent += additionalStyle;
+
+document.head.appendChild(style);
