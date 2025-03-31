@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertCircle } from 'lucide-react';
+import { AlertCircle, CloudCog } from 'lucide-react';
 
 interface Vulnerability {
   risk: string;
@@ -25,10 +25,16 @@ interface ResultsProps {
 const Results: React.FC<ResultsProps> = ({ isVisible, vulnerabilities, stats }) => {
   if (!isVisible) return null;
 
+  // Define the order of risk levels
+  const riskOrder = ['high', 'medium', 'low', 'informational'] as const;
+
+  // Create ordered stats entries
+  const orderedStats = riskOrder.map(risk => [risk, stats[risk]]);
+
   return (
     <section className="mt-8">
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-        {Object.entries(stats).map(([type, count]) => (
+        {orderedStats.map(([type, count]) => (
           <div key={type} className="bg-gray-800 p-6 rounded-lg shadow-md text-center border border-gray-700">
             <h3 className="text-lg font-semibold mb-2 capitalize text-gray-100">{type} Risk</h3>
             <span className="text-4xl font-bold block mb-2" style={{
