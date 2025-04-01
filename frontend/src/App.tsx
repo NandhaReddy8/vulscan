@@ -247,7 +247,7 @@ function App() {
       <main className="flex-1 container mx-auto px-4 py-12">
         <section className="text-center mb-16" data-aos="fade-up">
           <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-            Advanced Security Scanner
+            Advanced & Quick Security Scanner
           </h1>
           <p className="text-xl text-gray-300">
             Comprehensive vulnerability assessment for your digital assets

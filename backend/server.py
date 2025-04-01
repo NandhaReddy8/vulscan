@@ -107,6 +107,45 @@ def scan():
 
     return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
 
+@app.route("/api/report-request", methods=["POST"])
+def save_report_request():
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        required_fields = ['name', 'email', 'company', 'companySize']
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
+
+        # Format data for CSV
+        csv_data = {
+            'name': data['name'],
+            'email': data['email'],
+            'organization': data['company'],
+            'size': data['companySize'],
+            'phone': data.get('phone', 'Not provided'),
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        # Write to CSV file
+        csv_file = 'report_requests.csv'
+        file_exists = os.path.exists(csv_file)
+        
+        with open(csv_file, 'a', newline='') as f:
+            writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+            if not file_exists:
+                writer.writeheader()
+            writer.writerow(csv_data)
+
+        return jsonify({
+            "message": "Request submitted successfully",
+            "status": "success"
+        })
+
+    except Exception as e:
+        print(f"Error saving report request: {str(e)}")
+        return jsonify({"error": "Failed to save request"}), 500
+
 # Socket.IO connection event handlers
 @socketio.on('connect')
 def handle_connect():

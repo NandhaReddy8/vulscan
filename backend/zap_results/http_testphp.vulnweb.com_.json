@@ -1,8 +1,8 @@
 {
     "summary": {
+        "Informational": 4,
         "Medium": 3,
-        "Low": 3,
-        "Informational": 4
+        "Low": 3
     },
     "vulnerabilities_by_type": [
         {
@@ -17,7 +17,7 @@
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
                 "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
-                "http://testphp.vulnweb.com/AJAX/index.php",
+                "http://testphp.vulnweb.com/hpp/",
                 "...and 39 more"
             ]
         },
@@ -32,8 +32,8 @@
             "count": 29,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
+                "http://testphp.vulnweb.com/disclaimer.php",
                 "http://testphp.vulnweb.com/AJAX/index.php",
-                "http://testphp.vulnweb.com/artists.php",
                 "...and 26 more"
             ]
         },
@@ -49,7 +49,7 @@
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
                 "http://testphp.vulnweb.com/sitemap.xml",
-                "http://testphp.vulnweb.com/privacy.php",
+                "http://testphp.vulnweb.com/robots.txt",
                 "...and 43 more"
             ]
         },
@@ -64,8 +64,8 @@
             "count": 27,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/categories.php",
-                "http://testphp.vulnweb.com/disclaimer.php",
+                "http://testphp.vulnweb.com/index.php",
+                "http://testphp.vulnweb.com/artists.php",
                 "...and 24 more"
             ]
         },
@@ -80,8 +80,8 @@
             "count": 71,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/userinfo.php",
-                "http://testphp.vulnweb.com/Flash/add.swf",
+                "http://testphp.vulnweb.com/style.css",
+                "http://testphp.vulnweb.com/images/logo.gif",
                 "...and 68 more"
             ]
         },
@@ -96,8 +96,8 @@
             "count": 66,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/Flash/add.swf",
-                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
+                "http://testphp.vulnweb.com/style.css",
+                "http://testphp.vulnweb.com/images/logo.gif",
                 "...and 63 more"
             ]
         },
@@ -112,8 +112,8 @@
             "count": 59,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/userinfo.php",
                 "http://testphp.vulnweb.com/privacy.php",
+                "http://testphp.vulnweb.com/userinfo.php",
                 "...and 56 more"
             ]
         },
@@ -129,7 +129,7 @@
             "affected_urls": [
                 "http://testphp.vulnweb.com/AJAX/index.php",
                 "http://testphp.vulnweb.com/artists.php",
-                "http://testphp.vulnweb.com/listproducts.php?cat=1",
+                "http://testphp.vulnweb.com/listproducts.php?cat=2",
                 "...and 6 more"
             ]
         },
