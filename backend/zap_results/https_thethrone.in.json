@@ -1,8 +1,8 @@
 {
     "summary": {
         "Medium": 3,
-        "Low": 6,
-        "Informational": 5
+        "Informational": 5,
+        "Low": 6
     },
     "vulnerabilities_by_type": [
         {
@@ -10,7 +10,7 @@
             "alert_type": "Session Management Response Identified (1)",
             "alert_tags": "CWE--1",
             "parameter": "_shopify_y",
-            "evidence": "1AE7084B-b5c3-457B-bb60-83ff9ad824fe",
+            "evidence": "199EEC6D-8709-45E6-805d-68c292833669",
             "description": "The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.",
             "solution": "This is an informational alert rather than a vulnerability and so there is nothing to fix.",
             "count": 1,
@@ -126,8 +126,8 @@
             "risk": "Low",
             "alert_type": "Timestamp Disclosure - Unix (1)",
             "alert_tags": "CWE-497, OWASP 2021 A13",
-            "parameter": "x-request-id",
-            "evidence": "1743486293",
+            "parameter": "",
+            "evidence": "1743490201",
             "description": "A timestamp was disclosed by the application/web server. - Unix",
             "solution": "Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.",
             "count": 1,
