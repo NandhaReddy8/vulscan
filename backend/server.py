@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
@@ -108,14 +108,17 @@ def scan():
     return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
 
 @app.route("/api/report-request", methods=["POST"])
-def save_report_request():
+def handle_report_request():
     try:
         data = request.get_json()
+        print(f"[*] Received report request for target: {data.get('targetUrl', 'Unknown')}")
         
         # Validate required fields
-        required_fields = ['name', 'email', 'company', 'companySize']
-        if not all(field in data for field in required_fields):
-            return jsonify({"error": "Missing required fields"}), 400
+        required_fields = ['name', 'email', 'company', 'companySize', 'targetUrl']
+        missing_fields = [field for field in required_fields if field not in data]
+        if missing_fields:
+            print(f"[ERROR] Missing required fields: {missing_fields}")
+            return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
         # Format data for CSV
         csv_data = {
@@ -124,27 +127,53 @@ def save_report_request():
             'organization': data['company'],
             'size': data['companySize'],
             'phone': data.get('phone', 'Not provided'),
+            'target_url': data['targetUrl'],
             'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         }
 
-        # Write to CSV file
-        csv_file = 'report_requests.csv'
-        file_exists = os.path.exists(csv_file)
+        # Get the absolute path for the CSV file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(current_dir, 'report_requests.csv')
         
-        with open(csv_file, 'a', newline='') as f:
-            writer = csv.DictWriter(f, fieldnames=csv_data.keys())
-            if not file_exists:
-                writer.writeheader()
-            writer.writerow(csv_data)
+        try:
+            # Ensure the file exists or create with headers
+            if not os.path.exists(csv_file):
+                with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+                    writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+                    writer.writeheader()
 
-        return jsonify({
-            "message": "Request submitted successfully",
-            "status": "success"
-        })
+            # Append the new data
+            with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+                writer.writerow(csv_data)
+            print(f"[+] Successfully saved request to CSV: {csv_file}")
+        except Exception as e:
+            print(f"[ERROR] Failed to write to CSV: {str(e)}")
+            return jsonify({"error": "Failed to save request data"}), 500
+
+        # Get ZAP report file
+        safe_filename = data['targetUrl'].replace("://", "_").replace("/", "_").replace(":", "_")
+        report_path = os.path.join(current_dir, RESULTS_DIR, f"{safe_filename}.json")
+        
+        if not os.path.exists(report_path):
+            print(f"[ERROR] Report not found at: {report_path}")
+            return jsonify({"error": "Scan report not found. Please ensure scan is completed."}), 404
+
+        print(f"[+] Sending report file: {report_path}")
+        try:
+            return send_file(
+                report_path,
+                mimetype='application/json',
+                as_attachment=True,
+                download_name=f"security_report_{safe_filename}.json"
+            )
+        except Exception as e:
+            print(f"[ERROR] Failed to send file: {str(e)}")
+            return jsonify({"error": "Failed to send report file"}), 500
 
     except Exception as e:
-        print(f"Error saving report request: {str(e)}")
-        return jsonify({"error": "Failed to save request"}), 500
+        print(f"[ERROR] Report request failed: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 # Socket.IO connection event handlers
 @socketio.on('connect')

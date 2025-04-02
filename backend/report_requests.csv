@@ -1,1 +1,2 @@
-name,email,organization,size,purpose
+name,email,organization,size,phone,targetUrl,timestamp
+test-1 test last,testmail@gmail.com,test company,1-10,1234567890,https://thethrone.in/,2025-04-02 19:15:28

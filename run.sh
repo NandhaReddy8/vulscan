@@ -47,19 +47,20 @@ setup_frontend() {
 start_services() {
     # Start ZAP
     print_status "Starting OWASP ZAP..."
-    nohup zaproxy -daemon -port 8085 -host 127.0.0.1 > logs/zap.log 2>&1 &
-    sleep 10 # Wait for ZAP to initialize
+    nohup zaproxy -daemon -port 8080 -host 127.0.0.1 > logs/zap.log 2>&1 &
+    sleep 15 # Wait for ZAP to initialize
 
     # Start backend
     print_status "Starting Flask backend server..."
     cd backend
     nohup python server.py > ../logs/backend.log 2>&1 &
     cd ..
-    sleep 5
+    sleep 10
 
     # Start frontend
     print_status "Starting React frontend..."
     cd frontend
+    npm i
     npm run dev &
     cd ..
 }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { X, Loader2 } from 'lucide-react';
+import { X, Loader2, CheckCircle } from 'lucide-react';
 
 interface ReportRequestDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (formData: ReportFormData) => void;
+  targetUrl: string;
 }
 
 export interface ReportFormData {
@@ -18,67 +18,107 @@ export interface ReportFormData {
 const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
   isOpen,
   onClose,
-  onSubmit,
+  targetUrl
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setError(null);
 
-    const formData = new FormData(e.target as HTMLFormElement);
-    const data = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      company: formData.get('company'),
-      companySize: formData.get('companySize'),
-      phone: formData.get('phone'),
-    };
-
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    
     try {
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/report-request`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+        // Log the URL being used
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
+        console.log('Backend URL:', backendUrl);
+        
+        if (!backendUrl) {
+            throw new Error('Backend URL not configured');
+        }
 
-      if (!response.ok) {
-        throw new Error('Failed to submit request');
-      }
+        const response = await fetch(`${backendUrl}/api/report-request`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                name: formData.get('name'),
+                email: formData.get('email'),
+                company: formData.get('company'),
+                companySize: formData.get('companySize'),
+                phone: formData.get('phone') || '',
+                targetUrl: targetUrl
+            })
+        });
 
-      setShowConfirmation(true);
-    } catch (error) {
-      console.error('Error submitting form:', error);
+        console.log('Response status:', response.status);
+        const contentType = response.headers.get('content-type');
+        console.log('Content type:', contentType);
+
+        if (!response.ok) {
+            let errorMessage = 'Failed to submit request';
+            if (contentType?.includes('application/json')) {
+                const errorData = await response.json();
+                errorMessage = errorData.error || errorMessage;
+            }
+            throw new Error(errorMessage);
+        }
+
+        // Handle successful response
+        if (contentType?.includes('application/json')) {
+            const data = await response.json();
+            console.log('Response data:', data);
+            if (data.error) {
+                throw new Error(data.error);
+            }
+        } else {
+            // Handle file download
+            const blob = await response.blob();
+            console.log('Blob size:', blob.size);
+            
+            if (blob.size === 0) {
+                throw new Error('Received empty file response');
+            }
+            
+            const downloadUrl = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = downloadUrl;
+            link.download = `security_report_${targetUrl.replace(/[/:]/g, '_')}.json`;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.URL.revokeObjectURL(downloadUrl);
+        }
+
+        setShowSuccess(true);
+    } catch (err) {
+        console.error('Error submitting report request:', err);
+        setError(err instanceof Error ? err.message : 'Failed to submit request');
     } finally {
-      setIsSubmitting(false);
+        setIsSubmitting(false);
     }
   };
 
   if (!isOpen) return null;
 
-  if (showConfirmation) {
+  if (showSuccess) {
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
         <div className="bg-gray-800 rounded-lg w-full max-w-md p-6 text-center">
-          <div className="mb-4 text-green-400">
-            <svg className="w-16 h-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-            </svg>
-          </div>
+          <CheckCircle className="w-16 h-16 text-green-400 mx-auto mb-4" />
           <h3 className="text-xl font-semibold text-white mb-2">
             Thank You for Your Request
           </h3>
           <p className="text-gray-300 mb-6">
-            Our team will contact you shortly to discuss your security requirements and provide the complete vulnerability report.
+            Our team will contact you shortly for further discussion about your security requirements.
           </p>
           <button
-            onClick={() => {
-              setShowConfirmation(false);
-              onClose();
-            }}
+            onClick={onClose}
             className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
           >
             Close
@@ -94,8 +134,10 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          title='Close'
+          type='reset'
         >
-          <X className="h-5 w-5" />
+          <X className="h-5 w-5" /> 
         </button>
 
         <div className="mb-6">
@@ -193,6 +235,11 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
             )}
           </button>
         </form>
+        {error && (
+          <div className="text-red-400 text-sm mt-2">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );

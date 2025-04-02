@@ -26,12 +26,13 @@ interface Vulnerability {
 
 // You may want to set this in an environment variable
 
-const BACKEND_URL = import.meta.env.BACKEND_URL || "http://localhost:5000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:5000";
 
 function App() {
   const [isScanning, setIsScanning] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [socket, setSocket] = useState<Socket | null>(null);
+  const [url, setUrl] = useState("");
   const [scanProgress, setScanProgress] = useState({
     progress: 0,
     message: "",
@@ -229,7 +230,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
       <Header />
-      
+
       {/* Add ToastContainer component */}
       <ToastContainer
         position="top-right"
@@ -254,7 +255,12 @@ function App() {
           </p>
         </section>
 
-        <Scanner onScanSubmit={handleScan} isLoading={isScanning} />
+        <Scanner
+          url={url}
+          setUrl={setUrl}
+          onScanSubmit={handleScan}
+          isLoading={isScanning}
+        />
 
         {/* Scan Progress Indicator */}
         {isScanning && (
@@ -311,6 +317,7 @@ function App() {
           isVisible={showResults}
           vulnerabilities={vulnerabilities}
           stats={stats}
+          targetUrl={url}
         />
       </main>
 

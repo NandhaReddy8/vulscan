@@ -1,14 +1,22 @@
-import React, { useState } from 'react';
-import { Loader } from 'lucide-react';
+import React, { useState } from "react";
+import { Loader } from "lucide-react";
 
 interface ScannerProps {
   onScanSubmit: (url: string) => void;
   isLoading: boolean;
+  url: string;
+  setUrl: (url: string) => void;
 }
 
-const Scanner: React.FC<ScannerProps> = ({ onScanSubmit, isLoading }) => {
-  const [url, setUrl] = useState('');
-  const [activeType, setActiveType] = useState<'network' | 'application'>('network');
+const Scanner: React.FC<ScannerProps> = ({
+  onScanSubmit,
+  isLoading,
+  url,
+  setUrl,
+}) => {
+  const [activeType, setActiveType] = useState<"network" | "application">(
+    "network"
+  );
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,27 +28,30 @@ const Scanner: React.FC<ScannerProps> = ({ onScanSubmit, isLoading }) => {
       <div className="flex justify-center gap-4 mb-8">
         <button
           className={`px-6 py-3 rounded-lg transition-colors ${
-            activeType === 'network'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+            activeType === "network"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-700 text-gray-200 hover:bg-gray-600"
           }`}
-          onClick={() => setActiveType('network')}
+          onClick={() => setActiveType("network")}
         >
           Network Scanning
         </button>
         <button
           className={`px-6 py-3 rounded-lg transition-colors ${
-            activeType === 'application'
-              ? 'bg-blue-600 text-white'
-              : 'bg-gray-700 text-gray-200 hover:bg-gray-600'
+            activeType === "application"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-700 text-gray-200 hover:bg-gray-600"
           }`}
-          onClick={() => setActiveType('application')}
+          onClick={() => setActiveType("application")}
         >
           Application Scanning
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-gray-800 p-8 rounded-lg shadow-md border border-gray-700"
+      >
         <div className="flex gap-4">
           <input
             type="url"
@@ -61,7 +72,7 @@ const Scanner: React.FC<ScannerProps> = ({ onScanSubmit, isLoading }) => {
                 Scanning...
               </>
             ) : (
-              'Start Scan'
+              "Start Scan"
             )}
           </button>
         </div>
