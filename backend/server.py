@@ -9,6 +9,9 @@ import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target
 from datetime import datetime, timedelta
+import eventlet
+eventlet.monkey_patch()  # Add this at the top
+
 
 # Load environment variables
 FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "127.0.0.1")
@@ -192,4 +195,4 @@ def handle_disconnect():
 
 # Start the Flask Server
 if __name__ == "__main__":
-    socketio.run(app, debug=FLASK_DEBUG, host=FLASK_RUN_HOST, port=FLASK_RUN_PORT)
+    socketio.run(app, debug=FLASK_DEBUG, host=FLASK_RUN_HOST, port=FLASK_RUN_PORT, server='eventlet')
