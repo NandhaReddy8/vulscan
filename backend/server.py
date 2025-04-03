@@ -1,3 +1,5 @@
+import eventlet
+eventlet.monkey_patch()  # Add this at the top
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
@@ -9,8 +11,6 @@ import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target
 from datetime import datetime, timedelta
-import eventlet
-eventlet.monkey_patch()  # Add this at the top
 
 
 # Load environment variables
