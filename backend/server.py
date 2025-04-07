@@ -19,6 +19,7 @@ FLASK_RUN_PORT = int(os.getenv("FLASK_RUN_PORT", 5000))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 
 RESULTS_DIR = "./zap_results"  # Directory where ZAP scan results are stored
+REPORTS_DIR = "./zap_reports"
 
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
@@ -156,7 +157,7 @@ def handle_report_request():
 
         # Get ZAP report file
         safe_filename = data['targetUrl'].replace("://", "_").replace("/", "_").replace(":", "_")
-        report_path = os.path.join(current_dir, RESULTS_DIR, f"{safe_filename}.json")
+        report_path = os.path.join(current_dir, REPORTS_DIR, f"{safe_filename}.pdf")
         
         if not os.path.exists(report_path):
             print(f"[ERROR] Report not found at: {report_path}")
@@ -166,9 +167,9 @@ def handle_report_request():
         try:
             return send_file(
                 report_path,
-                mimetype='application/json',
+                mimetype='application/pdf',
                 as_attachment=True,
-                download_name=f"security_report_{safe_filename}.json"
+                download_name=f"security_report_{safe_filename}.pdf"
             )
         except Exception as e:
             print(f"[ERROR] Failed to send file: {str(e)}")
@@ -195,4 +196,4 @@ def handle_disconnect():
 
 # Start the Flask Server
 if __name__ == "__main__":
-    socketio.run(app, debug=FLASK_DEBUG, host=FLASK_RUN_HOST, port=FLASK_RUN_PORT, server='eventlet')
+    socketio.run(app, debug=FLASK_DEBUG, host=FLASK_RUN_HOST, port=FLASK_RUN_PORT)
