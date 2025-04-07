@@ -31,12 +31,11 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
 
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-    
+
     try {
-        // Log the URL being used
         const backendUrl = import.meta.env.VITE_BACKEND_URL;
         console.log('Backend URL:', backendUrl);
-        
+
         if (!backendUrl) {
             throw new Error('Backend URL not configured');
         }
@@ -69,31 +68,22 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
             throw new Error(errorMessage);
         }
 
-        // Handle successful response
-        if (contentType?.includes('application/json')) {
-            const data = await response.json();
-            console.log('Response data:', data);
-            if (data.error) {
-                throw new Error(data.error);
-            }
-        } else {
-            // Handle file download
-            const blob = await response.blob();
-            console.log('Blob size:', blob.size);
-            
-            if (blob.size === 0) {
-                throw new Error('Received empty file response');
-            }
-            
-            const downloadUrl = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = downloadUrl;
-            link.download = `security_report_${targetUrl.replace(/[/:]/g, '_')}.json`;
-            document.body.appendChild(link);
-            link.click();
-            link.remove();
-            window.URL.revokeObjectURL(downloadUrl);
+        // Handle file download
+        const blob = await response.blob();
+        console.log('Blob size:', blob.size);
+
+        if (blob.size === 0) {
+            throw new Error('Received empty file response');
         }
+
+        const downloadUrl = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `security_report_${targetUrl.replace(/[/:]/g, '_')}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.URL.revokeObjectURL(downloadUrl);
 
         setShowSuccess(true);
     } catch (err) {
@@ -115,7 +105,7 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
             Thank You for Your Request
           </h3>
           <p className="text-gray-300 mb-6">
-            Our team will contact you shortly for further discussion about your security requirements.
+          The PDF will be downloaded shortly. Our team will reach out to you soon to discuss your security requirements in detail.
           </p>
           <button
             onClick={onClose}
