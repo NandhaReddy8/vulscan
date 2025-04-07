@@ -1,7 +1,7 @@
 {
     "summary": {
-        "Informational": 4,
-        "Low": 5,
+        "Low": 6,
+        "Informational": 5,
         "Medium": 4
     },
     "vulnerabilities_by_type": [
@@ -10,7 +10,7 @@
             "alert_type": "Session Management Response Identified (1)",
             "alert_tags": "CWE--1",
             "parameter": "_shopify_y",
-            "evidence": "1345B5E5-6be5-4A94-9b64-a04169506790",
+            "evidence": "C7C416E0-3722-4ACD-8eae-54a669822a43",
             "description": "The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.",
             "solution": "This is an informational alert rather than a vulnerability and so there is nothing to fix.",
             "count": 1,
@@ -65,6 +65,19 @@
             "evidence": "set-cookie: _tracking_consent",
             "description": "A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.",
             "solution": "Ensure that the HttpOnly flag is set for all cookies.",
+            "count": 1,
+            "affected_urls": [
+                "https://thethrone.in/"
+            ]
+        },
+        {
+            "risk": "Low",
+            "alert_type": "Cookie without SameSite Attribute (1)",
+            "alert_tags": "CWE-1275, OWASP 2021 A13",
+            "parameter": "localization",
+            "evidence": "set-cookie: localization",
+            "description": "A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.",
+            "solution": "Ensure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.",
             "count": 1,
             "affected_urls": [
                 "https://thethrone.in/"
@@ -136,6 +149,19 @@
             ]
         },
         {
+            "risk": "Informational",
+            "alert_type": "Retrieved from Cache (1)",
+            "alert_tags": "CWE--1",
+            "parameter": "",
+            "evidence": "hit",
+            "description": "The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.",
+            "solution": "Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:\nCache-Control: no-cache, no-store, must-revalidate, private\nPragma: no-cache\nExpires: 0\nThis configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.",
+            "count": 1,
+            "affected_urls": [
+                "https://thethrone.in/"
+            ]
+        },
+        {
             "risk": "Low",
             "alert_type": "Timestamp Disclosure - Unix (1)",
             "alert_tags": "CWE-497, OWASP 2021 A13",
@@ -149,22 +175,6 @@
             ]
         },
         {
-            "risk": "Medium",
-            "alert_type": "Content Security Policy (CSP) Header Not Set (1)",
-            "alert_tags": "CWE-693, OWASP 2021 A15",
-            "parameter": "",
-            "evidence": "",
-            "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
-            "solution": "Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.",
-            "count": 4,
-            "affected_urls": [
-                "https://thethrone.in/robots.txt",
-                "https://thethrone.in/sitemap.xml",
-                "https://thethrone.in/",
-                "...and 1 more"
-            ]
-        },
-        {
             "risk": "Low",
             "alert_type": "Strict-Transport-Security Header Not Set (1)",
             "alert_tags": "CWE-319, OWASP 2021 A15",
@@ -174,10 +184,26 @@
             "solution": "Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.",
             "count": 6,
             "affected_urls": [
+                "https://thethrone.in/cdn-cgi/styles/cf.errors.ie.css",
                 "https://thethrone.in/robots.txt",
                 "https://thethrone.in/sitemap.xml",
-                "https://thethrone.in",
                 "...and 3 more"
+            ]
+        },
+        {
+            "risk": "Medium",
+            "alert_type": "Content Security Policy (CSP) Header Not Set (1)",
+            "alert_tags": "CWE-693, OWASP 2021 A15",
+            "parameter": "",
+            "evidence": "",
+            "description": "Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.",
+            "solution": "Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.",
+            "count": 4,
+            "affected_urls": [
+                "https://thethrone.in",
+                "https://thethrone.in/robots.txt",
+                "https://thethrone.in/",
+                "...and 1 more"
             ]
         }
     ]

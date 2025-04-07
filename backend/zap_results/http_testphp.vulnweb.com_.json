@@ -1,8 +1,8 @@
 {
     "summary": {
         "Low": 3,
-        "Medium": 3,
-        "Informational": 4
+        "Informational": 4,
+        "Medium": 3
     },
     "vulnerabilities_by_type": [
         {
@@ -16,8 +16,8 @@
             "count": 42,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
+                "http://testphp.vulnweb.com/guestbook.php",
                 "http://testphp.vulnweb.com/hpp/",
-                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
                 "...and 39 more"
             ]
         },
@@ -32,8 +32,8 @@
             "count": 29,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/artists.php",
-                "http://testphp.vulnweb.com/AJAX/index.php",
+                "http://testphp.vulnweb.com/search.php?test=query",
+                "http://testphp.vulnweb.com/categories.php",
                 "...and 26 more"
             ]
         },
@@ -48,8 +48,8 @@
             "count": 46,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/high",
-                "http://testphp.vulnweb.com/privacy.php",
+                "http://testphp.vulnweb.com/sitemap.xml",
+                "http://testphp.vulnweb.com/robots.txt",
                 "...and 43 more"
             ]
         },
@@ -64,8 +64,8 @@
             "count": 27,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/artists.php",
-                "http://testphp.vulnweb.com/disclaimer.php",
+                "http://testphp.vulnweb.com/search.php?test=query",
+                "http://testphp.vulnweb.com/guestbook.php",
                 "...and 24 more"
             ]
         },
@@ -80,8 +80,8 @@
             "count": 71,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/userinfo.php",
-                "http://testphp.vulnweb.com/high",
+                "http://testphp.vulnweb.com/images/logo.gif",
+                "http://testphp.vulnweb.com/robots.txt",
                 "...and 68 more"
             ]
         },
@@ -96,8 +96,8 @@
             "count": 66,
             "affected_urls": [
                 "http://testphp.vulnweb.com/",
-                "http://testphp.vulnweb.com/hpp/",
-                "http://testphp.vulnweb.com/Mod_Rewrite_Shop/",
+                "http://testphp.vulnweb.com/images/logo.gif",
+                "http://testphp.vulnweb.com/style.css",
                 "...and 63 more"
             ]
         },
@@ -122,7 +122,7 @@
             "alert_type": "Modern Web Application (1)",
             "alert_tags": "CWE--1",
             "parameter": "",
-            "evidence": "<a href='#' onClick=\"window.open('./comment.php?pid=7','comment','width=500,height=400')\">comment on this picture</a>",
+            "evidence": "<a href='#' onClick=\"window.open('./comment.php?pid=6','comment','width=500,height=400')\">comment on this picture</a>",
             "description": "The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.",
             "solution": "This is an informational alert and so no changes are required.",
             "count": 9,
