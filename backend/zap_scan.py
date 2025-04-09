@@ -401,109 +401,118 @@ def customize_report(html_content):
         with open(logo_path, 'rb') as f:
             logo_base64 = base64.b64encode(f.read()).decode('utf-8')
 
-        # Add CSS for styling
+        # Add CSS for styling - adjusted margins and padding in report-header
         css_styles = '''
         <style>
             body {
-                font-family: Arial, sans-serif;
-                line-height: 1.6;
-                color: #333;
-                margin: 0;
-                padding: 0;
-                background-color: #f9f9f9;
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
             }
             .report-header {
-                text-align: center;
-                background-color: #004080;
-                color: white;
-                padding: 20px 0;
-                margin-bottom: 30px;
+            text-align: center;
+            background-color: #f9f9f9;
+            color: black;
+            padding: 10px 0;  /* Reduced padding from 20px to 10px */
+            margin-bottom: 20px;  /* Reduced margin from 30px to 20px */
+            border-bottom: 2px solid #004080;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;  /* Added small gap between elements */
             }
             .report-header img {
-                width: 200px;
-                height: auto;
-                display: block;
-                margin: 0 auto 10px auto;
+            width: 300px;
+            height: auto;
+            margin: 0 auto;
+            display: block;
+            margin-bottom: 5px;  /* Added small bottom margin to logo */
             }
             .report-header h1 {
-                margin: 0;
-                font-size: 28px;
+            margin: 0;  /* Removed all margins */
+            font-size: 28px;
+            color: black;
             }
+            /* Rest of the CSS remains the same */
             .report-content {
-                padding: 20px;
-                background: white;
-                margin: 20px auto;
-                border-radius: 8px;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                max-width: 900px;
+            padding: 20px;
+            background: white;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 900px;
             }
             .footer {
-                text-align: center;
-                margin-top: 30px;
-                font-size: 12px;
-                color: #666;
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #666;
             }
             .footer-logo {
-                width: 80px;
-                height: auto;
-                margin-top: 10px;
+            width: 150px;  /* Increased from 80px to 150px (half of header logo size) */
+            height: auto;
+            margin-top: 10px;
             }
             table {
-                width: 80%;
-                margin: 20px auto;
-                border-collapse: collapse;
-                font-size: 14px;
-                border: 1px solid #ddd;
-                border-radius: 8px;
-                overflow: hidden;
-                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            font-size: 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             }
             table th, table td {
-                border: 1px solid #ddd;
-                padding: 12px;
-                text-align: left;
-                vertical-align: top;
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            vertical-align: top;
             }
             table th {
-                background-color: #004080;
-                color: white;
-                font-weight: bold;
-                text-transform: uppercase;
+            background-color: #004080;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
             }
             table tr:nth-child(even) {
-                background-color: #f2f2f2;
+            background-color: #f2f2f2;
             }
             table tr:hover {
-                background-color: #e6f7ff;
+            background-color: #e6f7ff;
             }
             .table-title {
-                font-size: 18px;
-                font-weight: bold;
-                margin: 10px auto;
-                color: #004080;
-                text-transform: uppercase;
-                text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 10px auto;
+            color: #004080;
+            text-transform: uppercase;
+            text-align: center;
             }
             .risk-high {
-                color: #d9534f;
-                font-weight: bold;
+            color: #d9534f;
+            font-weight: bold;
             }
             .risk-medium {
-                color: #f0ad4e;
-                font-weight: bold;
+            color: #f0ad4e;
+            font-weight: bold;
             }
             .risk-low {
-                color: #5bc0de;
-                font-weight: bold;
+            color: #5bc0de;
+            font-weight: bold;
             }
             .risk-info {
-                color: #5cb85c;
-                font-weight: bold;
+            color: #5cb85c;
+            font-weight: bold;
             }
         </style>
         '''
 
-        # Create header with VirtuesTech logo
+        # Rest of the function remains the same
         new_header = f'''
         <div class="report-header">
             <img src="data:image/png;base64,{logo_base64}" alt="VirtuesTech Logo" />
@@ -511,7 +520,6 @@ def customize_report(html_content):
         </div>
         '''
 
-        # Create footer with logo
         footer = f'''
         <div class="footer">
             <p>Report generated by VirtuesTech Security Scanner</p>
