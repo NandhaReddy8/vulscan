@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 # Initialize ZAP API
 zap = ZAPv2(proxies={"http": ZAP_URL, "https": ZAP_URL}, apikey=ZAP_API_KEY)
+print(ZAP_URL)
 
 def check_zap_running():
     """Check if ZAP is running before starting a scan"""

@@ -146,7 +146,7 @@ function App() {
     };
   }, []);
 
-  const handleScan = async (url: string) => {
+  const handleScan = async (url: string, email: string) => {
     setIsScanning(true);
     setShowResults(false);
     setScanError(null);
@@ -157,13 +157,13 @@ function App() {
     });
 
     try {
-      // First attempt to start scan using REST API
       const response = await fetch(`${BACKEND_URL}/api/scan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url,
-          session_id: socket?.id, // Include session_id from socket if available
+          email,
+          session_id: socket?.id,
         }),
       });
 
@@ -246,9 +246,16 @@ function App() {
       />
 
       <main className="flex-1 container mx-auto px-4 py-12">
-        <section className="text-center mb-16" data-aos="fade-up">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-            Advanced & Quick Security Scanner
+        <section
+          className="text-center mb-16" 
+          data-aos="fade-up"
+          style={{ lineHeight: "1.2" }} // Adjust line height to prevent text cutoff
+        >
+          <h1
+            className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent"
+            style={{ paddingBottom: "0.2em" }} // Add padding to prevent cutoff
+          >
+            Website Vulnerability Scanner
           </h1>
           <p className="text-xl text-gray-300">
             Comprehensive vulnerability assessment for your digital assets

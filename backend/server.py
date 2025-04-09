@@ -60,13 +60,44 @@ def is_duplicate_url(target_url):
 def scan():
     data = request.get_json()
     target_url = data.get("url")
-    session_id = data.get("session_id")  # Get session_id from the request
+    session_id = data.get("session_id")
+    email = data.get("email")  # Get email from the request
 
     if not target_url:
         return jsonify({"error": "No URL provided"}), 400
 
     if not session_id:
         return jsonify({"error": "No session_id provided"}), 400
+
+    if not email:
+        return jsonify({"error": "No email provided"}), 400
+
+    # Save scan request to CSV with email
+    try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(current_dir, 'scan_requests.csv')
+        
+        # Prepare CSV data
+        csv_data = {
+            'target_url': target_url,
+            'email': email,
+            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        }
+
+        # Create file with headers if it doesn't exist
+        if not os.path.exists(csv_file):
+            with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+                writer.writeheader()
+
+        # Append the new scan request
+        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+            writer.writerow(csv_data)
+            
+        print(f"[+] Scan request saved to CSV: {csv_file}")
+    except Exception as e:
+        print(f"[ERROR] Failed to save scan request to CSV: {str(e)}")
 
     # Check for duplicate URL
     if is_duplicate_url(target_url):
@@ -116,7 +147,7 @@ def handle_report_request():
     try:
         data = request.get_json()
         print(f"[*] Received report request for target: {data.get('targetUrl', 'Unknown')}")
-        
+
         # Validate required fields
         required_fields = ['name', 'email', 'company', 'companySize', 'targetUrl']
         missing_fields = [field for field in required_fields if field not in data]
@@ -124,46 +155,64 @@ def handle_report_request():
             print(f"[ERROR] Missing required fields: {missing_fields}")
             return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
 
-        # Format data for CSV
-        csv_data = {
-            'name': data['name'],
-            'email': data['email'],
-            'organization': data['company'],
-            'size': data['companySize'],
-            'phone': data.get('phone', 'Not provided'),
-            'target_url': data['targetUrl'],
-            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        }
-
-        # Get the absolute path for the CSV file
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        csv_file = os.path.join(current_dir, 'report_requests.csv')
-        
+        # Save request details to CSV first
         try:
-            # Ensure the file exists or create with headers
-            if not os.path.exists(csv_file):
-                with open(csv_file, 'w', newline='', encoding='utf-8') as f:
-                    writer = csv.DictWriter(f, fieldnames=csv_data.keys())
-                    writer.writeheader()
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            csv_file = os.path.join(current_dir, 'report_requests.csv')
+            
+            # Prepare CSV data
+            csv_data = {
+                'name': data['name'],
+                'email': data['email'],
+                'organization': data['company'],
+                'size': data['companySize'],
+                'phone': data.get('phone', 'Not provided'),
+                'target_url': data['targetUrl'],
+                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            }
 
-            # Append the new data
+            # Create file with headers if it doesn't exist
+            file_exists = os.path.exists(csv_file)
             with open(csv_file, 'a', newline='', encoding='utf-8') as f:
                 writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+                if not file_exists:
+                    writer.writeheader()
                 writer.writerow(csv_data)
+
             print(f"[+] Successfully saved request to CSV: {csv_file}")
         except Exception as e:
             print(f"[ERROR] Failed to write to CSV: {str(e)}")
-            return jsonify({"error": "Failed to save request data"}), 500
-
-        # Get ZAP report file
-        safe_filename = data['targetUrl'].replace("://", "_").replace("/", "_").replace(":", "_")
-        report_path = os.path.join(current_dir, REPORTS_DIR, f"{safe_filename}.pdf")
+            # Continue with PDF generation even if CSV writing fails
         
-        if not os.path.exists(report_path):
-            print(f"[ERROR] Report not found at: {report_path}")
+        # Normalize the target URL to include the protocol
+        target_url = data['targetUrl']
+        if not target_url.startswith("http://") and not target_url.startswith("https://"):
+            target_url = f"https://{target_url}"  # Default to https://
+
+        # Get the absolute path for the CSV file
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        
+        # Try both http and https versions of the filename
+        safe_filename_https = f"https_{target_url.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')}"
+        safe_filename_http = f"http_{target_url.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')}"
+        
+        # Check for both HTTP and HTTPS versions of the report
+        report_path_https = os.path.join(current_dir, REPORTS_DIR, f"{safe_filename_https}.pdf")
+        report_path_http = os.path.join(current_dir, REPORTS_DIR, f"{safe_filename_http}.pdf")
+
+        # Determine which report exists
+        if os.path.exists(report_path_https):
+            report_path = report_path_https
+            safe_filename = safe_filename_https
+        elif os.path.exists(report_path_http):
+            report_path = report_path_http
+            safe_filename = safe_filename_http
+        else:
+            print(f"[ERROR] Report not found at either: \n{report_path_https}\n{report_path_http}")
             return jsonify({"error": "Scan report not found. Please ensure scan is completed."}), 404
 
-        print(f"[+] Sending report file: {report_path}")
+        print(f"[+] Found report file at: {report_path}")
+        
         try:
             return send_file(
                 report_path,
