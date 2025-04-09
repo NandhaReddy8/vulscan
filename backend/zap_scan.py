@@ -12,7 +12,7 @@ import socket
 import base64
 import re
 import logging
-import pdfkit
+from xhtml2pdf import pisa  # Add this import
 
 logger = logging.getLogger(__name__)
 
@@ -571,46 +571,29 @@ def customize_report(html_content):
         logger.error(f"Failed to customize report: {str(e)}")
         return html_content
 
-import pdfkit
-import os
-
-# Function to configure wkhtmltopdf path based on the operating system
-def get_wkhtmltopdf_path():
-    """Determine the wkhtmltopdf binary path based on the operating system."""
-    if os.name == 'nt':  # Windows
-        possible_paths = [
-            r'C:\Program Files\wkhtmltopdf\bin\wkhtmltopdf.exe',
-            r'C:\Program Files (x86)\wkhtmltopdf\bin\wkhtmltopdf.exe',
-            r'C:\wkhtmltopdf\bin\wkhtmltopdf.exe'
-        ]
-    else:  # Linux/Unix-based systems
-        possible_paths = [
-            '/usr/local/bin/wkhtmltopdf',
-            '/usr/bin/wkhtmltopdf',
-            '/bin/wkhtmltopdf'
-        ]
-
-    for path in possible_paths:
-        if os.path.exists(path):
-            return path
-
-    raise Exception("wkhtmltopdf not found. Please install it from https://wkhtmltopdf.org/downloads.html")
-
-# Configure wkhtmltopdf for pdfkit
-try:
-    wkhtmltopdf_path = get_wkhtmltopdf_path()
-    pdfkit_config = pdfkit.configuration(wkhtmltopdf=wkhtmltopdf_path)
-    print(f"[+] wkhtmltopdf found at: {wkhtmltopdf_path}")
-except Exception as e:
-    print(f"[ERROR] {str(e)}")
-    raise
-
 # Function to generate PDF from HTML
 def generate_pdf_from_html(html_file, pdf_file):
-    """Generate a PDF from an HTML file using pdfkit."""
+    """Generate a PDF from an HTML file using xhtml2pdf."""
     try:
-        pdfkit.from_file(html_file, pdf_file, configuration=pdfkit_config)
+        # Read the HTML file
+        with open(html_file, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+
+        # Create PDF
+        with open(pdf_file, "wb") as output_file:
+            conversion_status = pisa.CreatePDF(
+                html_content,
+                dest=output_file,
+                encoding='utf-8'
+            )
+
+        # Check if conversion was successful
+        if conversion_status.err:
+            raise Exception("Failed to generate PDF")
+
         print(f"[+] PDF report saved to {pdf_file}")
+        return True
+
     except Exception as e:
         print(f"[ERROR] Failed to generate PDF: {str(e)}")
         raise
