@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Loader } from "lucide-react";
 
 interface ScannerProps {
-  onScanSubmit: (url: string, email: string) => void; // Update the function signature
+  onScanSubmit: (url: string) => void; // Removed email parameter
   isLoading: boolean;
   url: string;
   setUrl: (url: string) => void;
@@ -14,12 +14,9 @@ const Scanner: React.FC<ScannerProps> = ({
   url,
   setUrl,
 }) => {
-  const [activeType, setActiveType] = useState<"network" | "application">(
-    "application"
-  );
-  const [protocol, setProtocol] = useState("https://"); // State for protocol selection
-  const [email, setEmail] = useState(""); // State for email
-  const [error, setError] = useState<string | null>(null); // State for validation error
+  const [activeType, setActiveType] = useState<"network" | "application">("application");
+  const [protocol, setProtocol] = useState("https://");
+  const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,40 +24,23 @@ const Scanner: React.FC<ScannerProps> = ({
 
     try {
         const fullUrl = `${protocol}${url}`;
-        const urlDomain = new URL(fullUrl).hostname.replace("www.", "");
-        const urlParts = urlDomain.split(/[.-]/);
-        const emailDomain = email.split("@")[1]?.split(".")[0];
-
-        if (!emailDomain || !urlParts.some((part) => part.toLowerCase() === emailDomain.toLowerCase())) {
-            setError("The site you are checking and your company domain name do not match.");
-            return;
-        }
-
-        // Pass both URL and email to the scan handler
-        onScanSubmit(fullUrl, email);  // Update the function signature
+        // Submit scan with just the URL
+        onScanSubmit(fullUrl);
     } catch (error) {
-        setError("Invalid URL or email format. Please check your inputs.");
+        setError("Invalid URL format. Please check your input.");
     }
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-
-    // Allow only valid characters for a domain name (letters, numbers, hyphens, and dots)
+    // Allow only valid characters for a domain name
     const validInput = input.replace(/[^a-zA-Z0-9.-]/g, "");
-
     setUrl(validInput);
   };
 
   return (
     <section className="max-w-3xl mx-auto mb-16 mt-16" data-aos="fade-up">
       <div className="flex justify-center gap-4 mb-8">
-        <button
-          className="px-6 py-3 rounded-lg bg-gray-700 text-gray-400 cursor-not-allowed"
-          disabled
-        >
-          Network Scanning
-        </button>
         <button
           className={`px-6 py-3 rounded-lg transition-colors ${
             activeType === "application"
@@ -71,6 +51,17 @@ const Scanner: React.FC<ScannerProps> = ({
         >
           Application Scanning
         </button>
+        <div className="relative group">
+          <button
+            className="px-6 py-3 rounded-lg bg-gray-700 text-gray-400 cursor-not-allowed"
+            disabled
+          >
+            Network Scanning
+          </button>
+          <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 text-white text-sm px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+            Coming Soon
+          </div>
+        </div>
       </div>
 
       <form
@@ -96,14 +87,6 @@ const Scanner: React.FC<ScannerProps> = ({
               required
             />
           </div>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your company email"
-            className="px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all"
-            required
-          />
           {error && (
             <div className="text-red-400 text-sm mt-2">{error}</div>
           )}

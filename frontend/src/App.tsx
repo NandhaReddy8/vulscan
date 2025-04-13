@@ -146,7 +146,8 @@ function App() {
     };
   }, []);
 
-  const handleScan = async (url: string, email: string) => {
+  // Update handleScan function
+  const handleScan = async (url: string) => { // Remove email parameter
     setIsScanning(true);
     setShowResults(false);
     setScanError(null);
@@ -162,8 +163,8 @@ function App() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url,
-          email,
           session_id: socket?.id,
+          // Removed email from request body
         }),
       });
 

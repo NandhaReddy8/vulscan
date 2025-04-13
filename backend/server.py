@@ -61,43 +61,12 @@ def scan():
     data = request.get_json()
     target_url = data.get("url")
     session_id = data.get("session_id")
-    email = data.get("email")  # Get email from the request
 
     if not target_url:
         return jsonify({"error": "No URL provided"}), 400
 
     if not session_id:
         return jsonify({"error": "No session_id provided"}), 400
-
-    if not email:
-        return jsonify({"error": "No email provided"}), 400
-
-    # Save scan request to CSV with email
-    try:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        csv_file = os.path.join(current_dir, 'scan_requests.csv')
-        
-        # Prepare CSV data
-        csv_data = {
-            'target_url': target_url,
-            'email': email,
-            'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        }
-
-        # Create file with headers if it doesn't exist
-        if not os.path.exists(csv_file):
-            with open(csv_file, 'w', newline='', encoding='utf-8') as f:
-                writer = csv.DictWriter(f, fieldnames=csv_data.keys())
-                writer.writeheader()
-
-        # Append the new scan request
-        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=csv_data.keys())
-            writer.writerow(csv_data)
-            
-        print(f"[+] Scan request saved to CSV: {csv_file}")
-    except Exception as e:
-        print(f"[ERROR] Failed to save scan request to CSV: {str(e)}")
 
     # Check for duplicate URL
     if is_duplicate_url(target_url):
@@ -107,7 +76,7 @@ def scan():
     running_scans[target_url] = datetime.now()
 
     timestamp = time.time()
-    scan_id = str(uuid.uuid4())  # Generate a unique scan ID
+    scan_id = str(uuid.uuid4())
     save_scan_request(target_url, timestamp)
 
     # Map scan_id to session_id
