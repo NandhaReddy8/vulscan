@@ -68,45 +68,59 @@ def scan():
     if not session_id:
         return jsonify({"error": "No session_id provided"}), 400
 
-    # Check for duplicate URL
-    if is_duplicate_url(target_url):
-        return jsonify({"error": "This URL is currently being scanned. Please wait a few minutes before trying again."}), 400
+    # Get the user's IP address
+    user_ip = request.remote_addr
+
+    # Format the timestamp in dd-mm-yyyy format
+    timestamp = datetime.now().strftime("%d-%m-%Y")
+
+    # Save scan request to CSV
+    try:
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(current_dir, 'scan_requests.csv')
+
+        # Define the correct headers and data
+        headers = ['url', 'ip_address', 'timestamp']
+        csv_data = {
+            'url': target_url,
+            'ip_address': user_ip,
+            'timestamp': timestamp
+        }
+
+        # Create file with headers if it doesn't exist
+        file_exists = os.path.exists(csv_file)
+        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=headers)
+            if not file_exists:
+                writer.writeheader()
+            writer.writerow(csv_data)
+
+        print(f"[+] Scan request saved to CSV: {csv_file}")
+    except Exception as e:
+        print(f"[ERROR] Failed to save scan request to CSV: {str(e)}")
 
     # Add URL to running scans
     running_scans[target_url] = datetime.now()
 
-    timestamp = time.time()
     scan_id = str(uuid.uuid4())
-    save_scan_request(target_url, timestamp)
-
-    # Map scan_id to session_id
     active_scans[scan_id] = session_id
-
-    # Delete old JSON results if they exist
-    sanitized_url = target_url.replace("://", "_").replace("/", "_")
-    json_filename = f"{RESULTS_DIR}/{sanitized_url}.json"
-
-    if os.path.exists(json_filename):
-        os.remove(json_filename)
-        print(f"[*] Deleted old scan results: {json_filename}")
 
     # Run ZAP Scan in a separate thread
     def run_scan():
-        nonlocal scan_id, target_url  # Use nonlocal instead of global
+        nonlocal scan_id, target_url
         print(f"[*] Triggering scan for {target_url}...")
         try:
-            scan_target(target_url, socketio, scan_id, active_scans)  # Pass active_scans as parameter
+            scan_target(target_url, socketio, scan_id, active_scans)
         except Exception as e:
             print(f"[ERROR] Scan failed: {e}")
             session_id = active_scans.get(scan_id)
             if session_id:
                 socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url}, room=session_id)
         finally:
-            # Remove URL from running scans when complete
             running_scans.pop(target_url, None)
 
     scan_thread = threading.Thread(target=run_scan)
-    scan_thread.daemon = True  # Make thread daemon so it exits when main thread exits
+    scan_thread.daemon = True
     scan_thread.start()
 
     return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
@@ -118,7 +132,7 @@ def handle_report_request():
         print(f"[*] Received report request for target: {data.get('targetUrl', 'Unknown')}")
 
         # Validate required fields
-        required_fields = ['name', 'email', 'company', 'companySize', 'targetUrl']
+        required_fields = ['name', 'email', 'targetUrl']
         missing_fields = [field for field in required_fields if field not in data]
         if missing_fields:
             print(f"[ERROR] Missing required fields: {missing_fields}")
@@ -129,12 +143,10 @@ def handle_report_request():
             current_dir = os.path.dirname(os.path.abspath(__file__))
             csv_file = os.path.join(current_dir, 'report_requests.csv')
             
-            # Prepare CSV data
+            headers = ['name', 'email', 'phone', 'target_url', 'timestamp']
             csv_data = {
                 'name': data['name'],
                 'email': data['email'],
-                'organization': data['company'],
-                'size': data['companySize'],
                 'phone': data.get('phone', 'Not provided'),
                 'target_url': data['targetUrl'],
                 'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -143,7 +155,7 @@ def handle_report_request():
             # Create file with headers if it doesn't exist
             file_exists = os.path.exists(csv_file)
             with open(csv_file, 'a', newline='', encoding='utf-8') as f:
-                writer = csv.DictWriter(f, fieldnames=csv_data.keys())
+                writer = csv.DictWriter(f, fieldnames=headers)
                 if not file_exists:
                     writer.writeheader()
                 writer.writerow(csv_data)

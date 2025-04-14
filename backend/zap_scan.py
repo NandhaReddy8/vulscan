@@ -389,7 +389,7 @@ def normalize_url(url):
     return urlunparse((scheme, netloc, path, "", "", ""))
 
 def customize_report(html_content):
-    """Customize the ZAP HTML report to remove ZAP branding and add VirtuesTech branding."""
+    """Customize the ZAP HTML report to update the header and footer while removing ZAP-specific content."""
     try:
         # Read VirtuesTech logo
         logo_path = os.path.join(os.path.dirname(__file__), 'virtuestech_logo.png')
@@ -401,125 +401,49 @@ def customize_report(html_content):
         with open(logo_path, 'rb') as f:
             logo_base64 = base64.b64encode(f.read()).decode('utf-8')
 
-        # Add CSS for styling - adjusted margins and padding in report-header
+        # Add CSS for styling header and footer
         css_styles = '''
         <style>
-            body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9f9;
-            }
             .report-header {
-            text-align: center;
-            background-color: #f9f9f9;
-            color: black;
-            padding: 10px 0;  /* Reduced padding from 20px to 10px */
-            margin-bottom: 20px;  /* Reduced margin from 30px to 20px */
-            border-bottom: 2px solid #004080;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;  /* Added small gap between elements */
+                text-align: center;
+                background-color: #f9f9f9;
+                color: black;
+                padding: 10px 0;
+                border-bottom: 2px solid #004080;
             }
             .report-header img {
-            width: 300px;
-            height: auto;
-            margin: 0 auto;
-            display: block;
-            margin-bottom: 5px;  /* Added small bottom margin to logo */
+                width: 300px;
+                height: auto;
+                margin: 0 auto;
             }
             .report-header h1 {
-            margin: 0;  /* Removed all margins */
-            font-size: 28px;
-            color: black;
-            }
-            /* Rest of the CSS remains the same */
-            .report-content {
-            padding: 20px;
-            background: white;
-            margin: 20px auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            max-width: 900px;
+                margin: 0;
+                font-size: 28px;
+                color: black;
             }
             .footer {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
-            color: #666;
+                text-align: center;
+                margin-top: 30px;
+                font-size: 12px;
+                color: #666;
             }
             .footer-logo {
-            width: 150px;  /* Increased from 80px to 150px (half of header logo size) */
-            height: auto;
-            margin-top: 10px;
-            }
-            table {
-            width: 80%;
-            margin: 20px auto;
-            border-collapse: collapse;
-            font-size: 14px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            }
-            table th, table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            vertical-align: top;
-            }
-            table th {
-            background-color: #004080;
-            color: white;
-            font-weight: bold;
-            text-transform: uppercase;
-            }
-            table tr:nth-child(even) {
-            background-color: #f2f2f2;
-            }
-            table tr:hover {
-            background-color: #e6f7ff;
-            }
-            .table-title {
-            font-size: 18px;
-            font-weight: bold;
-            margin: 10px auto;
-            color: #004080;
-            text-transform: uppercase;
-            text-align: center;
-            }
-            .risk-high {
-            color: #d9534f;
-            font-weight: bold;
-            }
-            .risk-medium {
-            color: #f0ad4e;
-            font-weight: bold;
-            }
-            .risk-low {
-            color: #5bc0de;
-            font-weight: bold;
-            }
-            .risk-info {
-            color: #5cb85c;
-            font-weight: bold;
+                width: 150px;
+                height: auto;
+                margin-top: 10px;
             }
         </style>
         '''
 
-        # Rest of the function remains the same
+        # Define new header
         new_header = f'''
         <div class="report-header">
             <img src="data:image/png;base64,{logo_base64}" alt="VirtuesTech Logo" />
-            <h1>VirtuesTech Security Scan Report</h1>
+            <h1>Vulnerability Scan Report</h1>
         </div>
         '''
 
+        # Define footer
         footer = f'''
         <div class="footer">
             <p>Report generated by VirtuesTech Security Scanner</p>
@@ -536,8 +460,8 @@ def customize_report(html_content):
 
         # Replace existing header with the new header
         html_content = re.sub(
-            r'<h1>.*?</h1>\s*<p\s*/>',
-            new_header,
+            r'<body.*?>',
+            f'<body>{new_header}',
             html_content,
             flags=re.DOTALL
         )
@@ -549,19 +473,28 @@ def customize_report(html_content):
             html_content
         )
 
-        # Remove ZAP-specific content
-        patterns_to_remove = [
+        # Remove the specific ZAP h1 tag with logo
+        html_content = re.sub(
+            r'<h1>\s*<img[^>]*>ZAP Scanning Report\s*</h1>',
+            '',
+            html_content,
+            flags=re.DOTALL
+        )
+
+        # Remove other ZAP-specific content
+        zap_patterns = [
             r'<h3>\s*ZAP Version:.*?</h3>',
             r'<h4>\s*ZAP by.*?</h4>',
-            r'<title>ZAP.*?</title>'
+            r'<title>ZAP.*?</title>',
+            r'<div class="header.*?</div>'
         ]
-        for pattern in patterns_to_remove:
+        for pattern in zap_patterns:
             html_content = re.sub(pattern, '', html_content, flags=re.DOTALL)
 
         # Add a new title to the report
         html_content = re.sub(
             r'<head>',
-            '<head>\n<title>VirtuesTech Security Scan Report</title>',
+            '<head>\n<title>Vulnerability Scan Report</title>',
             html_content
         )
 

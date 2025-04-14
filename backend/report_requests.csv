@@ -1,17 +1,2 @@
-name,email,organization,size,purpose
-test name vir-2,testmailvir@gmail.com,testvir company,501+,124324234,thethrone.in,2025-04-09 14:07:03
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 14:43:09
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 14:48:22
-test name vir-2,testmailvir@gmail.com,testvir company,51-200,,thethrone.in,2025-04-09 14:56:53
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 14:58:46
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 15:01:22
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 15:04:30
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 15:09:48
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 15:14:04
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 15:24:37
-test name vir-2,testmailvir@gmail.com,testvir company,51-200,,thethrone.in,2025-04-09 15:25:44
-test name vir-2,testmailvir@gmail.com,testvir company,1-10,,virtuestech.com,2025-04-09 16:28:53
-test name vir-2,testmailvir@gmail.com,testvir company,1-10,,thethrone.in,2025-04-09 16:48:11
-test name vir-2,testmailvir@gmail.com,testvir company,51-200,,thethrone.in,2025-04-09 16:50:01
-test name vir-2,testmailvir@gmail.com,testvir company,11-50,,thethrone.in,2025-04-09 19:54:28
-test name vir-2,testmailvir@gmail.com,testvir company,1-10,,thethrone.in,2025-04-09 20:24:42
+name,email,Phone,Target_URL,time Stamp
+test name vir-2,testmailvir@gmail.com,00000000,thethrone.in,2025-04-14 16:22:30

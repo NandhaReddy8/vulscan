@@ -51,16 +51,14 @@ function App() {
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
 
   useEffect(() => {
-    // Configure Socket.IO with explicit options
     const socket: Socket = io(BACKEND_URL, {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
       timeout: 60000,
-      transports: ["websocket", "polling"], // Try WebSocket first, fall back to polling
+      transports: ["websocket", "polling"],
     });
 
-    // Connection event handlers
     socket.on("connect", () => {
       console.log("Connected to WebSocket server with ID:", socket.id);
       setSocket(socket);
@@ -146,8 +144,7 @@ function App() {
     };
   }, []);
 
-  // Update handleScan function
-  const handleScan = async (url: string) => { // Remove email parameter
+  const handleScan = async (url: string) => {
     setIsScanning(true);
     setShowResults(false);
     setScanError(null);
@@ -157,14 +154,19 @@ function App() {
       phase: "Initializing",
     });
 
+    if (!socket?.id) {
+      showToast("Error: No WebSocket connection available", "error");
+      setIsScanning(false);
+      return;
+    }
+
     try {
       const response = await fetch(`${BACKEND_URL}/api/scan`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           url,
-          session_id: socket?.id,
-          // Removed email from request body
+          session_id: socket.id,
         }),
       });
 
@@ -172,9 +174,7 @@ function App() {
 
       if (response.ok) {
         showToast("Scan started successfully!", "success");
-        // Note: We don't set showResults to true here as we'll wait for scan_completed event
       } else {
-        // If REST API fails, try using socket directly
         if (socket) {
           socket.emit("start_scan", { url });
           showToast("Scan requested via WebSocket", "info");
@@ -196,7 +196,6 @@ function App() {
     }
   };
 
-  // Use react-toastify instead of the placeholder function
   const showToast = (message: string, type: string) => {
     switch (type) {
       case "success":
@@ -232,7 +231,6 @@ function App() {
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
       <Header />
 
-      {/* Add ToastContainer component */}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -250,11 +248,11 @@ function App() {
         <section
           className="text-center mb-16" 
           data-aos="fade-up"
-          style={{ lineHeight: "1.2" }} // Adjust line height to prevent text cutoff
+          style={{ lineHeight: "1.2" }}
         >
           <h1
             className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent"
-            style={{ paddingBottom: "0.2em" }} // Add padding to prevent cutoff
+            style={{ paddingBottom: "0.2em" }}
           >
             Website Vulnerability Scanner
           </h1>
@@ -270,7 +268,6 @@ function App() {
           isLoading={isScanning}
         />
 
-        {/* Scan Progress Indicator */}
         {isScanning && (
           <div className="progress-indicator mt-8 p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700">
             <div className="progress-bar bg-gray-700 rounded-full h-4 overflow-hidden">
@@ -288,7 +285,6 @@ function App() {
           </div>
         )}
 
-        {/* Error Display */}
         {scanError && (
           <div className="error-container mt-8">
             <div

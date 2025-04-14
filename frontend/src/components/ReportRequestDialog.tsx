@@ -10,8 +10,6 @@ interface ReportRequestDialogProps {
 export interface ReportFormData {
   name: string;
   email: string;
-  company: string;
-  companySize: string;
   phone?: string;
 }
 
@@ -33,64 +31,49 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
     const formData = new FormData(form);
 
     try {
-        const backendUrl = import.meta.env.VITE_BACKEND_URL;
-        console.log('Backend URL:', backendUrl);
+      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      if (!backendUrl) {
+        throw new Error('Backend URL not configured');
+      }
 
-        if (!backendUrl) {
-            throw new Error('Backend URL not configured');
-        }
+      const response = await fetch(`${backendUrl}/api/report-request`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone') || '',
+          targetUrl: targetUrl
+        })
+      });
 
-        const response = await fetch(`${backendUrl}/api/report-request`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                name: formData.get('name'),
-                email: formData.get('email'),
-                company: formData.get('company'),
-                companySize: formData.get('companySize'),
-                phone: formData.get('phone') || '',
-                targetUrl: targetUrl
-            })
-        });
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit request');
+      }
 
-        console.log('Response status:', response.status);
-        const contentType = response.headers.get('content-type');
-        console.log('Content type:', contentType);
+      const blob = await response.blob();
+      if (blob.size === 0) {
+        throw new Error('Received empty file response');
+      }
 
-        if (!response.ok) {
-            let errorMessage = 'Failed to submit request';
-            if (contentType?.includes('application/json')) {
-                const errorData = await response.json();
-                errorMessage = errorData.error || errorMessage;
-            }
-            throw new Error(errorMessage);
-        }
+      const downloadUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = downloadUrl;
+      link.download = `security_report_${targetUrl.replace(/[/:]/g, '_')}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(downloadUrl);
 
-        // Handle file download
-        const blob = await response.blob();
-        console.log('Blob size:', blob.size);
-
-        if (blob.size === 0) {
-            throw new Error('Received empty file response');
-        }
-
-        const downloadUrl = window.URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `security_report_${targetUrl.replace(/[/:]/g, '_')}.pdf`;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        window.URL.revokeObjectURL(downloadUrl);
-
-        setShowSuccess(true);
+      setShowSuccess(true);
     } catch (err) {
-        console.error('Error submitting report request:', err);
-        setError(err instanceof Error ? err.message : 'Failed to submit request');
+      console.error('Error submitting report request:', err);
+      setError(err instanceof Error ? err.message : 'Failed to submit request');
     } finally {
-        setIsSubmitting(false);
+      setIsSubmitting(false);
     }
   };
 
@@ -105,7 +88,7 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
             Thank You for Your Request
           </h3>
           <p className="text-gray-300 mb-6">
-          The PDF will be downloaded shortly. Our team will reach out to you soon to discuss your security requirements in detail.
+            The PDF will be downloaded shortly. Our team will reach out to you soon.
           </p>
           <button
             onClick={onClose}
@@ -127,7 +110,7 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
           title='Close'
           type='reset'
         >
-          <X className="h-5 w-5" /> 
+          <X className="h-5 w-5" />
         </button>
 
         <div className="mb-6">
@@ -135,7 +118,7 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
             Request Full Security Report
           </h3>
           <p className="text-gray-300">
-            Please provide your details to receive the comprehensive vulnerability report.
+            Please provide your details to receive the comprehensive report.
           </p>
         </div>
 
@@ -164,38 +147,6 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
               required
               className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
-          </div>
-
-          <div>
-            <label htmlFor="company" className="block text-sm font-medium text-gray-200 mb-1">
-              Company Name *
-            </label>
-            <input
-              type="text"
-              id="company"
-              name="company"
-              required
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="companySize" className="block text-sm font-medium text-gray-200 mb-1">
-              Company Size *
-            </label>
-            <select
-              id="companySize"
-              name="companySize"
-              required
-              className="w-full bg-gray-700 border border-gray-600 rounded-lg px-4 py-2 text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-            >
-              <option value="">Select size</option>
-              <option value="1-10">1-10 employees</option>
-              <option value="11-50">11-50 employees</option>
-              <option value="51-200">51-200 employees</option>
-              <option value="201-500">201-500 employees</option>
-              <option value="501+">501+ employees</option>
-            </select>
           </div>
 
           <div>
