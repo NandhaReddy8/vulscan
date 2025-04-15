@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 
 
 # Load environment variables
-FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "127.0.0.1")
+FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "0.0.0.0")
 FLASK_RUN_PORT = int(os.getenv("FLASK_RUN_PORT", 5000))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 
@@ -71,8 +71,8 @@ def scan():
     # Get the user's IP address
     user_ip = request.remote_addr
 
-    # Format the timestamp in dd-mm-yyyy format
-    timestamp = datetime.now().strftime("%d-%m-%Y")
+    # Format the timestamp in dd-mm-yyyy HH:MM:SS format
+    timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
 
     # Save scan request to CSV
     try:
@@ -143,13 +143,16 @@ def handle_report_request():
             current_dir = os.path.dirname(os.path.abspath(__file__))
             csv_file = os.path.join(current_dir, 'report_requests.csv')
             
+            # Format timestamp in dd-mm-yyyy HH:MM:SS format
+            timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+            
             headers = ['name', 'email', 'phone', 'target_url', 'timestamp']
             csv_data = {
                 'name': data['name'],
                 'email': data['email'],
                 'phone': data.get('phone', 'Not provided'),
                 'target_url': data['targetUrl'],
-                'timestamp': datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+                'timestamp': timestamp
             }
 
             # Create file with headers if it doesn't exist
