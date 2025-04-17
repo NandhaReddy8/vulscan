@@ -17,6 +17,7 @@ from weasyprint.text.fonts import FontConfiguration
 
 logger = logging.getLogger(__name__)
 
+
 # Initialize ZAP API
 zap = ZAPv2(proxies={"http": ZAP_URL, "https": ZAP_URL}, apikey=ZAP_API_KEY)
 print(ZAP_URL)
@@ -192,27 +193,62 @@ def save_scan_results(target_url, results, scan_id, context_name):
         raise
 
 def generate_reports(target_url, results, scan_id, context_name):
-    """Generate HTML and PDF reports for the scan"""
+    """Generate HTML and PDF reports for specific site using ZAP Reports API"""
     try:
         output_dir = "./zap_reports"
         os.makedirs(output_dir, exist_ok=True)
         
         safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}"
         
-        # Generate HTML report
-        html_report = zap.core.htmlreport()
-        html_file = f"{output_dir}/{safe_filename}.html"
+        # Generate report using ZAP API
+        report_params = {
+            'apikey': ZAP_API_KEY,
+            'title': f'Vulnerability Scan Report - {target_url}',
+            'template': 'traditional-html',
+            'sites': target_url,  # Specify target site
+        }
+
+        # Make API request for report generation
+        report_endpoint = f"{ZAP_URL}/JSON/reports/action/generate/"
+        print(f"[*] Generating report for {target_url}...")
+        print(f"[*] Report params: {report_params}")
+        response = requests.get(
+            report_endpoint,
+            params=report_params,
+            headers={'Accept': 'application/json'},
+            verify=False  # Only if using self-signed cert
+        )
+        print(f"[*] Report response: {response.text}")
+        if response.status_code != 200:
+            raise Exception(f"Failed to generate report: {response.text}")
+
+        # Get generated HTML file path
+        html_file = response.json().get('generate', '').replace('//', '/')
+        print(html_file)
+        
+        # Customize the generated HTML report
+        with open(html_file, 'r', encoding='utf-8') as f:
+            html_content = f.read()
+        
+        customized_html = customize_report(html_content)
         
         with open(html_file, 'w', encoding='utf-8') as f:
-            f.write(customize_report(html_report))
-            
-        # Generate PDF
-        pdf_file = f"{output_dir}/{safe_filename}.pdf"
+            f.write(customized_html)
+        
+        # Generate PDF with a cleaner filename
+        clean_url = target_url.replace('https://', '').replace('http://', '').replace('/', '_')
+        pdf_file = f"{output_dir}/Vulnerability_Report_{clean_url}.pdf"
         generate_pdf_from_html(html_file, pdf_file)
         
+        print(f"[+] Generated reports for site {target_url}:")
+        print(f"    HTML: {html_file}")
+        print(f"    PDF: {pdf_file}")
+        
         return html_file, pdf_file
+        
     except Exception as e:
         print(f"[ERROR] Failed to generate reports: {str(e)}")
+        logger.error(f"Report generation failed: {str(e)}")
         raise
 
 def process_scan_results(alerts):
