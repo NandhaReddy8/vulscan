@@ -1,9 +1,11 @@
 import eventlet
-eventlet.monkey_patch()  # Add this at the top
+eventlet.monkey_patch()
+from OpenSSL import SSL
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
+import ssl
 import time
 import threading
 import csv
@@ -11,7 +13,6 @@ import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target
 from datetime import datetime, timedelta
-
 
 # Load environment variables
 FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "0.0.0.0")

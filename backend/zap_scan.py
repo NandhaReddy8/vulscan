@@ -12,13 +12,16 @@ import socket
 import base64
 import re
 import logging
-from xhtml2pdf import pisa  # Add this import
+from weasyprint import HTML, CSS
+from weasyprint.text.fonts import FontConfiguration
 
 logger = logging.getLogger(__name__)
 
 # Initialize ZAP API
 zap = ZAPv2(proxies={"http": ZAP_URL, "https": ZAP_URL}, apikey=ZAP_API_KEY)
 print(ZAP_URL)
+
+active_scan_contexts = {}
 
 def check_zap_running():
     """Check if ZAP is running before starting a scan"""
@@ -45,238 +48,172 @@ def is_valid_url(url):
     except Exception as e:
         return False, str(e)
 
-def scan_target(target_url, socketio, scan_id, active_scans):
-    session_id = None  # Initialize session_id to avoid referencing before assignment
+def create_scan_context(scan_id, target_url):
+    """Create a new ZAP context for this scan"""
     try:
-        # Clear session data before starting the scan
-        clear_session()
+        context_name = f"context_{scan_id}"
+        context_id = zap.context.new_context(context_name)
+        
+        # Include target URL in context
+        zap.context.include_in_context(context_name, f".*{target_url}.*")
+        
+        active_scan_contexts[scan_id] = {
+            'context_id': context_id,
+            'context_name': context_name,
+            'target_url': target_url,
+            'start_time': time.time()
+        }
+        
+        print(f"[+] Created new context {context_name} for scan {scan_id}")
+        return context_name
+    except Exception as e:
+        print(f"[ERROR] Failed to create context: {str(e)}")
+        raise
 
+def scan_target(target_url, socketio, scan_id, active_scans):
+    """Perform scan with isolated context"""
+    session_id = None
+    context_name = None
+    
+    try:
         session_id = active_scans.get(scan_id)
         if not session_id:
             raise Exception("No session ID found for scan")
 
-        # Enhanced URL validation
-        is_valid, error_msg = is_valid_url(target_url)
-        if not is_valid:
-            raise ValueError(f"Invalid URL: {error_msg}")
-
-        # Test ZAP connection to URL
-        try:
-            print(f"[*] Testing connection to: {target_url}")
-            zap.urlopen(target_url)
-            print("[+] Successfully connected to target")
-        except Exception as e:
-            print(f"[ERROR] Failed to connect: {str(e)}")
-            raise ValueError(f"Cannot reach {target_url}. Please verify the URL is accessible.")
-
-        # Continue with scan only if validation passes
-        print(f"[+] Starting scan for: {target_url}")
-
-        # Spider Scan Phase
-        socketio.emit('scan_progress', {
-            'message': 'Starting Spider Scan...',
-            'progress': 0,
-            'phase': 'Spider Scan'
-        }, room=session_id)
-
-        try:
-            spider_scan_id = zap.spider.scan(target_url)
-            if not spider_scan_id:
-                raise Exception("Failed to initiate spider scan")
-            print(f"[+] Spider scan initiated: {spider_scan_id}")
-        except Exception as e:
-            print(f"[ERROR] Spider scan failed: {str(e)}")
-            raise Exception(f"Failed to start scan: {str(e)}")
-
-        time.sleep(2)
-
+        # Create isolated context for this scan
+        context_name = create_scan_context(scan_id, target_url)
+        
+        # Spider scan with context
+        print(f"[*] Starting spider scan for context {context_name}")
+        spider_scan_id = zap.spider.scan(
+            url=target_url,
+            contextname=context_name
+        )
+        
         while int(zap.spider.status(spider_scan_id)) < 100:
             progress = int(zap.spider.status(spider_scan_id))
             socketio.emit('scan_progress', {
+                'scan_id': scan_id,
                 'message': f'Discovering site structure...',
                 'progress': progress,
                 'phase': 'Spider Scan'
             }, room=session_id)
             time.sleep(2)
 
-        # Passive Scan Phase
-        socketio.emit('scan_progress', {
-            'message': 'Starting Passive Scan...',
-            'progress': 95,
-            'phase': 'Passive Scan'
-        }, room=session_id)
-
+        # Passive scan
+        print(f"[*] Starting passive scan for context {context_name}")
         zap.pscan.enable_all_scanners()
-        time.sleep(2)
-
+        
         while int(zap.pscan.records_to_scan) > 0:
             records_left = int(zap.pscan.records_to_scan)
+            progress = max(50, min(95, 100 - records_left))
             socketio.emit('scan_progress', {
-                'message': f'Analyzing {records_left} records...',
-                'progress': 99,
+                'scan_id': scan_id,
+                'message': f'Analyzing responses...',
+                'progress': progress,
                 'phase': 'Passive Scan'
             }, room=session_id)
             time.sleep(2)
 
-        # Generate HTML Report
-        socketio.emit('scan_progress', {
-            'message': 'Generating HTML Report...',
-            'progress': 99,
-            'phase': 'Report Generation'
-        }, room=session_id)
-
-        try:
-            html_report = zap.core.htmlreport()
-            safe_filename = target_url.replace("://", "_").replace("/", "_")
-            output_dir = "./zap_reports"
-            os.makedirs(output_dir, exist_ok=True)
-            html_file = f"{output_dir}/{safe_filename}.html"
-
-            # Save the customized HTML report
-            with open(html_file, "w", encoding="utf-8") as f:
-                f.write(customize_report(html_report))
-
-            print(f"[+] HTML report saved to {html_file}")
-
-            # Convert HTML to PDF
-            pdf_file = f"{output_dir}/{safe_filename}.pdf"
-            generate_pdf_from_html(html_file, pdf_file)
-
-        except Exception as e:
-            print(f"[ERROR] Failed to generate HTML or PDF report: {str(e)}")
-
-        # Final completion
-        socketio.emit('scan_progress', {
-            'message': 'Scan Complete! Processing results...',
-            'progress': 100,
-            'phase': 'Completed'
-        }, room=session_id)
-
-        # Process and emit results
-        alerts = zap.core.alerts(baseurl=target_url)
+        # Get alerts specific to this context
+        alerts = [
+            alert for alert in zap.core.alerts()
+            if alert.get('url', '').startswith(target_url)
+        ]
         results = process_scan_results(alerts)
 
-        # Save results
-        save_scan_results(target_url, results)
+        # Save results with context information
+        save_scan_results(target_url, results, scan_id, context_name)
         
-        # Emit completion event
-        socketio.emit("scan_completed", {
-            "message": "Scan Completed!",
-            "result": results,
-            "html_report": html_file,  # Include HTML report path in the response
-            "pdf_report": pdf_file     # Include PDF report path in the response
+        # Generate reports
+        html_file, pdf_file = generate_reports(
+            target_url, 
+            results, 
+            scan_id, 
+            context_name
+        )
+
+        socketio.emit('scan_completed', {
+            'scan_id': scan_id,
+            'message': 'Scan Completed!',
+            'result': results,
+            'html_report': html_file,
+            'pdf_report': pdf_file
         }, room=session_id)
 
         return results
 
-    except ValueError as ve:
-        error_msg = str(ve)
-        print(f"[ERROR] Validation failed: {error_msg}")
-        if session_id:
-            socketio.emit('scan_error', {
-                'error': error_msg,
-                'type': 'validation_error'
-            }, room=session_id)
     except Exception as e:
         error_msg = str(e)
-        print(f"[ERROR] Scan failed: {error_msg}")
+        print(f"[ERROR] Scan {scan_id} failed: {error_msg}")
         if session_id:
             socketio.emit('scan_error', {
-                'error': error_msg,
-                'type': 'scan_error'
+                'scan_id': scan_id,
+                'error': error_msg
             }, room=session_id)
     finally:
+        # Clean up context
+        if context_name and scan_id in active_scan_contexts:
+            try:
+                zap.context.remove_context(context_name)
+                del active_scan_contexts[scan_id]
+                print(f"[+] Cleaned up context {context_name}")
+            except Exception as e:
+                print(f"[ERROR] Failed to clean up context: {str(e)}")
+        
         if session_id:
             active_scans.pop(scan_id, None)
 
-def scan_target_old(target_url, socketio):
-    """Performs a ZAP Spider and Passive Scan on the given target URL with real-time progress updates"""
-    if not check_zap_running():
-        print("[ERROR] ZAP Proxy is not running! Start ZAP before running scans.")
-        socketio.emit("scan_error", {"error": "ZAP Proxy is not running"})
-        return {"error": "ZAP Proxy is not running"}
-
+def save_scan_results(target_url, results, scan_id, context_name):
+    """Save scan results with context information"""
     try:
-        print(f"[*] Starting ZAP Spider scan on {target_url}")
-        socketio.emit("scan_progress", {"message": "Starting Spider Scan...", "progress": 0})
-
-        scan_id = zap.spider.scan(target_url)
-        time.sleep(2)
-
-        while int(zap.spider.status(scan_id)) < 100:
-            progress = int(zap.spider.status(scan_id))
-            print(f"[*] Spider progress: {progress}%")
-            socketio.emit("scan_progress", {"message": f"[{progress}%] Spidering in progress...", "progress": progress})
-            time.sleep(5)
-
-        print("[*] Spidering completed! Starting Passive Scan...")
-        socketio.emit("scan_progress", {"message": "Spider completed. Starting Passive Scan...", "progress": 100})
-
-        zap.pscan.enable_all_scanners()
-        time.sleep(2)
-
-        while int(zap.pscan.records_to_scan) > 0:
-            records_left = int(zap.pscan.records_to_scan)
-            print(f"[*] Passive Scan Progress: {records_left}")
-            socketio.emit("scan_progress", {"message": "Passive Scan in progress...", "progress": 100})
-            time.sleep(5)
-
-        print("[*] Passive Scan completed!")
-        socketio.emit("scan_progress", {"message": "Passive Scan completed!", "progress": 100})
-
-        # Fetch alerts
-        alerts = zap.core.alerts(baseurl=target_url)
-        vulnerabilities_by_type = defaultdict(lambda: {"risk": None, "description": None, "count": 0, "affected_urls": []})
-
-        for alert in alerts:
-            description = alert.get("description", "No description available")
-            risk = alert.get("risk", "Info").capitalize()
-            url = alert.get("url", "No URL")
-
-            vulnerabilities_by_type[description]["risk"] = risk
-            vulnerabilities_by_type[description]["description"] = description
-            vulnerabilities_by_type[description]["count"] += 1
-            if url not in vulnerabilities_by_type[description]["affected_urls"]:
-                vulnerabilities_by_type[description]["affected_urls"].append(url)
-
-        summary = defaultdict(int)
-        for vulnerability in vulnerabilities_by_type.values():
-            summary[vulnerability["risk"]] += 1
-
-        final_results = {
-            "summary": dict(summary),
-            "vulnerabilities_by_type": [
-                {
-                    "risk": vuln["risk"],
-                    "description": vuln["description"],
-                    "count": len(vuln["affected_urls"]),
-                    "affected_urls": vuln["affected_urls"][:3] + (
-                        ["and {} other sites".format(len(vuln["affected_urls"]) - 3)]
-                        if len(vuln["affected_urls"]) > 3
-                        else []
-                    )
-                } for vuln in vulnerabilities_by_type.values()
-            ]
-        }
-
-        # Save results to JSON file
-        safe_filename = target_url.replace("http://", "").replace("https://", "").replace("/", "_").replace(":", "").replace("?", "")
         output_dir = "./zap_results"
-        os.makedirs(output_dir, exist_ok=True)  # Ensure directory exists
-        output_file = f"{output_dir}/{safe_filename}.json"
-
-        with open(output_file, "w") as file:
-            json.dump(final_results, file, indent=4)
-
-        print(f"\n[*] Vulnerability scan completed! Results saved to '{output_file}'.")
-        socketio.emit("scan_completed", {"message": "Scan Completed!", "result": final_results})
-
-        return final_results
-
+        os.makedirs(output_dir, exist_ok=True)
+        
+        # Create filename with scan_id
+        safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}"
+        
+        # Save results with metadata
+        results_with_meta = {
+            'scan_id': scan_id,
+            'context_name': context_name,
+            'target_url': target_url,
+            'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+            'results': results
+        }
+        
+        json_file = f"{output_dir}/{safe_filename}.json"
+        with open(json_file, 'w') as f:
+            json.dump(results_with_meta, f, indent=4)
+            
+        return json_file
     except Exception as e:
-        print(f"[ERROR] An issue occurred: {e}")
-        socketio.emit("scan_error", {"error": str(e)})
-        return {"error": str(e)}
+        print(f"[ERROR] Failed to save results: {str(e)}")
+        raise
+
+def generate_reports(target_url, results, scan_id, context_name):
+    """Generate HTML and PDF reports for the scan"""
+    try:
+        output_dir = "./zap_reports"
+        os.makedirs(output_dir, exist_ok=True)
+        
+        safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}"
+        
+        # Generate HTML report
+        html_report = zap.core.htmlreport()
+        html_file = f"{output_dir}/{safe_filename}.html"
+        
+        with open(html_file, 'w', encoding='utf-8') as f:
+            f.write(customize_report(html_report))
+            
+        # Generate PDF
+        pdf_file = f"{output_dir}/{safe_filename}.pdf"
+        generate_pdf_from_html(html_file, pdf_file)
+        
+        return html_file, pdf_file
+    except Exception as e:
+        print(f"[ERROR] Failed to generate reports: {str(e)}")
+        raise
 
 def process_scan_results(alerts):
     """Process ZAP alerts into a structured format with detailed vulnerability information"""
@@ -351,18 +288,6 @@ def process_scan_results(alerts):
             } for vuln in vulnerabilities_by_type.values()
         ]
     }
-
-def save_scan_results(target_url, results):
-    """Save scan results to JSON file"""
-    safe_filename = target_url.replace("://", "_").replace("/", "_")
-    output_dir = "./zap_results"
-    os.makedirs(output_dir, exist_ok=True)
-    
-    output_file = f"{output_dir}/{safe_filename}.json"
-    with open(output_file, "w") as f:
-        json.dump(results, f, indent=4)
-    
-    print(f"[*] Results saved to {output_file}")
 
 def clear_session():
     """Clear current session data in ZAP"""
@@ -480,13 +405,13 @@ def customize_report(html_content):
             html_content,
             flags=re.DOTALL
         )
-
         # Remove other ZAP-specific content
         zap_patterns = [
             r'<h3>\s*ZAP Version:.*?</h3>',
             r'<h4>\s*ZAP by.*?</h4>',
             r'<title>ZAP.*?</title>',
-            r'<div class="header.*?</div>'
+            r'<div class="header.*?</div>',
+            r'<h1>.*?</h1>',
         ]
         for pattern in zap_patterns:
             html_content = re.sub(pattern, '', html_content, flags=re.DOTALL)
@@ -504,29 +429,78 @@ def customize_report(html_content):
         logger.error(f"Failed to customize report: {str(e)}")
         return html_content
 
+
 # Function to generate PDF from HTML
 def generate_pdf_from_html(html_file, pdf_file):
-    """Generate a PDF from an HTML file using xhtml2pdf."""
+    """Generate a PDF from an HTML file using WeasyPrint."""
     try:
+        print(f"[*] Starting PDF generation for {html_file}")
+        
+        # Configure fonts
+        font_config = FontConfiguration()
+        
         # Read the HTML file
         with open(html_file, 'r', encoding='utf-8') as f:
             html_content = f.read()
 
-        # Create PDF
-        with open(pdf_file, "wb") as output_file:
-            conversion_status = pisa.CreatePDF(
-                html_content,
-                dest=output_file,
-                encoding='utf-8'
-            )
+        # Add print-specific CSS with better table handling
+        css = CSS(string='''
+            @page {
+                margin: 2cm;
+                size: A4;
+                @bottom-right {
+                    content: counter(page);
+                    font-size: 12px;
+                    padding: 1em;
+                }
+            }
+            body {
+                font-family: Arial, sans-serif;
+                line-height: 1.5;
+                font-size: 12px;
+            }
+            table {
+                width: 100%;
+                margin: 1em 0;
+                border-collapse: collapse;
+                page-break-inside: avoid;
+            }
+            th, td {
+                padding: 8px;
+                border: 1px solid #ddd;
+                word-break: break-word;
+            }
+            th {
+                background-color: #f5f5f5;
+            }
+            .report-header {
+                text-align: center;
+                margin-bottom: 2em;
+                break-inside: avoid;
+            }
+            h1, h2, h3 {
+                break-after: avoid;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        ''', font_config=font_config)
 
-        # Check if conversion was successful
-        if conversion_status.err:
-            raise Exception("Failed to generate PDF")
+        # Generate PDF with optimizations
+        HTML(string=html_content).write_pdf(
+            pdf_file,
+            stylesheets=[css],
+            font_config=font_config,
+            optimize_size=('fonts', 'images'),
+            zoom=1,
+            presentational_hints=True
+        )
 
         print(f"[+] PDF report saved to {pdf_file}")
         return True
 
     except Exception as e:
         print(f"[ERROR] Failed to generate PDF: {str(e)}")
+        logger.error(f"PDF generation failed: {str(e)}")
         raise

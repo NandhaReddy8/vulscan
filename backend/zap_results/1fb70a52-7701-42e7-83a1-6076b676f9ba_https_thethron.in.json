@@ -1,0 +1,10 @@
+{
+    "scan_id": "1fb70a52-7701-42e7-83a1-6076b676f9ba",
+    "context_name": "context_1fb70a52-7701-42e7-83a1-6076b676f9ba",
+    "target_url": "https://thethron.in",
+    "timestamp": "2025-04-18 00:10:51",
+    "results": {
+        "summary": {},
+        "vulnerabilities_by_type": []
+    }
+}
