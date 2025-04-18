@@ -14,20 +14,20 @@ def initialize_csv(file_path, headers):
             writer.writerow(headers)  # Write column headers
 
 # Initialize CSV files
-initialize_csv(SCAN_REQUESTS_FILE, ["url", "timestamp"])
-initialize_csv(REPORT_REQUESTS_FILE, ["name", "email", "organization", "size", "purpose"])
+initialize_csv(SCAN_REQUESTS_FILE, ["URL","IP Address","Time Stamp"])
+initialize_csv(REPORT_REQUESTS_FILE, ["Name", "Email", "Phone", "Target URL"])
 
 # Function to save a scan request
-def save_scan_request(url, timestamp):
+def save_scan_request(URL,IP_Address,Time_Stamp):
     with open(SCAN_REQUESTS_FILE, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow([url, timestamp])
+        writer.writerow([URL,IP_Address,Time_Stamp])
 
 # Function to save a report request
-def save_report_request(name, email, organization, size, purpose):
+def save_report_request(name, email, Phone, Target_URL):
     with open(REPORT_REQUESTS_FILE, "a", newline="") as file:
         writer = csv.writer(file)
-        writer.writerow([name, email, organization, size, purpose])
+        writer.writerow([name, email, Phone, Target_URL])
 
 # Function to retrieve stored scan requests
 def get_scan_requests():

@@ -134,76 +134,74 @@ def handle_report_request():
 
         # Validate required fields
         required_fields = ['name', 'email', 'targetUrl']
-        missing_fields = [field for field in required_fields if field not in data]
-        if missing_fields:
-            print(f"[ERROR] Missing required fields: {missing_fields}")
-            return jsonify({"error": f"Missing required fields: {', '.join(missing_fields)}"}), 400
+        if not all(field in data for field in required_fields):
+            return jsonify({"error": "Missing required fields"}), 400
 
-        # Save request details to CSV first
+        target_url = data['targetUrl']
+        
+        # Save report request to CSV
         try:
             current_dir = os.path.dirname(os.path.abspath(__file__))
             csv_file = os.path.join(current_dir, 'report_requests.csv')
             
-            # Format timestamp in dd-mm-yyyy HH:MM:SS format
-            timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-            
-            headers = ['name', 'email', 'phone', 'target_url', 'timestamp']
+            # Define headers and data
+            headers = ['Name', 'Email', 'Phone', 'Target URL', 'Timestamp']
             csv_data = {
-                'name': data['name'],
-                'email': data['email'],
-                'phone': data.get('phone', 'Not provided'),
-                'target_url': data['targetUrl'],
-                'timestamp': timestamp
+                'Name': data['name'],
+                'Email': data['email'],
+                'Phone': data.get('phone', ''),  # Optional field
+                'Target URL': target_url,
+                'Timestamp': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
             }
-
-            # Create file with headers if it doesn't exist
+            
+            # Create/append to CSV file
             file_exists = os.path.exists(csv_file)
             with open(csv_file, 'a', newline='', encoding='utf-8') as f:
                 writer = csv.DictWriter(f, fieldnames=headers)
                 if not file_exists:
                     writer.writeheader()
                 writer.writerow(csv_data)
-
-            print(f"[+] Successfully saved request to CSV: {csv_file}")
+            
+            print(f"[+] Report request saved to CSV: {csv_file}")
         except Exception as e:
-            print(f"[ERROR] Failed to write to CSV: {str(e)}")
-            # Continue with PDF generation even if CSV writing fails
+            print(f"[ERROR] Failed to save report request to CSV: {str(e)}")
         
-        # Normalize the target URL to include the protocol
-        target_url = data['targetUrl']
-        if not target_url.startswith("http://") and not target_url.startswith("https://"):
-            target_url = f"https://{target_url}"  # Default to https://
+        # Rest of the existing PDF handling code
+        clean_url = target_url.replace('https://', '').replace('http://', '').replace('/', '_')
+        pdf_filename = f"Vulnerability_Report_{clean_url}.pdf"
+        
+        # Construct path to report directory
+        report_dir = os.path.join(
+            os.path.dirname(os.path.abspath(__file__)),
+            'zap_reports'
+        )
+        
+        # Full path to expected PDF file
+        pdf_path = os.path.join(report_dir, pdf_filename)
+        
+        print(f"[*] Looking for report at: {pdf_path}")
 
-        # Get the absolute path for the CSV file
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        
-        # Try both http and https versions of the filename
-        safe_filename_https = f"https_{target_url.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')}"
-        safe_filename_http = f"http_{target_url.replace('https://', '').replace('http://', '').replace('/', '_').replace(':', '_')}"
-        
-        # Check for both HTTP and HTTPS versions of the report
-        report_path_https = os.path.join(current_dir, REPORTS_DIR, f"{safe_filename_https}.pdf")
-        report_path_http = os.path.join(current_dir, REPORTS_DIR, f"{safe_filename_http}.pdf")
+        if not os.path.exists(pdf_path):
+            # Fallback: Try to find any report matching the URL
+            potential_files = [f for f in os.listdir(report_dir) 
+                             if clean_url in f and f.endswith('.pdf')]
+            
+            if potential_files:
+                pdf_path = os.path.join(report_dir, potential_files[0])
+                print(f"[+] Found alternative report: {pdf_path}")
+            else:
+                print(f"[ERROR] No report found for URL: {target_url}")
+                return jsonify({
+                    "error": "Scan report not found. Please ensure scan is completed.",
+                    "path_checked": pdf_path
+                }), 404
 
-        # Determine which report exists
-        if os.path.exists(report_path_https):
-            report_path = report_path_https
-            safe_filename = safe_filename_https
-        elif os.path.exists(report_path_http):
-            report_path = report_path_http
-            safe_filename = safe_filename_http
-        else:
-            print(f"[ERROR] Report not found at either: \n{report_path_https}\n{report_path_http}")
-            return jsonify({"error": "Scan report not found. Please ensure scan is completed."}), 404
-
-        print(f"[+] Found report file at: {report_path}")
-        
         try:
             return send_file(
-                report_path,
+                pdf_path,
                 mimetype='application/pdf',
                 as_attachment=True,
-                download_name=f"security_report_{safe_filename}.pdf"
+                download_name=pdf_filename
             )
         except Exception as e:
             print(f"[ERROR] Failed to send file: {str(e)}")
