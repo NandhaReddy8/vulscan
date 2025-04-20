@@ -31,7 +31,7 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
     const formData = new FormData(form);
 
     try {
-      const backendUrl = import.meta.env.VITE_BACKEND_URL;
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:5000";
       if (!backendUrl) {
         throw new Error('Backend URL not configured');
       }

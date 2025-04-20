@@ -26,6 +26,7 @@ interface Vulnerability {
 
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:5000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://127.0.0.1:5000";
 
 function App() {
   const [isScanning, setIsScanning] = useState(false);
@@ -50,7 +51,7 @@ function App() {
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
 
   useEffect(() => {
-    const socket: Socket = io(BACKEND_URL, {
+    const socket: Socket = io(SOCKET_URL, {
       reconnection: true,
       reconnectionAttempts: 5,
       reconnectionDelay: 1000,
