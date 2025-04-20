@@ -12,6 +12,8 @@ import socket
 import base64
 import re
 import logging
+import eventlet
+import eventlet.tpool
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
 
@@ -126,12 +128,21 @@ def scan_target(target_url, socketio, scan_id, active_scans):
         # Save results with context information
         save_scan_results(target_url, results, scan_id, context_name)
         
-        # Generate reports
+        # Generate reports with heartbeat
+        socketio.emit('scan_progress', {
+            'scan_id': scan_id,
+            'message': 'Generating reports...',
+            'progress': 98,  # Indicate report generation phase
+            'phase': 'Report Generation'
+        }, room=session_id)
+
         html_file, pdf_file = generate_reports(
-            target_url, 
-            results, 
-            scan_id, 
-            context_name
+            target_url,
+            results,
+            scan_id,
+            context_name,
+            socketio,  # Pass socketio
+            session_id # Pass session_id
         )
 
         socketio.emit('scan_completed', {
@@ -192,64 +203,158 @@ def save_scan_results(target_url, results, scan_id, context_name):
         print(f"[ERROR] Failed to save results: {str(e)}")
         raise
 
-def generate_reports(target_url, results, scan_id, context_name):
-    """Generate HTML and PDF reports for specific site using ZAP Reports API"""
-    try:
-        output_dir = "./zap_reports"
-        os.makedirs(output_dir, exist_ok=True)
-        
-        safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}"
-        
-        # Generate report using ZAP API
-        report_params = {
-            'apikey': ZAP_API_KEY,
-            'title': f'Vulnerability Scan Report - {target_url}',
-            'template': 'traditional-html',
-            'sites': target_url,  # Specify target site
-        }
+def generate_reports(target_url, results, scan_id, context_name, socketio, session_id):
+    """Generate HTML and PDF reports for specific site using ZAP Reports API with heartbeat"""
+    
+    report_result = {"html": None, "pdf": None}
+    report_exception = None
+    report_generation_complete = False # Flag to signal completion
 
-        # Make API request for report generation
-        report_endpoint = f"{ZAP_URL}/JSON/reports/action/generate/"
-        print(f"[*] Generating report for {target_url}...")
-        print(f"[*] Report params: {report_params}")
-        response = requests.get(
-            report_endpoint,
-            params=report_params,
-            headers={'Accept': 'application/json'},
-            verify=False  # Only if using self-signed cert
-        )
-        print(f"[*] Report response: {response.text}")
-        if response.status_code != 200:
-            raise Exception(f"Failed to generate report: {response.text}")
+    def _generate():
+        nonlocal report_result, report_exception, report_generation_complete
+        try:
+            print(f"[{scan_id}] _generate task started.") 
+            output_dir = "./zap_reports"
+            os.makedirs(output_dir, exist_ok=True)
+            
+            safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}"
+            
+            # Generate report using ZAP API
+            report_endpoint = f"{ZAP_URL}/JSON/reports/action/generate/"
+            print(f"[{scan_id}] Calling ZAP API to generate report...")
+            start_time_api = time.time()
+            response = requests.get(
+                report_endpoint,
+                params={
+                    'apikey': ZAP_API_KEY,
+                    'title': f'Vulnerability Scan Report - {target_url}',
+                    'template': 'traditional-html',
+                    'sites': target_url,
+                },
+                headers={'Accept': 'application/json'},
+                verify=False
+            )
+            api_duration = time.time() - start_time_api
+            print(f"[{scan_id}] ZAP API call finished in {api_duration:.2f} seconds.")
+            if response.status_code != 200:
+                raise Exception(f"Failed to generate report: {response.text}")
+            
+            socketio.sleep(0)
 
-        # Get generated HTML file path
-        html_file = response.json().get('generate', '').replace('//', '/')
-        print(html_file)
+            # Get generated HTML file path
+            html_file = response.json().get('generate', '').replace('//', '/')
+            if not html_file or not os.path.exists(html_file):
+                zap_report_dir = os.path.dirname(html_file) if html_file else "/zap/wrk/"
+                found = False
+                if os.path.exists(zap_report_dir):
+                   print(f"[{scan_id}] Checking directory {zap_report_dir} for report...")
+                   for f_name in os.listdir(zap_report_dir):
+                       if f_name.endswith('.html'):
+                           potential_path = os.path.join(zap_report_dir, f_name)
+                           if os.path.exists(potential_path) and os.path.getsize(potential_path) > 0:
+                               html_file = potential_path
+                               print(f"[{scan_id}] Found potential report file: {html_file}")
+                               found = True
+                               break
+                if not found:
+                    raise FileNotFoundError(f"Generated HTML report not found at path: {html_file} or in {zap_report_dir}")
+            
+            print(f"[{scan_id}] Found HTML report at: {html_file}")
+
+            # Customize the generated HTML report
+            print(f"[{scan_id}] Customizing HTML report...")
+            with open(html_file, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+            
+            customized_html = customize_report(html_content)
+            
+            custom_html_filename = f"{output_dir}/{safe_filename}.html"
+            with open(custom_html_filename, 'w', encoding='utf-8') as f:
+                f.write(customized_html)
+            print(f"[{scan_id}] Saved customized HTML to {custom_html_filename}")
+
+            socketio.sleep(0)
+            
+            # Generate PDF using eventlet's thread pool
+            clean_url = target_url.replace('https://', '').replace('http://', '').replace('/', '_')
+            pdf_file = f"{output_dir}/Vulnerability_Report_{clean_url}.pdf"
+            
+            pdf_success = False
+            try:
+                print(f"[{scan_id}] Submitting PDF generation to thread pool (this may take a while)...") # Modified
+                start_time_pdf = time.time()
+
+                # --- Execute blocking function in thread pool --- 
+                pdf_success = eventlet.tpool.execute(
+                    generate_pdf_from_html,
+                    custom_html_filename,
+                    pdf_file
+                )
+                # --- Control yields here, resumes after completion --- 
+
+                pdf_duration = time.time() - start_time_pdf # Note: Measures time until tpool call returns
+                print(f"[{scan_id}] PDF generation task completed in thread pool in {pdf_duration:.2f} seconds.") # Modified
+
+                if not pdf_success:
+                     # Should not happen if generate_pdf_from_html raises on error
+                     print(f"[{scan_id}] [WARNING] generate_pdf_from_html returned False/None without raising an exception.")
+                     # Treat as failure? Or just rely on exception handling?
+                     # For now, let's raise to be caught by outer block
+                     raise Exception("PDF generation function returned non-True value.")
+
+            except Exception as pdf_exc:
+                # Handle exceptions raised *within* the thread pool task
+                print(f"[{scan_id}] [ERROR] PDF generation in thread pool failed: {pdf_exc}")
+                logger.error(f"PDF generation in thread pool failed: {pdf_exc}", exc_info=True)
+                # Re-raise the exception so it's stored in report_exception
+                raise pdf_exc 
+            
+            # If we reach here, PDF generation in tpool succeeded (or didn't raise an error we caught)
+            print(f"[{scan_id}] Generated reports for site {target_url}:")
+            print(f"    HTML: {custom_html_filename}")
+            print(f"    PDF: {pdf_file}")
+            
+            report_result["html"] = custom_html_filename
+            report_result["pdf"] = pdf_file
+            print(f"[{scan_id}] _generate task finished successfully.")
+
+        except Exception as e:
+            # Catch exceptions from ZAP API, file handling, or re-raised from tpool
+            print(f"[{scan_id}] [ERROR] Report generation task failed overall: {str(e)}") # Modified
+            logger.error(f"Report generation task failed overall: {str(e)}", exc_info=True) # Added exc_info
+            report_exception = e
+        finally:
+            # Signal completion regardless of success or failure
+            print(f"[{scan_id}] Setting report_generation_complete = True")
+            report_generation_complete = True 
+
+    # Use socketio's background task runner for the _generate orchestrator
+    print(f"[{scan_id}] Starting report generation background task...")
+    socketio.start_background_task(target=_generate)
+
+    # Send heartbeat while the report generation task is running
+    # This loop should now run correctly even during PDF generation
+    heartbeat_count = 0 
+    while not report_generation_complete: 
+        heartbeat_count += 1 
+        socketio.emit('heartbeat', {'scan_id': scan_id, 'count': heartbeat_count}, room=session_id)
+        print(f"[{scan_id}] Sent heartbeat #{heartbeat_count} during report generation.") 
+        socketio.sleep(5) 
+
+    print(f"[{scan_id}] Report generation task finished or loop exited. Total heartbeats sent: {heartbeat_count}")
+
+    # Final check for exceptions occurred during the background task
+    if report_exception:
+        print(f"[{scan_id}] [ERROR] Failed to generate reports (exception from background task): {str(report_exception)}") # Modified
+        raise report_exception
+
+    if report_result["html"] is None or report_result["pdf"] is None:
+        if not report_exception: 
+           print(f"[{scan_id}] [ERROR] Report generation finished but did not produce file paths and no exception was logged.")
+           raise Exception("Report generation finished but did not produce file paths.")
+        pass 
         
-        # Customize the generated HTML report
-        with open(html_file, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        
-        customized_html = customize_report(html_content)
-        
-        with open(html_file, 'w', encoding='utf-8') as f:
-            f.write(customized_html)
-        
-        # Generate PDF with a cleaner filename
-        clean_url = target_url.replace('https://', '').replace('http://', '').replace('/', '_')
-        pdf_file = f"{output_dir}/Vulnerability_Report_{clean_url}.pdf"
-        generate_pdf_from_html(html_file, pdf_file)
-        
-        print(f"[+] Generated reports for site {target_url}:")
-        print(f"    HTML: {html_file}")
-        print(f"    PDF: {pdf_file}")
-        
-        return html_file, pdf_file
-        
-    except Exception as e:
-        print(f"[ERROR] Failed to generate reports: {str(e)}")
-        logger.error(f"Report generation failed: {str(e)}")
-        raise
+    return report_result["html"], report_result["pdf"]
 
 def process_scan_results(alerts):
     """Process ZAP alerts into a structured format with detailed vulnerability information"""
