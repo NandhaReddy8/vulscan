@@ -1,7 +1,13 @@
 venv/
 
-backend/vaenv/
-
 backend/__pycache__/
 
-backend/.env/
+backend/.env
+
+backend/zap_results/*
+backend/zap_reports/*
+
+report_results.csv
+scan_results.csv
+
+frontend/.env
