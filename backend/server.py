@@ -13,11 +13,7 @@ import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target
 from datetime import datetime, timedelta
-
-# Load environment variables
-FLASK_RUN_HOST = os.getenv("FLASK_RUN_HOST", "0.0.0.0")
-FLASK_RUN_PORT = int(os.getenv("FLASK_RUN_PORT", 5000))
-FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
+from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 
 RESULTS_DIR = "./zap_results"  # Directory where ZAP scan results are stored
 REPORTS_DIR = "./zap_reports"
@@ -228,4 +224,4 @@ def handle_disconnect():
 
 # Start the Flask Server
 if __name__ == "__main__":
-    socketio.run(app, debug=FLASK_DEBUG, host=FLASK_RUN_HOST, port=FLASK_RUN_PORT)
+    socketio.run(app, debug=FLASK_DEBUG, host=FLASK_HOST, port=FLASK_PORT)
