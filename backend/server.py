@@ -11,7 +11,7 @@ import threading
 import csv
 import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
-from zap_scan import scan_target
+from zap_scan import scan_target, zap
 from datetime import datetime, timedelta
 from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 
@@ -140,17 +140,15 @@ def handle_report_request():
             current_dir = os.path.dirname(os.path.abspath(__file__))
             csv_file = os.path.join(current_dir, 'report_requests.csv')
             
-            # Define headers and data
             headers = ['Name', 'Email', 'Phone', 'Target URL', 'Timestamp']
             csv_data = {
                 'Name': data['name'],
                 'Email': data['email'],
-                'Phone': data.get('phone', ''),  # Optional field
+                'Phone': data.get('phone', ''),
                 'Target URL': target_url,
                 'Timestamp': datetime.now().strftime("%d-%m-%Y %H:%M:%S")
             }
             
-            # Create/append to CSV file
             file_exists = os.path.exists(csv_file)
             with open(csv_file, 'a', newline='', encoding='utf-8') as f:
                 writer = csv.DictWriter(f, fieldnames=headers)
@@ -162,42 +160,30 @@ def handle_report_request():
         except Exception as e:
             print(f"[ERROR] Failed to save report request to CSV: {str(e)}")
         
-        # Rest of the existing PDF handling code
+        # Look for HTML report
         clean_url = target_url.replace('https://', '').replace('http://', '').replace('/', '_')
-        pdf_filename = f"Vulnerability_Report_{clean_url}.pdf"
-        
-        # Construct path to report directory
         report_dir = os.path.join(
             os.path.dirname(os.path.abspath(__file__)),
             'zap_reports'
         )
         
-        # Full path to expected PDF file
-        pdf_path = os.path.join(report_dir, pdf_filename)
+        # Find the most recent HTML report for this URL
+        html_files = [f for f in os.listdir(report_dir) 
+                     if clean_url in f and f.endswith('.html')]
         
-        print(f"[*] Looking for report at: {pdf_path}")
-
-        if not os.path.exists(pdf_path):
-            # Fallback: Try to find any report matching the URL
-            potential_files = [f for f in os.listdir(report_dir) 
-                             if clean_url in f and f.endswith('.pdf')]
+        if not html_files:
+            return jsonify({
+                "error": "Scan report not found. Please ensure scan is completed."
+            }), 404
             
-            if potential_files:
-                pdf_path = os.path.join(report_dir, potential_files[0])
-                print(f"[+] Found alternative report: {pdf_path}")
-            else:
-                print(f"[ERROR] No report found for URL: {target_url}")
-                return jsonify({
-                    "error": "Scan report not found. Please ensure scan is completed.",
-                    "path_checked": pdf_path
-                }), 404
-
+        # Get the most recent report
+        html_path = os.path.join(report_dir, html_files[-1])
+        
         try:
             return send_file(
-                pdf_path,
-                mimetype='application/pdf',
-                as_attachment=True,
-                download_name=pdf_filename
+                html_path,
+                mimetype='text/html',
+                as_attachment=False  # This will open in browser
             )
         except Exception as e:
             print(f"[ERROR] Failed to send file: {str(e)}")
@@ -205,6 +191,62 @@ def handle_report_request():
 
     except Exception as e:
         print(f"[ERROR] Report request failed: {str(e)}")
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/stop-scan", methods=["POST", "OPTIONS"])
+def stop_scan():
+    if request.method == "OPTIONS":
+        response = app.make_default_options_response()
+        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
+        response.headers.add("Access-Control-Allow-Headers", "Content-Type")
+        return response
+
+    try:
+        data = request.get_json()
+        session_id = data.get("session_id")
+        target_url = data.get("url")
+
+        if not session_id:
+            return jsonify({"error": "No session_id provided"}), 400
+
+        # Find the scan_id for this session
+        scan_id = next((sid for sid, sess in active_scans.items() 
+                       if sess == session_id), None)
+
+        if not scan_id:
+            return jsonify({"error": "No active scan found"}), 404
+
+        print(f"[*] Stopping scan for {target_url}")
+
+        # Stop ZAP scans
+        zap.spider.stop_all_scans()
+        zap.ascan.stop_all_scans()
+        zap.pscan.disable_all_scanners()
+
+        # Remove from tracking immediately
+        active_scans.pop(scan_id, None)
+        running_scans.pop(target_url, None)
+
+        # Clean up context
+        context_name = f"context_{scan_id}"
+        try:
+            zap.context.remove_context(context_name)
+            print(f"[+] Removed context {context_name}")
+        except Exception as e:
+            print(f"[WARNING] Error removing context: {str(e)}")
+
+        # Notify client immediately
+        socketio.emit('scan_stopped', {
+            'scan_id': scan_id,
+            'message': 'Scan stopped by user',
+            'status': 'stopped'
+        }, room=session_id)
+
+        print(f"[+] Successfully stopped scan for {target_url}")
+        return jsonify({"message": "Scan stopped successfully"}), 200
+
+    except Exception as e:
+        print(f"[ERROR] Stop scan request failed: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 # Socket.IO connection event handlers

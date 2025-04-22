@@ -54,19 +54,15 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
         throw new Error(errorData.error || 'Failed to submit request');
       }
 
+      // Get the HTML content and open in new tab
       const blob = await response.blob();
       if (blob.size === 0) {
-        throw new Error('Received empty file response');
+        throw new Error('Received empty report');
       }
 
-      const downloadUrl = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = downloadUrl;
-      link.download = `security_report_${targetUrl.replace(/[/:]/g, '_')}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-      window.URL.revokeObjectURL(downloadUrl);
+      const reportUrl = window.URL.createObjectURL(blob);
+      window.open(reportUrl, '_blank');
+      window.URL.revokeObjectURL(reportUrl);
 
       setShowSuccess(true);
     } catch (err) {
@@ -88,7 +84,7 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
             Thank You for Your Request
           </h3>
           <p className="text-gray-300 mb-6">
-            The PDF will be downloaded shortly. Our team will reach out to you soon.
+              The report has been opened in a new tab. Our team will reach out to you soon.
           </p>
           <button
             onClick={onClose}

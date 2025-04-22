@@ -220,7 +220,7 @@ const Results: React.FC<ResultsProps> = ({
               <AlertCircle className="h-6 w-6" />
             </div>
             <h4 className="text-xl font-semibold mb-3">
-              For detailed PDF Report !
+              For detailed Report !
             </h4>
             <p className="mb-6 opacity-90">
               Your scan has identified additional security concerns that require

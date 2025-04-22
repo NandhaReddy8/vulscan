@@ -3,7 +3,6 @@ import { io, Socket } from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
-import Footer from "./components/Footer";
 import Scanner from "./components/Scanner";
 import Results from "./components/Results";
 
@@ -23,7 +22,6 @@ interface Vulnerability {
   description: string;
   solution: string;
 }
-
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:5000";
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://127.0.0.1:5000";
@@ -138,6 +136,16 @@ function App() {
       showToast(data.error, "error");
     });
 
+    socket.on("scan_stopped", (data) => {
+      setIsScanning(false);
+      setScanProgress({
+        progress: 0,
+        message: "Scan stopped by user",
+        phase: "Stopped",
+      });
+      showToast("Scan stopped by user", "info");
+    });
+
     // Cleanup on component unmount
     return () => {
       socket.disconnect();
@@ -196,6 +204,41 @@ function App() {
     }
   };
 
+  const handleStopScan = async () => {
+    if (!socket?.id) {
+      showToast("Error: No WebSocket connection available", "error");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/stop-scan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          session_id: socket.id,
+          url: url
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setIsScanning(false);
+        setScanProgress({
+          progress: 0,
+          message: "Scan stopped",
+          phase: "Stopped",
+        });
+        showToast("Scan stopped successfully", "info");
+      } else {
+        throw new Error(data.error || "Failed to stop scan");
+      }
+    } catch (error) {
+      console.error("Error stopping scan:", error);
+      showToast(error instanceof Error ? error.message : "Error stopping scan", "error");
+    }
+  };
+
   const showToast = (message: string, type: string) => {
     switch (type) {
       case "success":
@@ -245,15 +288,8 @@ function App() {
       />
 
       <main className="flex-1 container mx-auto px-4 py-12">
-        <section
-          className="text-center mb-16" 
-          data-aos="fade-up"
-          style={{ lineHeight: "1.2" }}
-        >
-          <h1
-            className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent"
-            style={{ paddingBottom: "0.2em" }}
-          >
+        <section className="text-center mb-16" data-aos="fade-up">
+          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
             Website Vulnerability Scanner
           </h1>
           <p className="text-xl text-gray-300">
@@ -265,6 +301,7 @@ function App() {
           url={url}
           setUrl={setUrl}
           onScanSubmit={handleScan}
+          onStopScan={handleStopScan}
           isLoading={isScanning}
         />
 
@@ -287,22 +324,16 @@ function App() {
 
         {scanError && (
           <div className="error-container mt-8">
-            <div
-              className={`scan-error-container p-4 bg-gray-800 rounded-lg shadow-md border-l-4 ${
-                scanError.type === "validation_error"
-                  ? "border-yellow-500"
-                  : "border-red-500"
-              }`}
-            >
+            <div className={`scan-error-container p-4 bg-gray-800 rounded-lg shadow-md border-l-4 ${
+              scanError.type === "validation_error" ? "border-yellow-500" : "border-red-500"
+            }`}>
               <div className="error-message">
                 <div className="error-header flex items-center mb-2">
                   <span className="error-icon mr-2">
                     {scanError.type === "validation_error" ? "⚠️" : "❌"}
                   </span>
                   <h3 className="text-lg font-semibold text-gray-100">
-                    {scanError.type === "validation_error"
-                      ? "URL Validation Error"
-                      : "Scan Error"}
+                    {scanError.type === "validation_error" ? "URL Validation Error" : "Scan Error"}
                   </h3>
                 </div>
                 <p className="error-text text-gray-300">{scanError.error}</p>
@@ -324,8 +355,6 @@ function App() {
           targetUrl={url}
         />
       </main>
-
-      <Footer />
     </div>
   );
 }

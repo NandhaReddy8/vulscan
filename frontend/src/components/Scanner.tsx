@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Loader } from "lucide-react";
+import { Loader, StopCircle } from "lucide-react";
 
 interface ScannerProps {
   onScanSubmit: (url: string) => void;
+  onStopScan: () => void;
   isLoading: boolean;
   url: string;
   setUrl: (url: string) => void;
@@ -10,6 +11,7 @@ interface ScannerProps {
 
 const Scanner: React.FC<ScannerProps> = ({
   onScanSubmit,
+  onStopScan,
   isLoading,
   url,
   setUrl,
@@ -162,7 +164,7 @@ const Scanner: React.FC<ScannerProps> = ({
         Attempts remaining: <strong>{attempts}</strong>
           </p>
 
-          <div className="flex justify-center">
+          <div className="flex justify-center gap-4">
         <button
           type="submit"
           disabled={isLoading || attempts <= 0}
@@ -177,6 +179,17 @@ const Scanner: React.FC<ScannerProps> = ({
             "Start Scan"
           )}
         </button>
+
+        {isLoading && (
+          <button
+            type="button"
+            onClick={onStopScan}
+            className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
+          >
+            <StopCircle className="h-4 w-4" />
+            Stop Scan
+          </button>
+        )}
           </div>
         </div>
       </form>
