@@ -14,14 +14,15 @@ def initialize_csv(file_path, headers):
             writer.writerow(headers)  # Write column headers
 
 # Initialize CSV files
-initialize_csv(SCAN_REQUESTS_FILE, ["URL","IP Address","Time Stamp"])
+initialize_csv(SCAN_REQUESTS_FILE, ["url", "ip_address", "timestamp"])  # Changed headers to match
 initialize_csv(REPORT_REQUESTS_FILE, ["Name", "Email", "Phone", "Target URL"])
 
 # Function to save a scan request
-def save_scan_request(URL,IP_Address,Time_Stamp):
-    with open(SCAN_REQUESTS_FILE, "a", newline="") as file:
+def save_scan_request(url, ip_address, timestamp):
+    """Save scan request with consistent headers"""
+    with open(SCAN_REQUESTS_FILE, "a", newline="", encoding='utf-8') as file:
         writer = csv.writer(file)
-        writer.writerow([URL,IP_Address,Time_Stamp])
+        writer.writerow([url, ip_address, timestamp])
 
 # Function to save a report request
 def save_report_request(name, email, Phone, Target_URL):

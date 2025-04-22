@@ -18,6 +18,100 @@ from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 RESULTS_DIR = "./zap_results"  # Directory where ZAP scan results are stored
 REPORTS_DIR = "./zap_reports"
 
+def check_weekly_scan_limit(target_url):
+    """
+    Check if URL has exceeded the weekly scan limit (2 scans per 7 days)
+    Returns: (bool, str) - (is_limit_exceeded, error_message)
+    """
+    try:
+        print(f"[*] Checking scan limit for URL: {target_url}")
+        current_time = datetime.now()
+        week_ago = current_time - timedelta(days=7)
+        scan_count = 0
+        
+        # Get absolute path to scan_requests.csv
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        csv_file = os.path.join(current_dir, 'scan_requests.csv')
+        
+        print(f"[*] Looking for CSV file at: {csv_file}")
+
+        if not os.path.exists(csv_file):
+            print(f"[!] CSV file not found at: {csv_file}")
+            # Create the file with correct headers
+            with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+                writer = csv.writer(f)
+                writer.writerow(['url', 'ip_address', 'timestamp'])
+            return False, None
+
+        try:
+            with open(csv_file, 'r', encoding='utf-8') as f:
+                reader = csv.DictReader(f)
+                headers = reader.fieldnames
+                
+                # Convert headers to lowercase for case-insensitive comparison
+                headers_lower = [h.lower() for h in headers] if headers else []
+                required_headers = {'url', 'ip_address', 'timestamp'}
+                
+                if not headers or not required_headers.issubset(set(headers_lower)):
+                    print(f"[!] Invalid or missing headers. Found: {headers}")
+                    print("[*] Creating new file with correct headers")
+                    
+                    # Backup existing file
+                    backup_file = f"{csv_file}.backup"
+                    if os.path.exists(csv_file):
+                        os.rename(csv_file, backup_file)
+                    
+                    # Create new file with correct headers
+                    with open(csv_file, 'w', newline='', encoding='utf-8') as f:
+                        writer = csv.writer(f)
+                        writer.writerow(['url', 'ip_address', 'timestamp'])
+                    return False, None
+                
+                print(f"[*] Reading scan history...")
+                recent_scans = []
+                
+                # Create a mapping of header names
+                header_map = {h.lower(): h for h in headers}
+                
+                for row in reader:
+                    # Use header mapping to get values
+                    url_value = row[header_map.get('url', 'URL')]
+                    timestamp_value = row[header_map.get('timestamp', 'Time Stamp')]
+                    
+                    # Skip if URL doesn't match
+                    if url_value.strip() != target_url.strip():
+                        continue
+                        
+                    try:
+                        scan_time = datetime.strptime(timestamp_value, '%d-%m-%Y %H:%M:%S')
+                        if scan_time > week_ago:
+                            scan_count += 1
+                            recent_scans.append(scan_time)
+                            print(f"[+] Found recent scan from: {scan_time}")
+                            
+                            if scan_count >= 2:
+                                earliest_scan = min(recent_scans)
+                                days_until_reset = (earliest_scan + timedelta(days=7) - current_time).days + 1
+                                error_msg = f"Weekly scan limit reached for this URL. Please try again after {days_until_reset} days."
+                                print(f"[!] {error_msg}")
+                                return True, error_msg
+                                
+                    except ValueError as e:
+                        print(f"[ERROR] Invalid timestamp format in row: {timestamp_value}")
+                        continue
+                
+                print(f"[*] Found {scan_count} scans in the last 7 days")
+                return False, None
+                
+        except csv.Error as e:
+            print(f"[ERROR] CSV file error: {str(e)}")
+            return False, f"Error reading scan history: {str(e)}"
+            
+    except Exception as e:
+        error_msg = f"Failed to check weekly scan limit: {str(e)}"
+        print(f"[ERROR] {error_msg}")
+        return False, error_msg
+
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -55,72 +149,88 @@ def is_duplicate_url(target_url):
 
 @app.route("/api/scan", methods=["POST"])
 def scan():
-    data = request.get_json()
-    target_url = data.get("url")
-    session_id = data.get("session_id")
-
-    if not target_url:
-        return jsonify({"error": "No URL provided"}), 400
-
-    if not session_id:
-        return jsonify({"error": "No session_id provided"}), 400
-
-    # Get the user's IP address
-    user_ip = request.remote_addr
-
-    # Format the timestamp in dd-mm-yyyy HH:MM:SS format
-    timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
-
-    # Save scan request to CSV
     try:
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        csv_file = os.path.join(current_dir, 'scan_requests.csv')
+        data = request.get_json()
+        target_url = data.get("url")
+        session_id = data.get("session_id")
 
-        # Define the correct headers and data
-        headers = ['url', 'ip_address', 'timestamp']
-        csv_data = {
-            'url': target_url,
-            'ip_address': user_ip,
-            'timestamp': timestamp
-        }
+        print(f"[*] Received scan request for URL: {target_url}")
 
-        # Create file with headers if it doesn't exist
-        file_exists = os.path.exists(csv_file)
-        with open(csv_file, 'a', newline='', encoding='utf-8') as f:
-            writer = csv.DictWriter(f, fieldnames=headers)
-            if not file_exists:
-                writer.writeheader()
-            writer.writerow(csv_data)
+        if not target_url:
+            return jsonify({"error": "No URL provided"}), 400
 
-        print(f"[+] Scan request saved to CSV: {csv_file}")
-    except Exception as e:
-        print(f"[ERROR] Failed to save scan request to CSV: {str(e)}")
+        if not session_id:
+            return jsonify({"error": "No session_id provided"}), 400
 
-    # Add URL to running scans
-    running_scans[target_url] = datetime.now()
+        # Check weekly scan limit
+        print(f"[*] Checking scan limit...")
+        is_limited, limit_message = check_weekly_scan_limit(target_url)
+        
+        if is_limited:
+            print(f"[!] Scan limit reached: {limit_message}")
+            return jsonify({"error": limit_message}), 429
 
-    scan_id = str(uuid.uuid4())
-    active_scans[scan_id] = session_id
+        # Get the user's IP address
+        user_ip = request.remote_addr
 
-    # Run ZAP Scan in a separate thread
-    def run_scan():
-        nonlocal scan_id, target_url
-        print(f"[*] Triggering scan for {target_url}...")
+        # Format the timestamp in dd-mm-yyyy HH:MM:SS format
+        timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")
+
+        # Save scan request to CSV
         try:
-            scan_target(target_url, socketio, scan_id, active_scans)
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            csv_file = os.path.join(current_dir, 'scan_requests.csv')
+
+            # Define the correct headers and data
+            headers = ['url', 'ip_address', 'timestamp']
+            csv_data = {
+                'url': target_url,
+                'ip_address': user_ip,
+                'timestamp': timestamp
+            }
+
+            # Create file with headers if it doesn't exist
+            file_exists = os.path.exists(csv_file)
+            with open(csv_file, 'a', newline='', encoding='utf-8') as f:
+                writer = csv.DictWriter(f, fieldnames=headers)
+                if not file_exists:
+                    writer.writeheader()
+                writer.writerow(csv_data)
+
+            print(f"[+] Scan request saved to CSV: {csv_file}")
         except Exception as e:
-            print(f"[ERROR] Scan failed: {e}")
-            session_id = active_scans.get(scan_id)
-            if session_id:
-                socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url}, room=session_id)
-        finally:
-            running_scans.pop(target_url, None)
+            print(f"[ERROR] Failed to save scan request to CSV: {str(e)}")
 
-    scan_thread = threading.Thread(target=run_scan)
-    scan_thread.daemon = True
-    scan_thread.start()
+        # Add URL to running scans
+        running_scans[target_url] = datetime.now()
 
-    return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
+        scan_id = str(uuid.uuid4())
+        active_scans[scan_id] = session_id
+
+        # Run ZAP Scan in a separate thread
+        def run_scan():
+            nonlocal scan_id, target_url
+            print(f"[*] Triggering scan for {target_url}...")
+            try:
+                scan_target(target_url, socketio, scan_id, active_scans)
+            except Exception as e:
+                print(f"[ERROR] Scan failed: {e}")
+                session_id = active_scans.get(scan_id)
+                if session_id:
+                    socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url}, room=session_id)
+            finally:
+                running_scans.pop(target_url, None)
+
+        scan_thread = threading.Thread(target=run_scan)
+        scan_thread.daemon = True
+        scan_thread.start()
+
+        return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
+
+    except Exception as e:
+        error_msg = f"Scan request failed: {str(e)}"
+        print(f"[ERROR] {error_msg}")
+        return jsonify({"error": error_msg}), 500
 
 @app.route("/api/report-request", methods=["POST"])
 def handle_report_request():

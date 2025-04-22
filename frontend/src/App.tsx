@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { io, Socket } from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
+import { X } from 'lucide-react';
 import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Scanner from "./components/Scanner";
@@ -23,6 +24,73 @@ interface Vulnerability {
   solution: string;
 }
 
+// Add a new interface for scan limit error
+interface ScanLimitError {
+  type: 'limit_exceeded' | 'connection_error' | 'validation_error';
+  error: string;
+  daysRemaining?: number;
+}
+
+// Add new interface for error dialog props
+interface ErrorDialogProps {
+  error: ScanLimitError;
+  onClose: () => void;
+}
+
+// Add new ErrorDialog component
+const ErrorDialog: React.FC<ErrorDialogProps> = ({ error, onClose }) => {
+  return (
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-gray-800 rounded-lg w-full max-w-md p-6 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-white"
+          title='Close'
+        >
+          <X className="h-5 w-5" />
+        </button>
+
+        <div className="mb-6">
+          <div className="flex items-center mb-4">
+            <span className="text-2xl mr-3">
+              {error.type === 'limit_exceeded' ? '⏳' : 
+               error.type === 'validation_error' ? '⚠️' : '❌'}
+            </span>
+            <h3 className="text-xl font-semibold text-white">
+              {error.type === 'limit_exceeded' ? 'Scan Limit Reached' :
+               error.type === 'validation_error' ? 'Validation Error' : 'Scan Error'}
+            </h3>
+          </div>
+          <p className="text-gray-300 text-lg">
+            {error.error}
+          </p>
+        </div>
+
+        {error.type === 'limit_exceeded' && (
+          <div className="bg-gray-700/50 p-4 rounded-lg mb-6">
+            <p className="text-yellow-400 font-medium">
+              🕒 Please try again in {error.daysRemaining} days or reach us for complete Deep Scan.
+            </p>
+            <p className="text-gray-400 mt-2 text-sm">
+              To ensure fair usage, we limit scans to 2 per week for each URL.
+            </p>
+          </div>
+        )}
+
+        <button
+          onClick={onClose}
+          className="w-full bg-blue-600 text-white rounded-lg px-4 py-2 hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+          </svg>
+          Close
+        </button>
+      </div>
+    </div>
+  );
+};
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:5000";
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://127.0.0.1:5000";
 
@@ -36,10 +104,7 @@ function App() {
     message: "",
     phase: "",
   });
-  const [scanError, setScanError] = useState<{
-    type: string;
-    error: string;
-  } | null>(null);
+  const [scanError, setScanError] = useState<ScanLimitError | null>(null);
   const [stats, setStats] = useState<ScanStats>({
     high: 0,
     medium: 0,
@@ -180,27 +245,29 @@ function App() {
 
       const data = await response.json();
 
+      if (response.status === 429) {
+        // Handle rate limit error
+        setIsScanning(false);
+        setScanError({
+          type: 'limit_exceeded',
+          error: data.error,
+          daysRemaining: parseInt(data.error.match(/\d+/)?.[0] || '7')
+        });
+        return;
+      }
+
       if (response.ok) {
         showToast("Scan started successfully!", "success");
       } else {
-        if (socket) {
-          socket.emit("start_scan", { url });
-          showToast("Scan requested via WebSocket", "info");
-        } else {
-          throw new Error(data.error || "Failed to submit scan request");
-        }
+        throw new Error(data.error || "Failed to submit scan request");
       }
     } catch (error) {
       console.error("Error submitting scan request:", error);
       setIsScanning(false);
       setScanError({
         type: "connection_error",
-        error:
-          error instanceof Error
-            ? error.message
-            : "Unable to connect to the server",
+        error: error instanceof Error ? error.message : "Unable to connect to the server",
       });
-      showToast("Error: Unable to connect to the server.", "error");
     }
   };
 
@@ -323,29 +390,10 @@ function App() {
         )}
 
         {scanError && (
-          <div className="error-container mt-8">
-            <div className={`scan-error-container p-4 bg-gray-800 rounded-lg shadow-md border-l-4 ${
-              scanError.type === "validation_error" ? "border-yellow-500" : "border-red-500"
-            }`}>
-              <div className="error-message">
-                <div className="error-header flex items-center mb-2">
-                  <span className="error-icon mr-2">
-                    {scanError.type === "validation_error" ? "⚠️" : "❌"}
-                  </span>
-                  <h3 className="text-lg font-semibold text-gray-100">
-                    {scanError.type === "validation_error" ? "URL Validation Error" : "Scan Error"}
-                  </h3>
-                </div>
-                <p className="error-text text-gray-300">{scanError.error}</p>
-                <button
-                  className="retry-button mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                  onClick={() => setScanError(null)}
-                >
-                  Try Another URL
-                </button>
-              </div>
-            </div>
-          </div>
+          <ErrorDialog 
+            error={scanError} 
+            onClose={() => setScanError(null)} 
+          />
         )}
 
         <Results
