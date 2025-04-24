@@ -7,6 +7,7 @@ import Header from "./components/Header";
 import Scanner from "./components/Scanner";
 import Results from "./components/Results";
 import scannerBg from './components/assets/gif.webm';
+import virtuesLogo from './components/assets/virtuesTech_Logo.png';
 
 interface ScanStats {
   high: number;
@@ -443,19 +444,18 @@ function App() {
               <p className="text-gray-400 text-sm font-medium">
                 Developed by
               </p>
-              <a 
+                <a 
                 href="https://virtuestech.com" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="group flex items-center space-x-2 transition-all duration-300"
-              >
+                >
                 <img 
-                  src="/src/components/assets/virtuesTech_Logo.png" 
+                  src={virtuesLogo} 
                   alt="VirtuesTech" 
                   className="h-8 w-auto transition-transform group-hover:scale-105"
                 />
-              
-              </a>
+                </a>
               <p className="text-gray-500 text-xs">
                 © {new Date().getFullYear()} All rights reserved
               </p>
