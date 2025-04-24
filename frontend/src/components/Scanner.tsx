@@ -107,6 +107,18 @@ const Scanner: React.FC<ScannerProps> = ({
             Coming Soon!
           </div>
         </div>
+        <div className="relative group">
+          <button
+            type="button"
+            disabled
+            className="px-6 py-3 rounded-lg font-medium bg-gray-700 text-gray-400 cursor-not-allowed opacity-75"
+          >
+            API Scanner
+          </button>
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+            Coming Soon!
+          </div>
+        </div>
       </div>
 
       <form

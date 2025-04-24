@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { io, Socket } from "socket.io-client";
 import { ToastContainer, toast } from "react-toastify";
 import { X } from 'lucide-react';
@@ -6,6 +6,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header";
 import Scanner from "./components/Scanner";
 import Results from "./components/Results";
+import scannerBg from './components/assets/gif.webm';
 
 interface ScanStats {
   high: number;
@@ -24,20 +25,17 @@ interface Vulnerability {
   solution: string;
 }
 
-// Add a new interface for scan limit error
 interface ScanLimitError {
   type: 'limit_exceeded' | 'connection_error' | 'validation_error';
   error: string;
   daysRemaining?: number;
 }
 
-// Add new interface for error dialog props
 interface ErrorDialogProps {
   error: ScanLimitError;
   onClose: () => void;
 }
 
-// Add new ErrorDialog component
 const ErrorDialog: React.FC<ErrorDialogProps> = ({ error, onClose }) => {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
@@ -113,6 +111,20 @@ function App() {
   });
   const [vulnerabilities, setVulnerabilities] = useState<Vulnerability[]>([]);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      if (!isScanning) {
+        videoRef.current.play().catch(err => {
+          console.warn('Video autoplay failed:', err);
+        });
+      } else {
+        videoRef.current.pause();
+      }
+    }
+  }, [isScanning]);
+
   useEffect(() => {
     const socket: Socket = io(SOCKET_URL, {
       reconnection: true,
@@ -135,14 +147,12 @@ function App() {
       console.error("Connection error:", error);
     });
 
-    // Server event handlers
     socket.on("scan_completed", (data) => {
       setIsScanning(false);
       setShowResults(true);
       setScanError(null);
 
       console.log(data, "Scan completed data received:", data);
-      // Update results if available
       if (data.result) {
         if (data.result.summary) {
           setStats({
@@ -157,7 +167,6 @@ function App() {
         }
       }
 
-      // Handle error if present
       if (data.error) {
         showToast("Error: " + data.error, "error");
       } else {
@@ -211,7 +220,6 @@ function App() {
       showToast("Scan stopped by user", "info");
     });
 
-    // Cleanup on component unmount
     return () => {
       socket.disconnect();
     };
@@ -246,7 +254,6 @@ function App() {
       const data = await response.json();
 
       if (response.status === 429) {
-        // Handle rate limit error
         setIsScanning(false);
         setScanError({
           type: 'limit_exceeded',
@@ -338,71 +345,124 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100">
-      <Header />
+    <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100 relative overflow-hidden">
+      <div 
+        className={`fixed inset-0 w-full h-full transition-opacity duration-500 ${
+          isScanning ? 'opacity-0' : 'opacity-100'
+        }`}
+        style={{ zIndex: 0 }}
+      >
+        <video
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{
+            filter: 'brightness(0.3)',  // Increased from 0.15 to 0.3
+            transform: 'scale(1.05)',
+          }}
+        >
+          <source src={scannerBg} type="video/webm" />
+        </video>
+        <div 
+          className="absolute inset-0 bg-gradient-to-b from-gray-900/20 via-gray-900/10 to-gray-900/30" 
+        />
+      </div>
 
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+      <div className="relative z-10">
+        <Header />
 
-      <main className="flex-1 container mx-auto px-4 py-12">
-        <section className="text-center mb-16" data-aos="fade-up">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent">
-            Website Vulnerability Scanner
-          </h1>
-          <p className="text-xl text-gray-300">
-            Comprehensive vulnerability assessment for your digital assets
-          </p>
-        </section>
-
-        <Scanner
-          url={url}
-          setUrl={setUrl}
-          onScanSubmit={handleScan}
-          onStopScan={handleStopScan}
-          isLoading={isScanning}
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="dark"
         />
 
-        {isScanning && (
-          <div className="progress-indicator mt-8 p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700">
-            <div className="progress-bar bg-gray-700 rounded-full h-4 overflow-hidden">
-              <div
-                className="progress bg-blue-500 h-4"
-                style={{ width: `${scanProgress.progress}%` }}
-              ></div>
-            </div>
-            <p className="progress-message mt-2 text-gray-300">
-              {scanProgress.message}
+        <main className="flex-3 container mx-auto px-5 py-12">
+          <section className="text-center mb-16 py-2" data-aos="fade-up">
+            <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-400 to-blue-300 bg-clip-text text-transparent leading-relaxed">
+              Vulnerability Scanner
+            </h1>
+            <p className="text-xl text-gray-300">
+              Comprehensive vulnerability assessment for your digital assets
             </p>
-            <p className="scan-phase text-sm text-gray-400">
-              {scanProgress.phase}
-            </p>
-          </div>
-        )}
+          </section>
 
-        {scanError && (
-          <ErrorDialog 
-            error={scanError} 
-            onClose={() => setScanError(null)} 
+          <Scanner
+            url={url}
+            setUrl={setUrl}
+            onScanSubmit={handleScan}
+            onStopScan={handleStopScan}
+            isLoading={isScanning}
           />
-        )}
 
-        <Results
-          isVisible={showResults}
-          vulnerabilities={vulnerabilities}
-          stats={stats}
-          targetUrl={url}
-        />
-      </main>
+          {isScanning && (
+            <div className="progress-indicator mt-8 p-4 bg-gray-800 rounded-lg shadow-md border border-gray-700">
+              <div className="progress-bar bg-gray-700 rounded-full h-4 overflow-hidden">
+                <div
+                  className="progress bg-blue-500 h-4"
+                  style={{ width: `${scanProgress.progress}%` }}
+                ></div>
+              </div>
+              <p className="progress-message mt-2 text-gray-300">
+                {scanProgress.message}
+              </p>
+              <p className="scan-phase text-sm text-gray-400">
+                {scanProgress.phase}
+              </p>
+            </div>
+          )}
+
+          {scanError && (
+            <ErrorDialog 
+              error={scanError} 
+              onClose={() => setScanError(null)} 
+            />
+          )}
+
+          <Results
+            isVisible={showResults}
+            vulnerabilities={vulnerabilities}
+            stats={stats}
+            targetUrl={url}
+          />
+        </main>
+
+        <footer className="py-6 mt-auto border-t border-gray-800">
+          <div className="container mx-auto px-4">
+            <div className="flex flex-col items-center justify-center space-y-2">
+              <p className="text-gray-400 text-sm font-medium">
+                Developed by
+              </p>
+              <a 
+                href="https://virtuestech.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="group flex items-center space-x-2 transition-all duration-300"
+              >
+                <img 
+                  src="/src/components/assets/virtuesTech_Logo.png" 
+                  alt="VirtuesTech" 
+                  className="h-8 w-auto transition-transform group-hover:scale-105"
+                />
+              
+              </a>
+              <p className="text-gray-500 text-xs">
+                © {new Date().getFullYear()} All rights reserved
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
     </div>
   );
 }
