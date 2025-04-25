@@ -198,6 +198,7 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             'phase': 'Report Generation'
         }, room=session_id)
 
+        # Generate both HTML and XML reports
         html_file = generate_reports(
             target_url,
             results,
@@ -207,15 +208,50 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             session_id
         )
 
+        # Generate XML report
+        xml_file = generate_xml_report(target_url, scan_id, context_name)
+        print(f"[{scan_id}] XML report generated, initiating DefectDojo upload...")
+
         if scan_id not in active_scans:
             return
 
+        # Upload to DefectDojo
+        try:
+            from dojo_handler import DojoHandler
+            dojo_handler = DojoHandler()
+            
+            socketio.emit('scan_progress', {
+                'scan_id': scan_id,
+                'message': 'Uploading to DefectDojo...',
+                'progress': 99,
+                'phase': 'DefectDojo Integration'
+            }, room=session_id)
+
+            print(f"[{scan_id}] Initiating DefectDojo upload for {target_url}")
+            dojo_result = dojo_handler.process_scan(target_url, xml_file)
+            
+            if dojo_result['success']:
+                print(f"[{scan_id}] Successfully uploaded to DefectDojo")
+                print(f"[{scan_id}] DefectDojo URL: {dojo_result.get('dojo_url')}")
+            else:
+                print(f"[{scan_id}] DefectDojo upload failed: {dojo_result['message']}")
+
+        except Exception as e:
+            print(f"[{scan_id}] DefectDojo integration failed: {str(e)}")
+            dojo_result = {
+                'success': False,
+                'message': f"DefectDojo integration failed: {str(e)}"
+            }
+
+        # Update the completion event to include DefectDojo results
         socketio.emit('scan_completed', {
             'scan_id': scan_id,
             'message': 'Scan Completed!',
             'result': results,
             'html_report': html_file,
-            'html_path': html_file
+            'html_path': html_file,
+            'xml_report': xml_file,
+            'dojo_result': dojo_result
         }, room=session_id)
 
     except Exception as e:
@@ -319,6 +355,42 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
         print(f"[{scan_id}] [ERROR] Report generation failed: {str(e)}")
         logger.error(f"Report generation failed: {str(e)}", exc_info=True)
         raise
+
+def generate_xml_report(target_url, scan_id, context_name):
+    """Generate XML report for specific site using ZAP API"""
+    try:
+        print(f"[{scan_id}] Starting XML report generation...")
+        output_dir = "./zap_xml"
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Generate XML report using ZAP API
+        report_endpoint = f"{ZAP_URL}/OTHER/core/other/xmlreport/"
+        print(f"[{scan_id}] Calling ZAP API to generate XML report...")
+        
+        response = requests.get(
+            report_endpoint,
+            params={'apikey': ZAP_API_KEY},
+            headers={'Accept': 'application/xml'},
+            verify=False
+        )
+        
+        if response.status_code != 200:
+            raise Exception(f"Failed to generate XML report: {response.text}")
+
+        # Save XML report
+        safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.xml"
+        xml_filename = os.path.join(output_dir, safe_filename)
+        
+        with open(xml_filename, 'w', encoding='utf-8') as f:
+            f.write(response.text)
+            
+        print(f"[{scan_id}] Generated XML report at: {xml_filename}")
+        return xml_filename
+
+    except Exception as e:
+        print(f"[{scan_id}] [ERROR] XML report generation failed: {str(e)}")
+        logger.error(f"XML report generation failed: {str(e)}", exc_info=True)
+        return None
 
 def process_scan_results(alerts):
     """Process ZAP alerts into a structured format with detailed vulnerability information"""

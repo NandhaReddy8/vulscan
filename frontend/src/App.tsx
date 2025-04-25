@@ -90,7 +90,7 @@ const ErrorDialog: React.FC<ErrorDialogProps> = ({ error, onClose }) => {
   );
 };
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://127.0.0.1:5000";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL|| "http://127.0.0.1:5000";
 const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://127.0.0.1:5000";
 
 function App() {

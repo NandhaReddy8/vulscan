@@ -14,9 +14,13 @@ from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target, zap
 from datetime import datetime, timedelta
 from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
+from dojo_handler import DojoHandler
 
 RESULTS_DIR = "./zap_results"  # Directory where ZAP scan results are stored
 REPORTS_DIR = "./zap_reports"
+
+# Initialize DojoHandler
+dojo_handler = DojoHandler()
 
 def check_weekly_scan_limit(target_url):
     """
