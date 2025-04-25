@@ -17,7 +17,7 @@ const FreeScan = () => {
           </p>
           <Button
             className="bg-primary hover:bg-primary/90 text-white text-lg px-12 py-6 w-full md:w-auto"
-            onClick={() => window.location.href = "https://vas.virtuelity.com/webscanner"}
+            onClick={() => window.location.href = "https://vas.virtuelity.com/webscanner/"}
           >
             Free Scan
           </Button>

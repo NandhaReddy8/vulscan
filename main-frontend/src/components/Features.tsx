@@ -28,7 +28,7 @@ const Features = () => {
               </p>
               <Button
           className="bg-primary hover:bg-primary/90 text-white"
-          onClick={() => window.location.href = "https://vas.virtuelity.com/webscanner"}
+          onClick={() => window.location.href = "https://vas.virtuelity.com/webscanner/"}
         >
           Scan Now
         </Button>
