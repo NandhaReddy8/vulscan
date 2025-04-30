@@ -15,7 +15,7 @@ def initialize_csv(file_path, headers):
 
 # Initialize CSV files
 initialize_csv(SCAN_REQUESTS_FILE, ["url", "ip_address", "timestamp"])  # Changed headers to match
-initialize_csv(REPORT_REQUESTS_FILE, ["Name", "Email", "Phone", "Target URL"])
+initialize_csv(REPORT_REQUESTS_FILE, ["Name", "Email", "Phone", "Target URL", "Timestamp"])
 
 # Function to save a scan request
 def save_scan_request(url, ip_address, timestamp):
@@ -25,7 +25,7 @@ def save_scan_request(url, ip_address, timestamp):
         writer.writerow([url, ip_address, timestamp])
 
 # Function to save a report request
-def save_report_request(name, email, Phone, Target_URL):
+def save_report_request(name, email, Phone, Target_URL, Timestamp):
     with open(REPORT_REQUESTS_FILE, "a", newline="") as file:
         writer = csv.writer(file)
         writer.writerow([name, email, Phone, Target_URL])
@@ -41,3 +41,5 @@ def get_report_requests():
     with open(REPORT_REQUESTS_FILE, "r") as file:
         reader = csv.DictReader(file)
         return list(reader)
+
+# Function to delete all scan requests

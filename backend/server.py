@@ -151,6 +151,22 @@ def is_duplicate_url(target_url):
             return True
     return False
 
+def get_client_ip(request):
+    """Get the real client IP address when behind Nginx"""
+    # Try to get IP from X-Forwarded-For header first
+    forwarded_for = request.headers.get('X-Forwarded-For')
+    if forwarded_for:
+        # X-Forwarded-For can contain multiple IPs - first one is the client
+        return forwarded_for.split(',')[0].strip()
+    
+    # Try X-Real-IP header next (commonly set by Nginx)
+    real_ip = request.headers.get('X-Real-IP')
+    if real_ip:
+        return real_ip
+        
+    # Fallback to remote address
+    return request.remote_addr
+
 @app.route("/api/scan", methods=["POST"])
 def scan():
     try:
@@ -175,7 +191,7 @@ def scan():
             return jsonify({"error": limit_message}), 429
 
         # Get the user's IP address
-        user_ip = request.remote_addr
+        user_ip = get_client_ip(request)
 
         # Format the timestamp in dd-mm-yyyy HH:MM:SS format
         timestamp = datetime.now().strftime("%d-%m-%Y %H:%M:%S")

@@ -106,17 +106,15 @@ const Results: React.FC<ResultsProps> = ({
                 {type} Risk
               </h3>
               <span
-                className="text-4xl font-bold block mb-2"
-                style={{
-                  color:
-                    type === "high"
-                      ? "#ef4444"
-                      : type === "medium"
-                      ? "#f59e0b"
-                      : type === "low"
-                      ? "#3b82f6"
-                      : "#60a5fa",
-                }}
+                className={`text-4xl font-bold block mb-2 ${
+                  type === "high"
+                    ? "text-red-500"
+                    : type === "medium"
+                    ? "text-amber-500"
+                    : type === "low"
+                    ? "text-blue-500"
+                    : "text-blue-400"
+                }`}
               >
                 {count}
               </span>
