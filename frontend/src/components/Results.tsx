@@ -61,16 +61,25 @@ const Results: React.FC<ResultsProps> = ({
   stats,
   targetUrl,
 }) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // Define the order of risk levels (from highest to lowest)
+  const riskOrder = ["high", "medium", "low", "informational"] as const;
 
+  // Find the highest risk level that has vulnerabilities
+  const getInitialRiskLevel = () => {
+    for (const risk of riskOrder) {
+      if (stats[risk] > 0) {
+        return risk;
+      }
+    }
+    return "low" as const; // fallback to low if no vulnerabilities found
+  };
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedRiskFindings, setSelectedRiskFindings] = useState<
     "high" | "medium" | "low" | "informational"
-  >("low");
+  >(getInitialRiskLevel());
 
   if (!isVisible) return null;
-
-  // Define the order of risk levels
-  const riskOrder = ["high", "medium", "low", "informational"] as const;
 
   // Create ordered stats entries
   const orderedStats = riskOrder.map((risk) => [risk, stats[risk]]);

@@ -243,13 +243,15 @@ def scan_target(target_url, socketio, scan_id, active_scans):
                 'message': f"DefectDojo integration failed: {str(e)}"
             }
 
-        # Update the completion event to include DefectDojo results
+        # Update the completion event to include report URL instead of file path
+        report_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.html"
+        report_url = f'/reports/{report_filename}'  # URL path instead of file path
+
         socketio.emit('scan_completed', {
             'scan_id': scan_id,
             'message': 'Scan Completed!',
             'result': results,
-            'html_report': html_file,
-            'html_path': html_file,
+            'report_url': report_url,  # Send URL instead of file path
             'xml_report': xml_file,
             'dojo_result': dojo_result
         }, room=session_id)
@@ -299,7 +301,6 @@ def save_scan_results(target_url, results, scan_id, context_name):
         raise
 
 def generate_reports(target_url, results, scan_id, context_name, socketio, session_id):
-    """Generate HTML report for specific site using ZAP Reports API"""
     try:
         print(f"[{scan_id}] Starting report generation...") 
         output_dir = "./zap_reports"
@@ -320,7 +321,7 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
             params={
                 'apikey': ZAP_API_KEY,
                 'title': f'Vulnerability Scan Report - {target_url}',
-                'template': 'traditional-html',
+                'template': 'risk-confidence-html',
                 'sites': target_url,
             },
             headers={'Accept': 'application/json'},
@@ -330,24 +331,447 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
         if response.status_code != 200:
             raise Exception(f"Failed to generate report: {response.text}")
 
-        # Get generated HTML file path and create final report
+        # Get generated HTML file path
         html_file = response.json().get('generate', '').replace('//', '/')
         if not html_file or not os.path.exists(html_file):
             raise FileNotFoundError(f"Generated HTML report not found at path: {html_file}")
 
-        # Read and customize the report
+        # Read the report content
         with open(html_file, 'r', encoding='utf-8') as f:
             html_content = f.read()
 
-
+        # Updated logo handling with absolute path and error checking
+        try:
+            # Get absolute path to the logo
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            logo_path = os.path.join(current_dir, 'virtuestech_logo.png')
+            
+            print(f"[DEBUG] Looking for logo at: {logo_path}")
+            
+            if not os.path.exists(logo_path):
+                raise FileNotFoundError(f"Logo file not found at: {logo_path}")
+            
+            with open(logo_path, 'rb') as img_file:
+                logo_base64 = base64.b64encode(img_file.read()).decode('utf-8')
+                print("[DEBUG] Successfully loaded and encoded logo")
         
-        # Save final report
+        except Exception as logo_error:
+            print(f"[ERROR] Failed to load logo: {str(logo_error)}")
+            logo_base64 = ""
+
+        # Custom CSS combining normalize.css with our styles
+        custom_css = """
+        <style>
+        /* Normalize CSS Base */
+        *, *::after, *::before { box-sizing: border-box; }
+        html { line-height: 1.15; -webkit-text-size-adjust: 100%; }
+        body { margin: 0; }
+        main { display: block; }
+
+        /* Typography Normalization */
+        h1 { font-size: 2em; margin: 0.67em 0; }
+        pre { font-family: monospace, monospace; font-size: 1em; }
+        b, strong { font-weight: bolder; }
+        code, kbd, samp { font-family: monospace, monospace; font-size: 1em; }
+
+        /* Custom Theme */
+        :root {
+            --primary-color: #0369ba;
+            --secondary-color: #FF963f;
+            --text-color: #333333;
+            --border-color: #e5e7eb;
+            --background-start: #fff;
+            --background-middle: #8ce1d6;
+            --background-end: #386095;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background: linear-gradient(135deg, #fff 0%, #8ce1d6 15%, #306aa0 60%, #386095 100%);
+            margin: 0;
+            padding: 2rem;
+        }
+
+        /* Container Sizing */
+        .report-container {
+            max-width: 1200px;  /* Increased from 90ch */
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.1);
+            overflow: hidden;  /* Contain child elements */
+        }
+
+        /* Header Styling */
+        header {
+            background: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        header img {
+            height: 64px;
+            margin-bottom: 1rem;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin: 0.5rem 0;
+            font-family: Georgia, serif;
+        }
+
+        .slogan {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Main Content */
+        main {
+            padding: 2rem;
+        }
+
+        /* Heading Hierarchy */
+        h2 { 
+            font-size: 1.75rem; 
+            color: var(--primary-color);
+            margin: 2rem 0 1rem;
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+        }
+
+        h3 { 
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin: 1.5rem 0 1rem;
+        }
+
+        h4 { 
+            font-size: 1.25rem;
+            color: var(--text-color);
+            margin: 1rem 0;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        td {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            vertical-align: top;
+            word-break: break-word;  /* Prevent table overflow */
+        }
+
+        tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        tr:hover {
+            background: var(--table-hover);
+        }
+
+        /* Alert Sections */
+        .alerts-section {
+            margin: 2rem 0;
+        }
+
+        .alert-high { 
+            color: #dc3545; 
+            font-weight: bold;
+            font-family: monospace, monospace;
+        }
+        
+        .alert-medium { 
+            color: var(--secondary-color); 
+            font-weight: bold;
+            font-family: monospace, monospace;
+        }
+        
+        .alert-low { 
+            color: var(--primary-color); 
+            font-weight: bold;
+            font-family: monospace, monospace;
+        }
+
+        /* Code/Pre Formatting */
+        pre {
+            margin: 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+
+        code {
+            font-family: monospace, monospace;
+            font-size: 0.95em;
+        }
+
+        /* Responsive Design */
+        @media screen and (max-width: 1200px) {
+            body { padding: 1rem; }
+            .report-container { margin: 0 1rem; }
+            table { font-size: 0.9rem; }
+            td, th { padding: 0.75rem; }
+        }
+
+        @media screen and (max-width: 768px) {
+            header h1 { font-size: 2rem; }
+            h2 { font-size: 1.5rem; }
+            h3 { font-size: 1.25rem; }
+            h4 { font-size: 1.1rem; }
+            td, th { padding: 0.5rem; }
+        }
+
+        /* Alert Table Styling */
+        .alerts-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+            background: white;
+        }
+
+        .alerts-table th {
+            background: var(--primary-color);
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        .alerts-table td {
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            background: white;  /* Force white background */
+            color: var(--text-color);  /* Force dark text color */
+        }
+
+        /* Risk Level Colors with White Background */
+        .alert-high { 
+            color: #dc3545; 
+            font-weight: bold;
+            font-family: monospace, monospace;
+            background: white;
+        }
+        
+        .alert-medium { 
+            color: var(--secondary-color); 
+            font-weight: bold;
+            font-family: monospace, monospace;
+            background: white;
+        }
+        
+        .alert-low { 
+            color: var(--primary-color); 
+            font-weight: bold;
+            font-family: monospace, monospace;
+            background: white;
+        }
+
+        /* Alert Type Table Specific */
+        .alert-types-table th {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .alert-types-table td {
+            background: white;
+            color: var(--text-color);
+        }
+
+        /* Ensure links in tables are visible */
+        .alerts-table a,
+        .alert-types-table a {
+            color: var(--primary-color);
+            text-decoration: underline;
+        }
+
+        .alerts-table a:hover,
+        .alert-types-table a:hover {
+            color: var(--secondary-color);
+        }
+
+        /* Table Row Hover Effect */
+        .alerts-table tr:hover td,
+        .alert-types-table tr:hover td {
+            background: rgba(3, 105, 186, 0.05);
+        }
+
+        /* Alert Type Table Specific - Force White Background */
+        .alert-type-counts-table td {
+            background-color: white !important;  /* Force white background */
+            color: white !important;  /* Force text color */
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        .alert-type-counts-table th {
+            background: white;
+            color: white;
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+
+        .alert-type-counts-table tr:hover td {
+            background-color: rgba(3, 105, 186, 0.02) !important;
+        }
+
+        /* Hide Context Section */
+        #contexts, 
+        .contexts,
+        section[id*="context"],
+        div[class*="context"] {
+            display: none !important;
+        }
+
+        /* Alert Type Table Specific - Blue Background with White Text */
+        .alert-type-counts-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin: 1.5rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Header row - Primary color background */
+        .alert-type-counts-table tr:first-child th {
+            background-color: var(--primary-color) !important;
+            color: white !important;
+            padding: 1rem;
+            text-align: left;
+            border: 1px solid var(--border-color);
+            font-weight: 600;
+        }
+
+        /* All cells including first column - White background */
+        .alert-type-counts-table td,
+        .alert-type-counts-table td:first-child {
+            background-color: white !important;
+            color: var(--text-color) !important;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+        }
+
+        /* Links in table cells */
+        .alert-type-counts-table td a {
+            color: var(--primary-color) !important;
+            text-decoration: none;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            margin: 0 0.2rem;
+            display: inline-block;
+        }
+
+        /* Hover effects */
+        .alert-type-counts-table tr:hover td {
+            background-color: #f8f9fa !important;
+        }
+        </style>
+        """
+
+        # Custom JavaScript
+        custom_js = """
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add collapsible functionality to sections
+            document.querySelectorAll('.section h2').forEach(header => {
+                header.style.cursor = 'pointer';
+                header.addEventListener('click', () => {
+                    const content = header.parentElement.querySelector('.section-content');
+                    if (content) {
+                        const isHidden = content.style.display === 'none';
+                        content.style.display = isHidden ? 'block' : 'none';
+                        header.classList.toggle('collapsed', !isHidden);
+                    }
+                });
+            });
+
+            // Enhance risk level rows
+            document.querySelectorAll('tr').forEach(row => {
+                const riskCell = row.querySelector('.risk-high, .risk-medium, .risk-low');
+                if (riskCell) {
+                    const riskLevel = riskCell.className.split('-')[1];
+                    row.classList.add(`alert-${riskLevel}`);
+                }
+            });
+        });
+        </script>
+        """
+
+        # Load and embed logo directly in HTML
+        try:
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            logo_path = os.path.join(current_dir, 'virtuestech_logo.png')
+            
+            print(f"[DEBUG] Loading logo from: {logo_path}")
+            
+            if not os.path.exists(logo_path):
+                raise FileNotFoundError(f"Logo file not found at: {logo_path}")
+            
+            with open(logo_path, 'rb') as img_file:
+                logo_base64 = base64.b64encode(img_file.read()).decode('utf-8')
+                logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="VirtuesTech Logo" style="height: 64px; margin-bottom: 1rem;">'
+                print("[DEBUG] Successfully embedded logo")
+        except Exception as e:
+            print(f"[ERROR] Failed to load logo: {str(e)}")
+            logo_html = '<!-- Logo failed to load -->'
+
+        # Updated header HTML with embedded logo
+        header_html = f"""
+        <div class="report-container">
+            <header>
+                {logo_html}
+                <h1>Vulnerability Scan Report</h1>
+                <div class="scan-info">
+                    <p>Target: {target_url}</p>
+                    <p>Date: {time.strftime('%Y-%m-%d %H:%M:%S')}</p>
+                </div>
+            </header>
+            <main>
+        """
+
+        # Remove ZAP references and replace header
+        html_content = re.sub(r'<header.*?</header>', header_html, html_content, flags=re.DOTALL)
+        html_content = re.sub(r'Generated with.*?Checkmarx', '', html_content, flags=re.DOTALL)
+        html_content = html_content.replace('ZAP', '').replace('Checkmarx', '')
+
+        # Remove context section
+        html_content = re.sub(r'<section[^>]*id="contexts".*?</section>', '', html_content, flags=re.DOTALL)
+        html_content = re.sub(r'<div[^>]*class="contexts".*?</div>', '', html_content, flags=re.DOTALL)
+
+        # Add custom CSS and JS
+        html_content = re.sub(r'</head>', f'{custom_css}\n{custom_js}\n</head>', html_content)
+
+        # Add closing tags at the end of the document
+        html_content = html_content.replace('</body>', '</main></div></body>')
+
+        # Save the customized report
         safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.html"
         custom_html_filename = os.path.join(output_dir, safe_filename)
-        
         with open(custom_html_filename, 'w', encoding='utf-8') as f:
-            f.write(customize_report(html_content))
-            
+            f.write(html_content)
+
         print(f"[{scan_id}] Generated HTML report at: {custom_html_filename}")
         return custom_html_filename, None
 
@@ -489,119 +913,3 @@ def normalize_url(url):
     netloc = parsed.netloc.lower()  # Ensure the domain is lowercase
     path = parsed.path.rstrip("/")  # Remove trailing slashes
     return urlunparse((scheme, netloc, path, "", "", ""))
-
-def customize_report(html_content):
-    """Customize the ZAP HTML report to update the header and footer while removing ZAP-specific content."""
-    try:
-        # Read VirtuesTech logo
-        logo_path = os.path.join(os.path.dirname(__file__), 'virtuestech_logo.png')
-        if not os.path.exists(logo_path):
-            logger.error(f"Logo not found at: {logo_path}")
-            return html_content
-
-        # Convert logo to base64
-        with open(logo_path, 'rb') as f:
-            logo_base64 = base64.b64encode(f.read()).decode('utf-8')
-
-        # Add CSS for styling header and footer
-        css_styles = '''
-        <style>
-            .report-header {
-                text-align: center;
-                background-color: #f9f9f9;
-                color: black;
-                padding: 10px 0;
-                border-bottom: 2px solid #004080;
-            }
-            .report-header img {
-                width: 300px;
-                height: auto;
-                margin: 0 auto;
-            }
-            .report-header h1 {
-                margin: 0;
-                font-size: 28px;
-                color: black;
-            }
-            .footer {
-                text-align: center;
-                margin-top: 30px;
-                font-size: 12px;
-                color: #666;
-            }
-            .footer-logo {
-                width: 150px;
-                height: auto;
-                margin-top: 10px;
-            }
-        </style>
-        '''
-
-        # Define new header
-        new_header = f'''
-        <div class="report-header">
-            <img src="data:image/png;base64,{logo_base64}" alt="VirtuesTech Logo" />
-            <h1>Vulnerability Scan Report</h1>
-        </div>
-        '''
-
-        # Define footer
-        footer = f'''
-        <div class="footer">
-            <p>Report generated by VirtuesTech Security Scanner</p>
-            <img src="data:image/png;base64,{logo_base64}" class="footer-logo" alt="VirtuesTech Logo" />
-        </div>
-        '''
-
-        # Add CSS to the head section
-        html_content = re.sub(
-            r'</head>',
-            f'{css_styles}</head>',
-            html_content
-        )
-
-        # Replace existing header with the new header
-        html_content = re.sub(
-            r'<body.*?>',
-            f'<body>{new_header}',
-            html_content,
-            flags=re.DOTALL
-        )
-
-        # Add footer before the closing body tag
-        html_content = re.sub(
-            r'</body>',
-            f'{footer}</body>',
-            html_content
-        )
-
-        # Remove the specific ZAP h1 tag with logo
-        html_content = re.sub(
-            r'<h1>\s*<img[^>]*>ZAP Scanning Report\s*</h1>',
-            '',
-            html_content,
-            flags=re.DOTALL
-        )
-        # Remove other ZAP-specific content
-        zap_patterns = [
-            r'<h3>\s*ZAP Version:.*?</h3>',
-            r'<h4>\s*ZAP by.*?</h4>',
-            r'<title>ZAP.*?</title>',
-            r'<div class="header.*?</div>',
-            r'<h1>.*?</h1>',
-        ]
-        for pattern in zap_patterns:
-            html_content = re.sub(pattern, '', html_content, flags=re.DOTALL)
-
-        # Add a new title to the report
-        html_content = re.sub(
-            r'<head>',
-            '<head>\n<title>Vulnerability Scan Report</title>',
-            html_content
-        )
-
-        return html_content
-
-    except Exception as e:
-        logger.error(f"Failed to customize report: {str(e)}")
-        return html_content

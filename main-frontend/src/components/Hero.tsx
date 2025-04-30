@@ -3,7 +3,7 @@ import virtuelityLogo from "@/assets/gif.webm";
 
 const Hero = () => {
   return (
-    <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <div className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
       <video
         autoPlay
         muted

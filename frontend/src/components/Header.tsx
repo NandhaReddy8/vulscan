@@ -4,7 +4,7 @@ import virtuesTechLogo from '../components/assets/virtuesTech_Logo.png';
 
 const Header = () => {
   return (
-    <header className="bg-gray-100/30 backdrop-blur-sm py-4 shadow-lg border-b border-gray-200/20">
+    <header className="bg-white/90 backdrop-blur-sm py-4 shadow-lg border-b backdrop-blur-sm">
       <div className="container mx-auto px-4 flex justify-left items-center relative">
         <div className="logo">
             <a href="/">

@@ -1,7 +1,7 @@
 import eventlet
 eventlet.monkey_patch()
 from OpenSSL import SSL
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
 import os
@@ -362,6 +362,11 @@ def stop_scan():
     except Exception as e:
         print(f"[ERROR] Stop scan request failed: {str(e)}")
         return jsonify({"error": str(e)}), 500
+
+# Add this route to serve HTML reports
+@app.route('/reports/<path:filename>')
+def serve_report(filename):
+    return send_from_directory('zap_reports', filename)
 
 # Socket.IO connection event handlers
 @socketio.on('connect')
