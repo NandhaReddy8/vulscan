@@ -1,5 +1,8 @@
 import csv
 import os
+from db_handler import DatabaseHandler
+
+db = DatabaseHandler()
 
 # Define CSV file paths
 SCAN_REQUESTS_FILE = "scan_requests.csv"
@@ -19,27 +22,62 @@ initialize_csv(REPORT_REQUESTS_FILE, ["Name", "Email", "Phone", "Target URL", "T
 
 # Function to save a scan request
 def save_scan_request(url, ip_address, timestamp):
-    """Save scan request with consistent headers"""
-    with open(SCAN_REQUESTS_FILE, "a", newline="", encoding='utf-8') as file:
-        writer = csv.writer(file)
-        writer.writerow([url, ip_address, timestamp])
+    """Save scan request to database"""
+    try:
+        db.ensure_tables_exist()  # Ensure tables exist before operation
+        conn = db.get_connection()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO scan_requests (url, ip_address, timestamp)
+                    VALUES (%s, %s, %s)
+                    """, (url, ip_address, timestamp))
+            conn.commit()
+        finally:
+            db.put_connection(conn)
+    except Exception as e:
+        print(f"[ERROR] Failed to save scan request: {str(e)}")
+        raise
 
 # Function to save a report request
-def save_report_request(name, email, Phone, Target_URL, Timestamp):
-    with open(REPORT_REQUESTS_FILE, "a", newline="") as file:
-        writer = csv.writer(file)
-        writer.writerow([name, email, Phone, Target_URL])
+def save_report_request(name, email, phone, target_url, timestamp):
+    """Save report request to database"""
+    try:
+        db.ensure_tables_exist()  # Ensure tables exist before operation
+        conn = db.get_connection()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO report_requests (name, email, phone, target_url, timestamp)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """, (name, email, phone, target_url, timestamp))
+            conn.commit()
+        finally:
+            db.put_connection(conn)
+    except Exception as e:
+        print(f"[ERROR] Failed to save report request: {str(e)}")
+        raise
 
 # Function to retrieve stored scan requests
 def get_scan_requests():
-    with open(SCAN_REQUESTS_FILE, "r") as file:
-        reader = csv.DictReader(file)
-        return list(reader)
+    """Get all scan requests"""
+    conn = db.get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM scan_requests ORDER BY timestamp DESC")
+            return cur.fetchall()
+    finally:
+        db.put_connection(conn)
 
 # Function to retrieve stored report requests
 def get_report_requests():
-    with open(REPORT_REQUESTS_FILE, "r") as file:
-        reader = csv.DictReader(file)
-        return list(reader)
+    """Get all report requests"""
+    conn = db.get_connection()
+    try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT * FROM report_requests ORDER BY timestamp DESC")
+            return cur.fetchall()
+    finally:
+        db.put_connection(conn)
 
 # Function to delete all scan requests

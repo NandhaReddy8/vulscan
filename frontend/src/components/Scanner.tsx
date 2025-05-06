@@ -76,7 +76,7 @@ const Scanner: React.FC<ScannerProps> = ({
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const input = e.target.value;
-    const validInput = input.replace(/[^a-zA-Z0-9.-]/g, "");
+    const validInput = input.replace(/[^a-zA-Z0-9.?=/-]/g, "");
     setUrl(validInput);
   };
 

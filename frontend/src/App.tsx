@@ -136,16 +136,11 @@ function App() {
     });
 
     socket.on("connect", () => {
-      console.log("Connected to WebSocket server with ID:", socket.id);
       setSocket(socket);
     });
 
-    socket.on("disconnect", (reason) => {
-      console.log("Disconnected from WebSocket server. Reason:", reason);
-    });
-
-    socket.on("connect_error", (error) => {
-      console.error("Connection error:", error);
+    socket.on("disconnect", () => {
+      // Silent disconnect handling
     });
 
     socket.on("scan_completed", (data) => {
@@ -153,7 +148,6 @@ function App() {
       setShowResults(true);
       setScanError(null);
 
-      console.log(data, "Scan completed data received:", data);
       if (data.result) {
         if (data.result.summary) {
           setStats({
@@ -197,11 +191,11 @@ function App() {
     });
 
     socket.on("server_update", (data) => {
-      console.log("Server update received:", data);
+      // Silent server update handling
     });
 
     socket.io.on("error", (error) => {
-      console.error("Transport error:", error);
+      // Handle transport errors silently
     });
 
     socket.on("scan_error", (data) => {

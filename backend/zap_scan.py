@@ -16,6 +16,8 @@ import eventlet
 import eventlet.tpool
 from weasyprint import HTML, CSS
 from weasyprint.text.fonts import FontConfiguration
+from db_handler import DatabaseHandler
+db = DatabaseHandler()
 
 logger = logging.getLogger(__name__)
 
@@ -208,40 +210,9 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             session_id
         )
 
-        # Generate XML report
-        xml_file = generate_xml_report(target_url, scan_id, context_name)
-        print(f"[{scan_id}] XML report generated, initiating DefectDojo upload...")
 
         if scan_id not in active_scans:
             return
-
-        # Upload to DefectDojo
-        try:
-            from dojo_handler import DojoHandler
-            dojo_handler = DojoHandler()
-            
-            socketio.emit('scan_progress', {
-                'scan_id': scan_id,
-                'message': 'Uploading to DefectDojo...',
-                'progress': 99,
-                'phase': 'DefectDojo Integration'
-            }, room=session_id)
-
-            print(f"[{scan_id}] Initiating DefectDojo upload for {target_url}")
-            dojo_result = dojo_handler.process_scan(target_url, xml_file)
-            
-            if dojo_result['success']:
-                print(f"[{scan_id}] Successfully uploaded to DefectDojo")
-                print(f"[{scan_id}] DefectDojo URL: {dojo_result.get('dojo_url')}")
-            else:
-                print(f"[{scan_id}] DefectDojo upload failed: {dojo_result['message']}")
-
-        except Exception as e:
-            print(f"[{scan_id}] DefectDojo integration failed: {str(e)}")
-            dojo_result = {
-                'success': False,
-                'message': f"DefectDojo integration failed: {str(e)}"
-            }
 
         # Update the completion event to include report URL instead of file path
         report_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.html"
@@ -252,8 +223,6 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             'message': 'Scan Completed!',
             'result': results,
             'report_url': report_url,  # Send URL instead of file path
-            'xml_report': xml_file,
-            'dojo_result': dojo_result
         }, room=session_id)
 
     except Exception as e:
@@ -276,24 +245,38 @@ def scan_target(target_url, socketio, scan_id, active_scans):
 def save_scan_results(target_url, results, scan_id, context_name):
     """Save scan results with context information"""
     try:
+        # Ensure database tables exist
+        db.ensure_tables_exist()
+
+        # Save to database
+        conn = db.get_connection()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO zap_results 
+                    (scan_id, target_url, results, timestamp)
+                    VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+                    """, 
+                    (scan_id, target_url, json.dumps(results))
+                )
+            conn.commit()
+        finally:
+            db.put_connection(conn)
+
+        # Keep existing file storage functionality
         output_dir = "./zap_results"
         os.makedirs(output_dir, exist_ok=True)
-        
-        # Create filename with scan_id
         safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}"
-        
-        # Save results with metadata
-        results_with_meta = {
-            'scan_id': scan_id,
-            'context_name': context_name,
-            'target_url': target_url,
-            'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
-            'results': results
-        }
-        
         json_file = f"{output_dir}/{safe_filename}.json"
+        
         with open(json_file, 'w') as f:
-            json.dump(results_with_meta, f, indent=4)
+            json.dump({
+                'scan_id': scan_id,
+                'context_name': context_name,
+                'target_url': target_url,
+                'timestamp': time.strftime('%Y-%m-%d %H:%M:%S'),
+                'results': results
+            }, f, indent=4)
             
         return json_file
     except Exception as e:
@@ -773,6 +756,31 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
             f.write(html_content)
 
         print(f"[{scan_id}] Generated HTML report at: {custom_html_filename}")
+
+        # Save report to database
+        try:
+            conn = db.get_connection()
+            try:
+                with conn.cursor() as cur:
+                    print(f"[DEBUG] Saving report to database for URL: {target_url}")
+                    cur.execute("""
+                        INSERT INTO zap_reports 
+                        (scan_id, target_url, report_type, content, timestamp)
+                        VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
+                        """, 
+                        (scan_id, target_url, 'html', html_content)
+                    )
+                conn.commit()
+                print(f"[{scan_id}] Report saved to database")
+            except Exception as e:
+                print(f"[ERROR] Database insertion failed: {str(e)}")
+                conn.rollback()
+                raise
+            finally:
+                db.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to save report to database: {str(e)}")
+
         return custom_html_filename, None
 
     except Exception as e:
@@ -780,41 +788,6 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
         logger.error(f"Report generation failed: {str(e)}", exc_info=True)
         raise
 
-def generate_xml_report(target_url, scan_id, context_name):
-    """Generate XML report for specific site using ZAP API"""
-    try:
-        print(f"[{scan_id}] Starting XML report generation...")
-        output_dir = "./zap_xml"
-        os.makedirs(output_dir, exist_ok=True)
-
-        # Generate XML report using ZAP API
-        report_endpoint = f"{ZAP_URL}/OTHER/core/other/xmlreport/"
-        print(f"[{scan_id}] Calling ZAP API to generate XML report...")
-        
-        response = requests.get(
-            report_endpoint,
-            params={'apikey': ZAP_API_KEY},
-            headers={'Accept': 'application/xml'},
-            verify=False
-        )
-        
-        if response.status_code != 200:
-            raise Exception(f"Failed to generate XML report: {response.text}")
-
-        # Save XML report
-        safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.xml"
-        xml_filename = os.path.join(output_dir, safe_filename)
-        
-        with open(xml_filename, 'w', encoding='utf-8') as f:
-            f.write(response.text)
-            
-        print(f"[{scan_id}] Generated XML report at: {xml_filename}")
-        return xml_filename
-
-    except Exception as e:
-        print(f"[{scan_id}] [ERROR] XML report generation failed: {str(e)}")
-        logger.error(f"XML report generation failed: {str(e)}", exc_info=True)
-        return None
 
 def process_scan_results(alerts):
     """Process ZAP alerts into a structured format with detailed vulnerability information"""
