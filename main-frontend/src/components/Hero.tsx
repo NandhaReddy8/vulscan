@@ -16,19 +16,23 @@ const Hero = () => {
       </video>
       <div className="container mx-auto px-4 z-10 text-center">
         <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-          Secure Every Layer of Your Digital World
+        Precision Security for Web, API, Network
         </h1>
         <h2 className="text-2xl md:text-3xl font-semibold text-blue-300 mb-8 animate-fade-in" style={{ animationDelay: "150ms" }}>
           Fast. Accurate. Comprehensive.
         </h2>
-        <p className="text-lg text-blue-100 max-w-2xl mx-auto mb-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
-          Protect your digital assets with our advanced vulnerability scanning platform. 
-          Stay one step ahead of cyber threats with real-time monitoring and analysis.
+        <p className="text-lg text-blue-100 max-w-5xl mx-auto mb-8 animate-fade-in" style={{ animationDelay: "300ms" }}>
+        VirtueSec delivers enterprise-grade vulnerability scanning and penetration testing services powered by AI and automation. We help businesses proactively identify and remediate security flaws across digital infrastructures—web apps, APIs, networks, and cloud environments. Our solutions reduce false positives, accelerate remediation, and ensure compliance with industry standards.
         </p>
         <Button
           className="bg-primary hover:bg-primary/90 text-white text-lg px-8 py-6 animate-fade-in"
           style={{ animationDelay: "450ms" }}
-          onClick={() => window.location.href = "#scan"}
+          onClick={() => {
+            const scannerSection = document.querySelector('.bg-gray-50');
+            if (scannerSection) {
+              scannerSection.scrollIntoView({ behavior: 'smooth' });
+            }
+          }}
         >
           Start Your Free Scan
         </Button>
