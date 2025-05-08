@@ -136,8 +136,10 @@ def save_scan_results(scan_id, target_url, results, context_name=None):
                 INSERT INTO scan_report_summary (
                     scanned_on, ip_address, target_url,
                     vuln_high, vuln_medium, vuln_low, vuln_info,
-                    user_email, user_name, user_phone
-                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                    user_email, user_name, user_phone, lead_status
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, 
+                    COALESCE((SELECT lead_status FROM scan_report_summary WHERE target_url = %s), 'not_connected')
+                )
                 ON CONFLICT (target_url) DO UPDATE SET
                     scanned_on = EXCLUDED.scanned_on,
                     ip_address = EXCLUDED.ip_address,
@@ -147,15 +149,15 @@ def save_scan_results(scan_id, target_url, results, context_name=None):
                     vuln_info = EXCLUDED.vuln_info,
                     user_email = EXCLUDED.user_email,
                     user_name = EXCLUDED.user_name,
-                    user_phone = EXCLUDED.user_phone
+                    user_phone = EXCLUDED.user_phone,
+                    last_updated = CURRENT_TIMESTAMP
             """, (
                 scanned_on, ip_address, target_url,
                 high, medium, low, info,
-                user_email, user_name, user_phone
+                user_email, user_name, user_phone, target_url
             ))
 
         conn.commit()
-        print(f"[+] Scan results and marketing summary saved for {target_url}")
     except Exception as e:
         print(f"[ERROR] Failed to save scan results: {str(e)}")
         conn.rollback()

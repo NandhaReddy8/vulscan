@@ -15,6 +15,10 @@ from zap_scan import scan_target, zap
 from datetime import datetime, timedelta
 from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 from db_handler import DatabaseHandler
+import logging
+
+log = logging.getLogger('werkzeug')
+log.setLevel(logging.ERROR)
 
 db = DatabaseHandler()
 
@@ -329,6 +333,42 @@ def stop_scan():
         print(f"[ERROR] Stop scan request failed: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/scan-report-summary", methods=["GET"])
+def get_scan_report_summary():
+    try:
+        conn = db.get_connection()
+        with conn.cursor() as cur:
+            cur.execute("""
+                SELECT id, scanned_on, ip_address, target_url, vuln_high, vuln_medium, vuln_low, vuln_info, user_email, user_name, user_phone, lead_status, last_updated
+                FROM scan_report_summary
+                ORDER BY scanned_on DESC NULLS LAST, id DESC
+            """)
+            rows = cur.fetchall()
+            columns = [desc[0] for desc in cur.description]
+            data = [dict(zip(columns, row)) for row in rows]
+        db.put_connection(conn)
+        return jsonify(data)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+@app.route("/api/scan-report-summary/<int:row_id>/lead-status", methods=["POST"])
+def update_lead_status(row_id):
+    try:
+        new_status = request.json.get("lead_status")
+        if not new_status:
+            return jsonify({"error": "Missing lead_status"}), 400
+        conn = db.get_connection()
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE scan_report_summary SET lead_status = %s, last_updated = CURRENT_TIMESTAMP WHERE id = %s",
+                (new_status, row_id)
+            )
+            conn.commit()
+        db.put_connection(conn)
+        return jsonify({"success": True})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 # Socket.IO connection event handlers
 @socketio.on('connect')
 def handle_connect():
@@ -361,7 +401,8 @@ if __name__ == "__main__":
             host=host,
             port=int(FLASK_PORT),
             debug=FLASK_DEBUG,
-            use_reloader=FLASK_DEBUG
+            use_reloader=FLASK_DEBUG,
+            log_output=False  # <--- ADD THIS LINE
         )
     except Exception as e:
         print(f"[ERROR] Failed to start server: {str(e)}")

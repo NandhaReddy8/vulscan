@@ -112,6 +112,7 @@ class DatabaseHandler:
             user_email TEXT,
             user_name TEXT,
             user_phone TEXT,
+            lead_status TEXT DEFAULT 'not_connected',  -- <-- ensure this line exists
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """
@@ -197,8 +198,8 @@ class DatabaseHandler:
                     INSERT INTO scan_report_summary (
                         scanned_on, ip_address, target_url,
                         vuln_high, vuln_medium, vuln_low, vuln_info,
-                        user_email, user_name, user_phone, last_updated
-                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+                        user_email, user_name, user_phone, lead_status, last_updated
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, COALESCE((SELECT lead_status FROM scan_report_summary WHERE target_url = %s), 'not_connected'), CURRENT_TIMESTAMP)
                     ON CONFLICT (target_url) DO UPDATE SET
                         scanned_on = EXCLUDED.scanned_on,
                         ip_address = EXCLUDED.ip_address,
@@ -213,7 +214,7 @@ class DatabaseHandler:
                 """, (
                     scanned_on, ip_address, target_url,
                     high, medium, low, info,
-                    user_email, user_name, user_phone
+                    user_email, user_name, user_phone, target_url
                 ))
             conn.commit()
             print(f"[+] Marketing summary updated for URL: {target_url}")
