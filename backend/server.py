@@ -190,45 +190,43 @@ def handle_report_request():
         data = request.get_json()
         print(f"[*] Received report request for target: {data.get('targetUrl', 'Unknown')}")
 
-        target_url = data['targetUrl']
-        
-        # Normalize target URL for matching
-        clean_url = target_url
-        if not clean_url.startswith(('http://', 'https://')):
-            clean_url = f"https://{clean_url}"
+        target_url = data['targetUrl'].strip()
+        # Ensure protocol is present
+        if not target_url.startswith(('http://', 'https://')):
+            target_url = 'http://' + target_url  # Or 'https://' if you prefer
 
-        print(f"[DEBUG] Normalized URL: {clean_url}")
-        
-        # Save report request
+        # Save report request with the exact URL (with protocol)
         try:
             timestamp = datetime.now()
             save_report_request(
                 data['name'],
                 data['email'],
                 data.get('phone', ''),
-                clean_url,
+                target_url,
                 timestamp
             )
         except Exception as e:
             print(f"[ERROR] Failed to save report request: {str(e)}")
+
+        try:
+            db.update_scan_summary(target_url=target_url)
+        except Exception as e:
+            print(f"[ERROR] Failed to update marketing summary after report request: {str(e)}")
 
         # Get report from database with better URL matching
         try:
             conn = db.get_connection()
             try:
                 with conn.cursor() as cur:
-                    # More comprehensive URL patterns
                     url_patterns = [
-                        f"%{clean_url}%",  # Full URL
-                        f"%{target_url}%",  # Original input
-                        f"%{target_url.replace('http://', '').replace('https://', '')}%",  # Without protocol
-                        f"%{target_url.strip('/')}%",  # Without trailing slash
-                        f"%{clean_url.replace('http://', '').replace('https://', '')}%"  # Normalized without protocol
+                        target_url,  # Exact
+                        target_url.rstrip('/'),  # Without trailing slash
+                        target_url.replace('http://', '').replace('https://', ''),  # Without protocol
+                        f"%{target_url}%",
+                        f"%{target_url.rstrip('/')}%",
+                        f"%{target_url.replace('http://', '').replace('https://', '')}%"
                     ]
-                    
                     print(f"[DEBUG] Trying URL patterns: {url_patterns}")
-                    
-                    # Try each pattern
                     for pattern in url_patterns:
                         cur.execute("""
                             SELECT content, target_url 
@@ -239,7 +237,6 @@ def handle_report_request():
                             LIMIT 1
                             """, (pattern,))
                         result = cur.fetchone()
-                        
                         if result:
                             print(f"[+] Retrieved report from database using pattern: {pattern}")
                             print(f"[DEBUG] Matched with stored URL: {result[1]}")

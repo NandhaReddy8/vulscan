@@ -43,6 +43,10 @@ def save_scan_request(url, ip_address, timestamp):
 def save_report_request(name, email, phone, target_url, timestamp):
     """Save report request to database"""
     try:
+        # Ensure protocol is present
+        if not target_url.startswith(('http://', 'https://')):
+            target_url = 'http://' + target_url  # Default to http, or use https if you prefer
+
         db.ensure_tables_exist()  # Ensure tables exist before operation
         conn = db.get_connection()
         try:
