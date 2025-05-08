@@ -190,12 +190,33 @@ def handle_report_request():
         data = request.get_json()
         print(f"[*] Received report request for target: {data.get('targetUrl', 'Unknown')}")
 
-        target_url = data['targetUrl'].strip()
-        # Ensure protocol is present
-        if not target_url.startswith(('http://', 'https://')):
-            target_url = 'http://' + target_url  # Or 'https://' if you prefer
+        user_input_url = data['targetUrl'].strip()
 
-        # Save report request with the exact URL (with protocol)
+        # Try to find the protocol used in the most recent scan for this domain
+        conn = db.get_connection()
+        try:
+            with conn.cursor() as cur:
+                # Remove protocol for matching
+                domain = user_input_url.replace('http://', '').replace('https://', '').rstrip('/')
+                cur.execute("""
+                    SELECT url FROM scan_requests
+                    WHERE REPLACE(REPLACE(url, 'http://', ''), 'https://', '') = %s
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                """, (domain,))
+                row = cur.fetchone()
+                if row:
+                    target_url = row[0]  # Use the exact URL (with protocol) from the scan
+                else:
+                    # Fallback: use user input as-is, add https if missing protocol
+                    if not user_input_url.startswith(('http://', 'https://')):
+                        target_url = 'https://' + user_input_url
+                    else:
+                        target_url = user_input_url
+        finally:
+            db.put_connection(conn)
+
+        # Save report request with the correct protocol
         try:
             timestamp = datetime.now()
             save_report_request(
@@ -221,17 +242,13 @@ def handle_report_request():
                     url_patterns = [
                         target_url,  # Exact
                         target_url.rstrip('/'),  # Without trailing slash
-                        target_url.replace('http://', '').replace('https://', ''),  # Without protocol
-                        f"%{target_url}%",
-                        f"%{target_url.rstrip('/')}%",
-                        f"%{target_url.replace('http://', '').replace('https://', '')}%"
                     ]
                     print(f"[DEBUG] Trying URL patterns: {url_patterns}")
                     for pattern in url_patterns:
                         cur.execute("""
                             SELECT content, target_url 
                             FROM zap_reports 
-                            WHERE target_url LIKE %s 
+                            WHERE target_url = %s 
                             AND report_type = 'html'
                             ORDER BY timestamp DESC 
                             LIMIT 1
