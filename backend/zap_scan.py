@@ -190,17 +190,10 @@ def scan_target(target_url, socketio, scan_id, active_scans):
         if scan_id not in active_scans:
             return
 
-        # Save and generate reports only if scan wasn't stopped
-        save_scan_results(target_url, results, scan_id, context_name)
+        # Save scan results
+        save_scan_results(scan_id, target_url, results, context_name)
         
-        socketio.emit('scan_progress', {
-            'scan_id': scan_id,
-            'message': 'Generating reports...',
-            'progress': 98,
-            'phase': 'Report Generation'
-        }, room=session_id)
-
-        # Generate both HTML and XML reports
+        # Generate reports
         html_file = generate_reports(
             target_url,
             results,
@@ -209,7 +202,6 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             socketio,
             session_id
         )
-
 
         if scan_id not in active_scans:
             return
@@ -242,8 +234,7 @@ def scan_target(target_url, socketio, scan_id, active_scans):
             except Exception as e:
                 print(f"[ERROR] Failed to clean up context: {str(e)}")
 
-def save_scan_results(target_url, results, scan_id, context_name):
-    """Save scan results with context information"""
+def save_scan_results(scan_id, target_url, results, context_name=None):
     try:
         # Ensure database tables exist
         db.ensure_tables_exist()
@@ -278,6 +269,9 @@ def save_scan_results(target_url, results, scan_id, context_name):
                 'results': results
             }, f, indent=4)
             
+        # Update marketing summary
+        db.update_scan_summary(target_url=target_url)
+        
         return json_file
     except Exception as e:
         print(f"[ERROR] Failed to save results: {str(e)}")

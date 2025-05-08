@@ -80,4 +80,81 @@ def get_report_requests():
     finally:
         db.put_connection(conn)
 
-# Function to delete all scan requests
+# Function to save scan results and update marketing summary
+def save_scan_results(scan_id, target_url, results, context_name=None):
+    """Save scan results and update marketing summary"""
+    conn = db.get_connection()
+    try:
+        with conn.cursor() as cur:
+            # Save scan results
+            cur.execute("""
+                INSERT INTO zap_results 
+                (scan_id, target_url, results, timestamp)
+                VALUES (%s, %s, %s, CURRENT_TIMESTAMP)
+            """, (scan_id, target_url, json.dumps(results)))
+
+            # Get the latest scan request info for this URL
+            cur.execute("""
+                SELECT timestamp, ip_address, url
+                FROM scan_requests
+                WHERE url = %s
+                ORDER BY timestamp DESC
+                LIMIT 1
+            """, (target_url,))
+            scan_row = cur.fetchone()
+            if scan_row:
+                scanned_on, ip_address, url = scan_row
+            else:
+                scanned_on, ip_address, url = None, None, target_url
+
+            # Get vulnerability summary
+            high = int(results.get("summary", {}).get("High", 0))
+            medium = int(results.get("summary", {}).get("Medium", 0))
+            low = int(results.get("summary", {}).get("Low", 0))
+            info = int(results.get("summary", {}).get("Informational", 0))
+
+            # Get the latest report request info for this URL (if any)
+            cur.execute("""
+                SELECT email, name, phone
+                FROM report_requests
+                WHERE target_url = %s
+                ORDER BY timestamp DESC
+                LIMIT 1
+            """, (target_url,))
+            report_row = cur.fetchone()
+            if report_row:
+                user_email, user_name, user_phone = report_row
+            else:
+                user_email, user_name, user_phone = None, None, None
+
+            # Upsert into summary table (only one row per target_url)
+            cur.execute("""
+                INSERT INTO scan_report_summary (
+                    scanned_on, ip_address, target_url,
+                    vuln_high, vuln_medium, vuln_low, vuln_info,
+                    user_email, user_name, user_phone
+                ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                ON CONFLICT (target_url) DO UPDATE SET
+                    scanned_on = EXCLUDED.scanned_on,
+                    ip_address = EXCLUDED.ip_address,
+                    vuln_high = EXCLUDED.vuln_high,
+                    vuln_medium = EXCLUDED.vuln_medium,
+                    vuln_low = EXCLUDED.vuln_low,
+                    vuln_info = EXCLUDED.vuln_info,
+                    user_email = EXCLUDED.user_email,
+                    user_name = EXCLUDED.user_name,
+                    user_phone = EXCLUDED.user_phone
+            """, (
+                scanned_on, ip_address, target_url,
+                high, medium, low, info,
+                user_email, user_name, user_phone
+            ))
+
+        conn.commit()
+        print(f"[+] Scan results and marketing summary saved for {target_url}")
+    except Exception as e:
+        print(f"[ERROR] Failed to save scan results: {str(e)}")
+        conn.rollback()
+        raise
+    finally:
+        db.put_connection(conn)

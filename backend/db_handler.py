@@ -98,6 +98,22 @@ class DatabaseHandler:
             content TEXT NOT NULL,
             timestamp TIMESTAMP NOT NULL
         );
+
+        -- Create marketing summary table
+        CREATE TABLE IF NOT EXISTS scan_report_summary (
+            id SERIAL PRIMARY KEY,
+            scanned_on TIMESTAMP,
+            ip_address VARCHAR(45),
+            target_url TEXT UNIQUE,
+            vuln_high INT DEFAULT 0,
+            vuln_medium INT DEFAULT 0,
+            vuln_low INT DEFAULT 0,
+            vuln_info INT DEFAULT 0,
+            user_email TEXT,
+            user_name TEXT,
+            user_phone TEXT,
+            last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
         """
         
         conn = self.get_connection()
@@ -125,4 +141,85 @@ class DatabaseHandler:
             print(f"[ERROR] Failed to ensure tables exist: {str(e)}")
             return False
 
-    # Add methods to handle database operations
+    def update_scan_summary(self, scan_id=None, target_url=None):
+        """Update marketing summary table after scan or report request"""
+        conn = self.get_connection()
+        try:
+            with conn.cursor() as cur:
+                # Get latest scan_request for this URL
+                cur.execute("""
+                    SELECT timestamp, ip_address, url
+                    FROM scan_requests
+                    WHERE url = %s
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                """, (target_url,))
+                scan_row = cur.fetchone()
+                if scan_row:
+                    scanned_on, ip_address, url = scan_row
+                else:
+                    scanned_on, ip_address, url = None, None, target_url
+
+                # Get latest zap_results for this URL
+                cur.execute("""
+                    SELECT results
+                    FROM zap_results
+                    WHERE target_url = %s
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                """, (target_url,))
+                zap_row = cur.fetchone()
+                if zap_row and zap_row[0]:
+                    results = zap_row[0]
+                    high = int(results.get("summary", {}).get("High", 0))
+                    medium = int(results.get("summary", {}).get("Medium", 0))
+                    low = int(results.get("summary", {}).get("Low", 0))
+                    info = int(results.get("summary", {}).get("Informational", 0))
+                else:
+                    high = medium = low = info = 0
+
+                # Get latest report_request for this URL
+                cur.execute("""
+                    SELECT email, name, phone
+                    FROM report_requests
+                    WHERE target_url = %s
+                    ORDER BY timestamp DESC
+                    LIMIT 1
+                """, (target_url,))
+                report_row = cur.fetchone()
+                if report_row:
+                    user_email, user_name, user_phone = report_row
+                else:
+                    user_email, user_name, user_phone = None, None, None
+
+                # Upsert into summary table (only one row per target_url)
+                cur.execute("""
+                    INSERT INTO scan_report_summary (
+                        scanned_on, ip_address, target_url,
+                        vuln_high, vuln_medium, vuln_low, vuln_info,
+                        user_email, user_name, user_phone, last_updated
+                    ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, CURRENT_TIMESTAMP)
+                    ON CONFLICT (target_url) DO UPDATE SET
+                        scanned_on = EXCLUDED.scanned_on,
+                        ip_address = EXCLUDED.ip_address,
+                        vuln_high = EXCLUDED.vuln_high,
+                        vuln_medium = EXCLUDED.vuln_medium,
+                        vuln_low = EXCLUDED.vuln_low,
+                        vuln_info = EXCLUDED.vuln_info,
+                        user_email = EXCLUDED.user_email,
+                        user_name = EXCLUDED.user_name,
+                        user_phone = EXCLUDED.user_phone,
+                        last_updated = CURRENT_TIMESTAMP
+                """, (
+                    scanned_on, ip_address, target_url,
+                    high, medium, low, info,
+                    user_email, user_name, user_phone
+                ))
+            conn.commit()
+            print(f"[+] Marketing summary updated for URL: {target_url}")
+        except Exception as e:
+            print(f"[ERROR] Failed to update marketing summary: {str(e)}")
+            conn.rollback()
+            raise
+        finally:
+            self.put_connection(conn)
