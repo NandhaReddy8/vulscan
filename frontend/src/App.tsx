@@ -435,9 +435,6 @@ function App() {
         <footer className="py-6 mt-auto border-t border-gray-800">
           <div className="container mx-auto px-4">
             <div className="flex flex-col items-center justify-center space-y-2">
-              <p className="text-gray-400 text-sm font-medium">
-                Developed by
-              </p>
                 <a 
                 href="https://virtuestech.com" 
                 target="_blank" 
@@ -451,7 +448,7 @@ function App() {
                 />
                 </a>
               <p className="text-gray-500 text-xs">
-                © {new Date().getFullYear()} All rights reserved
+                © 2020-2025 All Rights Reserved. VirtuesTech ® is a registered trademark of Virtue Software Technologies Private Limited​.
               </p>
             </div>
           </div>
