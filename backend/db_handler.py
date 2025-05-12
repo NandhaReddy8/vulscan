@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 import json
 from datetime import datetime
 import logging
+import psycopg2.pool
 
 logger = logging.getLogger(__name__)
 load_dotenv()
@@ -14,7 +15,7 @@ class DatabaseHandler:
     def __init__(self):
         self.pool = pool.SimpleConnectionPool(
             minconn=1,
-            maxconn=10,
+            maxconn=20,
             dbname=os.getenv("DB_NAME"),
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD"),

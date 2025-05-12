@@ -53,7 +53,7 @@ function App() {
 
   useEffect(() => {
     fetchData(); // Initial fetch
-    const interval = setInterval(fetchData, 5000); // Poll every 5 seconds
+    const interval = setInterval(fetchData, 15000); // Poll every 15 seconds
 
     return () => clearInterval(interval); // Cleanup on unmount
   }, []);
