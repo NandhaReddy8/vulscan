@@ -113,11 +113,23 @@ def create_scan_context(scan_id, target_url):
         print(f"[ERROR] Failed to create context: {str(e)}")
         raise
 
+def sanitize_url(url):
+    """
+    Remove leading/trailing whitespace and invisible characters from the URL.
+    """
+    if not isinstance(url, str):
+        return ""
+    # Remove leading/trailing whitespace, newlines, tabs, and zero-width spaces
+    return url.strip().replace('\u200b', '').replace('\u200c', '').replace('\u200d', '').replace('\ufeff', '')
+
 def scan_target(target_url, socketio, scan_id, active_scans):
     """Perform scan with isolated context"""
     session_id = None
     context_name = None
-    
+
+    # Sanitize the URL before any validation or scan
+    target_url = sanitize_url(target_url)
+
     try:
         session_id = active_scans.get(scan_id)
         if not session_id:

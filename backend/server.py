@@ -11,7 +11,7 @@ import threading
 import csv
 import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
-from zap_scan import scan_target, zap
+from zap_scan import scan_target, zap, sanitize_url
 from datetime import datetime, timedelta
 from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
 from db_handler import DatabaseHandler
@@ -128,6 +128,7 @@ def scan():
     try:
         data = request.get_json()
         target_url = data.get("url")
+        target_url = sanitize_url(target_url)
         session_id = data.get("session_id")
 
         print(f"[*] Received scan request for URL: {target_url}")
