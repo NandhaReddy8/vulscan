@@ -7,7 +7,7 @@ import ScanTable from './components/ScanTable';
 import Pagination from './components/Pagination';
 import StatsCard from './components/StatsCard';
 import virtuesLogo from "./assets/virtuesTech_Logo.png";
-
+import { useNavigate } from 'react-router-dom';
 
 function App() {
   const [scans, setScans] = useState<ScanResult[]>([]);
@@ -23,40 +23,71 @@ function App() {
     search: '',
   });
   const [isDarkMode, setIsDarkMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const scansPerPage = 10;
 
-  const fetchData = () => {
-    fetch(`${import.meta.env.VITE_API_BASE_URL}/api/scan-report-summary`)
-      .then(res => res.json())
-      .then((data) => {
-        const mapped = data.map((row: any) => ({
-          id: row.id,
-          scanned_on: row.scanned_on,
-          ip_address: row.ip_address || '',
-          url: row.target_url,
-          vuln_high: row.vuln_high,
-          vuln_medium: row.vuln_medium,
-          vuln_low: row.vuln_low,
-          vuln_info: row.vuln_info,
-          user_email: row.user_email || '',
-          user_name: row.user_name || '',
-          user_phone: row.user_phone || '',
-          status: row.lead_status || 'not_contacted',
-          status_color: row.status_color || 'gray',
-          last_contact: row.last_updated || '',
-          notes: row.notes || '',
-        }));
-        setScans(mapped);
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/scan-report-summary`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       });
+
+      if (response.status === 401 || response.status === 403) {
+        // Token expired or invalid, redirect to login
+        navigate('/login');
+        return;
+      }
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      if (Array.isArray(result)) {
+        setScans(result.map(scan => ({
+          id: scan.id,
+          scanned_on: scan.scanned_on,
+          ip_address: scan.ip_address || '',
+          url: scan.target_url,
+          vuln_high: scan.vuln_high,
+          vuln_medium: scan.vuln_medium,
+          vuln_low: scan.vuln_low,
+          vuln_info: scan.vuln_info,
+          user_email: scan.user_email || '',
+          user_name: scan.user_name || '',
+          user_phone: scan.user_phone || '',
+          status: scan.lead_status || 'not_contacted',
+          last_contact: scan.last_updated || '',
+          notes: scan.notes || '',
+        })));
+      } else {
+        setScans([]);
+        console.error('Expected array but got:', result);
+      }
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching data:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch data');
+      setScans([]);
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    fetchData(); // Initial fetch
-    const interval = setInterval(fetchData, 15000); // Poll every 15 seconds
-
-    return () => clearInterval(interval); // Cleanup on unmount
-  }, []);
+    fetchData();
+    // Refresh data every 30 seconds
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
+  }, [navigate]);
 
   useEffect(() => {
     let result = [...scans];
@@ -171,6 +202,25 @@ function App() {
   const indexOfFirstScan = indexOfLastScan - scansPerPage;
   const currentScans = filteredScans.slice(indexOfFirstScan, indexOfLastScan);
   const totalPages = Math.ceil(filteredScans.length / scansPerPage);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <strong className="font-bold">Error!</strong>
+          <span className="block sm:inline"> {error}</span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen flex flex-col bg-gray-100 dark:bg-gray-900 ${isDarkMode ? 'dark' : ''}`}>

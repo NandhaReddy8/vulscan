@@ -4,6 +4,9 @@ from OpenSSL import SSL
 from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from flask_socketio import SocketIO, emit
+from flask_jwt_extended import JWTManager, create_access_token, create_refresh_token, jwt_required, get_jwt_identity, get_jwt
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 import os
 import ssl
 import time
@@ -13,16 +16,19 @@ import uuid
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target, zap, sanitize_url
 from datetime import datetime, timedelta
-from config import FLASK_DEBUG, FLASK_HOST, FLASK_PORT
+from config import (
+    FLASK_DEBUG, FLASK_HOST, FLASK_PORT,
+    JWT_SECRET_KEY, JWT_ACCESS_TOKEN_EXPIRES, JWT_REFRESH_TOKEN_EXPIRES,
+    CORS_ORIGINS, RATELIMIT_DEFAULT, RATELIMIT_STORAGE_URL, RATELIMIT_STRATEGY
+)
 from db_handler import DatabaseHandler
 import logging
+import json
 
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
 db = DatabaseHandler()
-
-
 
 def check_weekly_scan_limit(target_url):
     """
@@ -74,15 +80,67 @@ def check_weekly_scan_limit(target_url):
 
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": "*"}})
+
+# Configure CORS
+CORS(app, 
+     resources={r"/*": {
+         "origins": CORS_ORIGINS,
+         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+         "allow_headers": ["Content-Type", "Authorization"],
+         "supports_credentials": True,
+         "expose_headers": ["Content-Type", "Authorization"],
+         "max_age": 3600
+     }},
+     supports_credentials=True
+)
+
+# Configure JWT
+app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
+app.config["JWT_ACCESS_TOKEN_EXPIRES"] = JWT_ACCESS_TOKEN_EXPIRES
+app.config["JWT_REFRESH_TOKEN_EXPIRES"] = JWT_REFRESH_TOKEN_EXPIRES
+app.config["JWT_TOKEN_LOCATION"] = ["cookies"]
+app.config["JWT_COOKIE_CSRF_PROTECT"] = False  # Disable CSRF protection since we're using HTTP-only cookies
+app.config["JWT_COOKIE_SECURE"] = not FLASK_DEBUG
+app.config["JWT_COOKIE_SAMESITE"] = "Lax"
+app.config["JWT_ERROR_MESSAGE_KEY"] = "error"  # Use consistent error message key
+jwt = JWTManager(app)
+
+# Add JWT error handlers
+@jwt.invalid_token_loader
+def invalid_token_callback(error_string):
+    print(f"[DEBUG] Invalid token error: {error_string}")
+    return jsonify({"error": "Invalid token"}), 422
+
+@jwt.unauthorized_loader
+def unauthorized_callback(error_string):
+    print(f"[DEBUG] Missing token error: {error_string}")
+    return jsonify({"error": "Missing token"}), 401
+
+@jwt.expired_token_loader
+def expired_token_callback(jwt_header, jwt_payload):
+    print(f"[DEBUG] Token expired for user: {jwt_payload.get('sub', {}).get('username', 'unknown')}")
+    return jsonify({"error": "Token has expired"}), 401
+
+# Configure Rate Limiting
+limiter = Limiter(
+    app=app,
+    key_func=get_remote_address,
+    default_limits=[RATELIMIT_DEFAULT],
+    storage_uri=RATELIMIT_STORAGE_URL,
+    strategy=RATELIMIT_STRATEGY
+)
 
 # Configure Socket.IO with explicit settings
 socketio = SocketIO(
     app, 
-    cors_allowed_origins="*",
+    cors_allowed_origins=CORS_ORIGINS,
     async_mode='eventlet',
     ping_timeout=60,  # Increase ping timeout
-    ping_interval=25  # Adjust ping interval
+    ping_interval=25,  # Adjust ping interval
+    logger=True,
+    engineio_logger=True,
+    always_connect=True,
+    path='/socket.io/'
 )
 
 # Maintain a mapping of scan_id -> session_id
@@ -334,13 +392,166 @@ def stop_scan():
         print(f"[ERROR] Stop scan request failed: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
+@app.route("/api/auth/login", methods=["POST", "OPTIONS"])
+@limiter.limit("5 per minute")
+def login():
+    if request.method == "OPTIONS":
+        response = app.make_default_options_response()
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response
+        
+    try:
+        data = request.get_json()
+        
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+            
+        username = data.get("username")
+        password = data.get("password")
+        
+        if not username or not password:
+            return jsonify({"error": "Missing username or password"}), 400
+            
+        # Authenticate user
+        user = db.authenticate_user(username, password)
+        if not user:
+            return jsonify({"error": "Invalid username or password"}), 401
+            
+        # Create user identity string
+        user_identity = json.dumps({
+            "username": user["username"],
+            "role": user["role"]
+        })
+        
+        # Create tokens
+        access_token = create_access_token(identity=user_identity)
+        refresh_token = create_refresh_token(identity=user_identity)
+        
+        # Create response
+        response = jsonify({
+            "message": "Login successful",
+            "user": {
+                "username": user["username"],
+                "role": user["role"]
+            }
+        })
+        
+        # Set cookies
+        response.set_cookie(
+            "access_token_cookie",
+            access_token,
+            httponly=True,
+            secure=not FLASK_DEBUG,
+            samesite="Lax",
+            max_age=JWT_ACCESS_TOKEN_EXPIRES
+        )
+        response.set_cookie(
+            "refresh_token_cookie",
+            refresh_token,
+            httponly=True,
+            secure=not FLASK_DEBUG,
+            samesite="Lax",
+            max_age=JWT_REFRESH_TOKEN_EXPIRES
+        )
+        
+        return response
+        
+    except Exception as e:
+        if FLASK_DEBUG:
+            print(f"[ERROR] Login failed: {str(e)}")
+        return jsonify({"error": "Login failed"}), 500
+
+@app.route("/api/auth/refresh", methods=["POST"])
+@jwt_required(refresh=True)
+def refresh():
+    try:
+        current_user = get_jwt_identity()
+        new_access_token = create_access_token(identity=current_user)
+        
+        response = jsonify({"message": "Token refreshed"})
+        response.set_cookie(
+            "access_token_cookie",
+            new_access_token,
+            httponly=True,
+            secure=not FLASK_DEBUG,
+            samesite="Lax",
+            max_age=3600
+        )
+        return response
+    except Exception as e:
+        return jsonify({"error": "Token refresh failed"}), 401
+
+@app.route("/api/auth/logout", methods=["POST"])
+def logout():
+    response = jsonify({"message": "Logout successful"})
+    response.delete_cookie("access_token_cookie")
+    response.delete_cookie("refresh_token_cookie")
+    return response
+
+@app.route("/api/auth/verify", methods=["GET", "OPTIONS"])
+@jwt_required(optional=True)
+def verify_token():
+    if request.method == "OPTIONS":
+        response = app.make_default_options_response()
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+        response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response
+        
+    try:
+        identity = get_jwt_identity()
+        
+        if not identity:
+            response = jsonify({"valid": False, "error": "No valid token"})
+            response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            return response, 401
+            
+        current_user = json.loads(identity)
+        
+        response = jsonify({
+            "valid": True,
+            "user": current_user
+        })
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response
+        
+    except Exception as e:
+        if FLASK_DEBUG:
+            print(f"[ERROR] Token verification failed: {str(e)}")
+        response = jsonify({"valid": False, "error": "Token verification failed"})
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Credentials"] = "true"
+        return response, 401
+
 @app.route("/api/scan-report-summary", methods=["GET"])
+@jwt_required()
 def get_scan_report_summary():
     try:
+        print("[DEBUG] Received request for scan report summary")
+        identity = get_jwt_identity()
+        current_user = json.loads(identity) if identity else None
+        print(f"[DEBUG] Current user from JWT: {current_user}")
+        
+        if not current_user:
+            print("[DEBUG] No user identity found in JWT")
+            return jsonify({"error": "No user identity found"}), 401
+            
+        if current_user.get("role") != "admin":
+            print(f"[DEBUG] User role '{current_user.get('role')}' is not admin")
+            return jsonify({"error": "Unauthorized"}), 403
+            
+        print("[DEBUG] User is admin, proceeding with database query")
         conn = db.get_connection()
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT id, scanned_on, ip_address, target_url, vuln_high, vuln_medium, vuln_low, vuln_info, user_email, user_name, user_phone, lead_status, last_updated
+                SELECT id, scanned_on, ip_address, target_url, vuln_high, vuln_medium, vuln_low, vuln_info, 
+                       user_email, user_name, user_phone, lead_status, last_updated
                 FROM scan_report_summary
                 ORDER BY scanned_on DESC NULLS LAST, id DESC
             """)
@@ -348,8 +559,10 @@ def get_scan_report_summary():
             columns = [desc[0] for desc in cur.description]
             data = [dict(zip(columns, row)) for row in rows]
         db.put_connection(conn)
+        print(f"[DEBUG] Successfully retrieved {len(data)} scan reports")
         return jsonify(data)
     except Exception as e:
+        print(f"[ERROR] Failed to get scan report summary: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/scan-report-summary/<int:row_id>/lead-status", methods=["POST"])
@@ -373,22 +586,25 @@ def update_lead_status(row_id):
 # Socket.IO connection event handlers
 @socketio.on('connect')
 def handle_connect():
-    print(f"Client connected: {request.sid}")
+    # Only log in development mode
+    if FLASK_DEBUG:
+        print("[INFO] New client connected")
     emit('server_update', {'message': 'Connected to server successfully'})
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    print(f"Client disconnected: {request.sid}")
+    # Only log in development mode
+    if FLASK_DEBUG:
+        print("[INFO] Client disconnected")
     # Remove any scans associated with this session
     disconnected_scans = [scan_id for scan_id, session_id in active_scans.items() 
                          if session_id == request.sid]
     for scan_id in disconnected_scans:
         active_scans.pop(scan_id, None)
 
-# Update the socket binding logic to handle IP addresses properly
+# Update the socket binding logic
 if __name__ == "__main__":
     try:
-        # Convert FLASK_HOST to string and handle IP validation
         host = str(FLASK_HOST)
         if host == "0.0.0.0":
             print(f"[INFO] Server will be accessible from all network interfaces")
@@ -397,13 +613,15 @@ if __name__ == "__main__":
             host = "127.0.0.1"
             
         print(f"[INFO] Starting server on {host}:{FLASK_PORT}")
+        if FLASK_DEBUG:
+            print(f"[INFO] Debug mode enabled")
         socketio.run(
             app,
             host=host,
             port=int(FLASK_PORT),
             debug=FLASK_DEBUG,
-            use_reloader=FLASK_DEBUG,
-            log_output=False  # <--- ADD THIS LINE
+            use_reloader=False,
+            log_output=FLASK_DEBUG  # Only enable logging in debug mode
         )
     except Exception as e:
         print(f"[ERROR] Failed to start server: {str(e)}")

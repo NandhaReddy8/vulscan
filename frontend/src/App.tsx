@@ -90,8 +90,8 @@ const ErrorDialog: React.FC<ErrorDialogProps> = ({ error, onClose }) => {
   );
 };
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL|| "http://127.0.0.1:5000";
-const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://127.0.0.1:5000";
+const BACKEND_URL = "http://192.168.1.10:5000";
+const SOCKET_URL = "http://192.168.1.10:5000";
 
 function App() {
   const [isScanning, setIsScanning] = useState(false);
@@ -133,14 +133,30 @@ function App() {
       reconnectionDelay: 1000,
       timeout: 60000,
       transports: ["websocket", "polling"],
+      path: "/socket.io/",
+      withCredentials: true,
+      autoConnect: true,
+      forceNew: true,
+      extraHeaders: {
+        "Origin": window.location.origin
+      }
     });
 
     socket.on("connect", () => {
+      if (import.meta.env.DEV) {
+        console.log("Connected to server");
+      }
       setSocket(socket);
     });
 
-    socket.on("disconnect", () => {
-      // Silent disconnect handling
+    socket.on("connect_error", (error) => {
+      showToast("Connection error. Please try again later.", "error");
+    });
+
+    socket.on("disconnect", (reason) => {
+      if (reason === "io server disconnect") {
+        socket.connect();
+      }
     });
 
     socket.on("scan_completed", (data) => {

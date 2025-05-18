@@ -7,20 +7,34 @@ import json
 from datetime import datetime
 import logging
 import psycopg2.pool
+import bcrypt
 
 logger = logging.getLogger(__name__)
 load_dotenv()
+
+def hash_password(password: str) -> str:
+    """Hash a password using bcrypt"""
+    salt = bcrypt.gensalt()
+    return bcrypt.hashpw(password.encode(), salt).decode()
+
+def verify_password(password: str, stored_hash: str) -> bool:
+    """Verify a password against a stored hash"""
+    try:
+        return bcrypt.checkpw(password.encode(), stored_hash.encode())
+    except Exception as e:
+        print(f"[ERROR] Password verification failed: {str(e)}")
+        return False
 
 class DatabaseHandler:
     def __init__(self):
         self.pool = pool.SimpleConnectionPool(
             minconn=1,
             maxconn=20,
-            dbname=os.getenv("DB_NAME"),
-            user=os.getenv("DB_USER"),
-            password=os.getenv("DB_PASSWORD"),
-            host=os.getenv("DB_HOST"),
-            port=os.getenv("DB_PORT")
+            dbname=os.getenv("DB_NAME", "webscanner"),  # Updated default
+            user=os.getenv("DB_USER", "postgres"),
+            password=os.getenv("DB_PASSWORD", "postgres"),
+            host=os.getenv("DB_HOST", "localhost"),
+            port=os.getenv("DB_PORT", "5432")
         )
         self.initialize_tables()
 
@@ -63,6 +77,19 @@ class DatabaseHandler:
     def initialize_tables(self):
         """Create necessary tables if they don't exist"""
         create_tables_sql = """
+        -- Create users table for authentication
+        CREATE TABLE IF NOT EXISTS users (
+            id SERIAL PRIMARY KEY,
+            username VARCHAR(50) UNIQUE NOT NULL,
+            email VARCHAR(255) UNIQUE NOT NULL,
+            password_hash VARCHAR(255) NOT NULL,
+            role VARCHAR(20) NOT NULL DEFAULT 'user',
+            is_active BOOLEAN DEFAULT true,
+            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            last_login TIMESTAMP,
+            CONSTRAINT valid_role CHECK (role IN ('admin', 'user'))
+        );
+
         -- Create scan_requests table
         CREATE TABLE IF NOT EXISTS scan_requests (
             id SERIAL PRIMARY KEY,
@@ -113,7 +140,7 @@ class DatabaseHandler:
             user_email TEXT,
             user_name TEXT,
             user_phone TEXT,
-            lead_status TEXT DEFAULT 'not_connected',  -- <-- ensure this line exists
+            lead_status TEXT DEFAULT 'not_connected',
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """
@@ -121,12 +148,22 @@ class DatabaseHandler:
         conn = self.get_connection()
         try:
             with conn.cursor() as cur:
-                # Split SQL into individual statements
+                # First create all tables
                 for statement in create_tables_sql.split(';'):
                     if statement.strip():
                         cur.execute(statement)
-            conn.commit()
-            print("[+] Database tables initialized")
+                
+                # Then create default admin user if not exists
+                cur.execute("""
+                    INSERT INTO users (username, email, password_hash, role)
+                    SELECT 'admin', 'admin@virtuestech.com', %s, 'admin'
+                    WHERE NOT EXISTS (
+                        SELECT 1 FROM users WHERE username = 'admin'
+                    )
+                """, (hash_password('admin123'),))
+                
+                conn.commit()
+                print("[+] Database tables initialized")
         except Exception as e:
             print(f"[ERROR] Failed to initialize tables: {str(e)}")
             conn.rollback()
@@ -222,6 +259,76 @@ class DatabaseHandler:
         except Exception as e:
             print(f"[ERROR] Failed to update marketing summary: {str(e)}")
             conn.rollback()
+            raise
+        finally:
+            self.put_connection(conn)
+
+    def authenticate_user(self, username: str, password: str) -> dict:
+        """Authenticate a user and return user info if successful"""
+        print(f"[DEBUG] Attempting to authenticate user: {username}")
+        conn = self.get_connection()
+        try:
+            with conn.cursor() as cur:
+                # First get the user and their password hash
+                cur.execute("""
+                    SELECT id, username, email, role, is_active, password_hash
+                    FROM users
+                    WHERE username = %s AND is_active = true
+                """, (username,))
+                user = cur.fetchone()
+                
+                if not user:
+                    print(f"[DEBUG] User not found or not active: {username}")
+                    return None
+                    
+                print(f"[DEBUG] Found user: {user[1]} (role: {user[3]})")
+                print(f"[DEBUG] Stored hash: {user[5]}")
+                
+                is_valid = verify_password(password, user[5])
+                print(f"[DEBUG] Password verification result: {is_valid}")
+                
+                if is_valid:
+                    # Update last login
+                    cur.execute("""
+                        UPDATE users 
+                        SET last_login = CURRENT_TIMESTAMP 
+                        WHERE id = %s
+                    """, (user[0],))
+                    conn.commit()
+                    print(f"[DEBUG] Authentication successful for user: {username}")
+                    
+                    return {
+                        'id': user[0],
+                        'username': user[1],
+                        'email': user[2],
+                        'role': user[3]
+                    }
+                print(f"[DEBUG] Password verification failed for user: {username}")
+                return None
+        except Exception as e:
+            print(f"[ERROR] Authentication failed: {str(e)}")
+            raise
+        finally:
+            self.put_connection(conn)
+
+    def create_user(self, username: str, email: str, password: str, role: str = 'user') -> bool:
+        """Create a new user"""
+        conn = self.get_connection()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    INSERT INTO users (username, email, password_hash, role)
+                    VALUES (%s, %s, %s, %s)
+                    RETURNING id
+                """, (username, email, hash_password(password), role))
+                user_id = cur.fetchone()[0]
+                conn.commit()
+                return user_id
+        except psycopg2.IntegrityError as e:
+            print(f"[ERROR] User creation failed - duplicate username/email: {str(e)}")
+            return None
+        except Exception as e:
+            print(f"[ERROR] User creation failed: {str(e)}")
             raise
         finally:
             self.put_connection(conn)
