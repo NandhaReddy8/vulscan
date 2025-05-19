@@ -90,12 +90,13 @@ class DatabaseHandler:
             CONSTRAINT valid_role CHECK (role IN ('admin', 'user'))
         );
 
-        -- Create scan_requests table
+        -- Create scan_requests table with scan_id column
         CREATE TABLE IF NOT EXISTS scan_requests (
             id SERIAL PRIMARY KEY,
-            url TEXT NOT NULL,
+            scan_id TEXT UNIQUE NOT NULL,  -- Add scan_id column for external reference
+            url TEXT,
             ip_address TEXT NOT NULL,
-            timestamp TIMESTAMP NOT NULL
+            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
         -- Create report_requests table
@@ -143,6 +144,24 @@ class DatabaseHandler:
             lead_status TEXT DEFAULT 'not_connected',
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
+
+        -- Create network_scan_results table (after scan_requests table exists)
+        CREATE TABLE IF NOT EXISTS network_scan_results (
+            id SERIAL PRIMARY KEY,
+            scan_id TEXT NOT NULL UNIQUE,  -- Add UNIQUE constraint
+            ip_address TEXT NOT NULL,
+            scan_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            scan_status TEXT NOT NULL,     -- 'pending', 'running', 'completed', 'failed'
+            scan_results JSONB,            -- Store Nmap results in JSON format
+            error_message TEXT,            -- Store any error messages
+            requester_ip TEXT NOT NULL,    -- IP address of the person who requested the scan
+            FOREIGN KEY (scan_id) REFERENCES scan_requests(scan_id) ON DELETE CASCADE
+        );
+
+        -- Add indexes for faster lookups (after all tables exist)
+        CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id);
+        CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address);
+        CREATE INDEX IF NOT EXISTS idx_scan_requests_scan_id ON scan_requests(scan_id);
         """
         
         conn = self.get_connection()
@@ -151,7 +170,13 @@ class DatabaseHandler:
                 # First create all tables
                 for statement in create_tables_sql.split(';'):
                     if statement.strip():
+                        try:
                         cur.execute(statement)
+                            conn.commit()  # Commit after each statement
+                        except Exception as e:
+                            print(f"[WARNING] Error executing statement: {str(e)}")
+                            conn.rollback()
+                            raise
                 
                 # Then create default admin user if not exists
                 cur.execute("""
@@ -162,8 +187,8 @@ class DatabaseHandler:
                     )
                 """, (hash_password('admin123'),))
                 
-                conn.commit()
-                print("[+] Database tables initialized")
+            conn.commit()
+                print("[+] Database tables initialized successfully")
         except Exception as e:
             print(f"[ERROR] Failed to initialize tables: {str(e)}")
             conn.rollback()
@@ -172,13 +197,56 @@ class DatabaseHandler:
             self.put_connection(conn)
 
     def ensure_tables_exist(self):
-        """Check and create tables if they don't exist"""
+        """Ensure all required tables exist with correct schema"""
         try:
+            # First create tables if they don't exist
             self.initialize_tables()
-            return True
+            
+            # Then check if network_scan_results needs to be recreated
+            conn = self.get_connection()
+            try:
+                with conn.cursor() as cur:
+                    # Check if scan_id has unique constraint
+                    cur.execute("""
+                        SELECT COUNT(*)
+                        FROM information_schema.table_constraints tc
+                        JOIN information_schema.constraint_column_usage ccu
+                            ON tc.constraint_name = ccu.constraint_name
+                        WHERE tc.table_name = 'network_scan_results'
+                        AND tc.constraint_type = 'UNIQUE'
+                        AND ccu.column_name = 'scan_id'
+                    """)
+                    has_unique = cur.fetchone()[0] > 0
+                    
+                    if not has_unique:
+                        print("[*] Recreating network_scan_results table with unique constraint...")
+                        # Drop existing table
+                        cur.execute("DROP TABLE IF EXISTS network_scan_results CASCADE")
+                        # Recreate table with unique constraint
+                        cur.execute("""
+                            CREATE TABLE network_scan_results (
+                                id SERIAL PRIMARY KEY,
+                                scan_id TEXT NOT NULL UNIQUE,
+                                ip_address TEXT NOT NULL,
+                                scan_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                scan_status TEXT NOT NULL,
+                                scan_results JSONB,
+                                error_message TEXT,
+                                requester_ip TEXT NOT NULL,
+                                FOREIGN KEY (scan_id) REFERENCES scan_requests(scan_id) ON DELETE CASCADE
+                            )
+                        """)
+                        # Recreate indexes
+                        cur.execute("CREATE INDEX idx_network_scan_id ON network_scan_results(scan_id)")
+                        cur.execute("CREATE INDEX idx_network_scan_ip ON network_scan_results(ip_address)")
+                        conn.commit()
+                        print("[+] network_scan_results table recreated successfully")
+            finally:
+                self.put_connection(conn)
+                
         except Exception as e:
             print(f"[ERROR] Failed to ensure tables exist: {str(e)}")
-            return False
+            raise
 
     def update_scan_summary(self, scan_id=None, target_url=None):
         """Update marketing summary table after scan or report request"""

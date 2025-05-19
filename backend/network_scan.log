@@ -1,0 +1,1577 @@
+2025-05-19 00:48:02,789 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 00:48:12,237 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Sending packet OPEN data {'sid': 'jDp8hDjBQDovNQpYAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 00:48:12,238 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Received request to upgrade to websocket
+2025-05-19 00:48:12,240 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Upgrade to websocket successful
+2025-05-19 00:48:12,252 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Received packet MESSAGE data 0
+2025-05-19 00:48:12,256 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Sending packet MESSAGE data 0{"sid":"rM7uToidliZt5_pMAAAB"}
+2025-05-19 00:48:12,258 - socketio.server - INFO - emitting event "server_update" to rM7uToidliZt5_pMAAAB [/]
+2025-05-19 00:48:12,260 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Sending packet MESSAGE data 2["server_update",{"message":"Connected to server successfully"}]
+2025-05-19 00:48:17,402 - engineio.server - INFO - jDp8hDjBQDovNQpYAAAA: Received packet MESSAGE data 1
+2025-05-19 00:48:36,711 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 00:48:36,712 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 00:48:36,712 - networkscan - INFO - Generated scan ID: 911aef4ee694e52cc1a38f42303c372b20d19f312491e6ff70fc6033fd43071d
+2025-05-19 00:48:36,712 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 00:48:37,017 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 00:48:37,020 - networkscan - ERROR - Scan error: there is no unique or exclusion constraint matching the ON CONFLICT specification
+
+2025-05-19 00:48:37,024 - networkscan - INFO - Updating scan status to 'failed' due to error
+2025-05-19 00:48:37,027 - networkscan - ERROR - Failed to update scan status: there is no unique or exclusion constraint matching the ON CONFLICT specification
+
+2025-05-19 00:54:42,479 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 00:54:42,479 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 00:54:42,480 - networkscan - INFO - Generated scan ID: eb3fd1fbe6997c23d660db7a8d1ef5d0a180afb6cd160f5e0172a2856f63a002
+2025-05-19 00:54:42,480 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 00:54:42,915 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 00:54:42,918 - networkscan - ERROR - Scan error: there is no unique or exclusion constraint matching the ON CONFLICT specification
+
+2025-05-19 00:54:42,918 - networkscan - INFO - Updating scan status to 'failed' due to error
+2025-05-19 00:54:42,920 - networkscan - ERROR - Failed to update scan status: there is no unique or exclusion constraint matching the ON CONFLICT specification
+
+2025-05-19 00:55:31,711 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 00:56:25,076 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.1.10
+2025-05-19 00:56:25,076 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 00:56:25,077 - networkscan - INFO - Generated scan ID: be51ecc815ca04a48c58b6e7da5f6fd5e3e3949d78b77390e2480f535f39dec5
+2025-05-19 00:56:25,077 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 00:56:25,463 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 00:56:25,475 - networkscan - ERROR - Scan error: insert or update on table "network_scan_results" violates foreign key constraint "network_scan_results_scan_id_fkey"
+DETAIL:  Key (scan_id)=(be51ecc815ca04a48c58b6e7da5f6fd5e3e3949d78b77390e2480f535f39dec5) is not present in table "scan_requests".
+
+2025-05-19 00:56:25,477 - networkscan - INFO - Updating scan status to 'failed' due to error
+2025-05-19 00:56:25,479 - networkscan - ERROR - Failed to update scan status: insert or update on table "network_scan_results" violates foreign key constraint "network_scan_results_scan_id_fkey"
+DETAIL:  Key (scan_id)=(be51ecc815ca04a48c58b6e7da5f6fd5e3e3949d78b77390e2480f535f39dec5) is not present in table "scan_requests".
+
+2025-05-19 00:59:49,345 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.1.10
+2025-05-19 00:59:49,346 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 00:59:49,346 - networkscan - INFO - Generated scan ID: 8aead586042e51c9a135cbc5f8895c834b293c3245308e6379fb94358955819d
+2025-05-19 00:59:49,347 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 00:59:49,651 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 00:59:49,652 - networkscan - ERROR - Scan error: insert or update on table "network_scan_results" violates foreign key constraint "network_scan_results_scan_id_fkey"
+DETAIL:  Key (scan_id)=(8aead586042e51c9a135cbc5f8895c834b293c3245308e6379fb94358955819d) is not present in table "scan_requests".
+
+2025-05-19 00:59:49,654 - networkscan - INFO - Updating scan status to 'failed' due to error
+2025-05-19 00:59:49,656 - networkscan - ERROR - Failed to update scan status: insert or update on table "network_scan_results" violates foreign key constraint "network_scan_results_scan_id_fkey"
+DETAIL:  Key (scan_id)=(8aead586042e51c9a135cbc5f8895c834b293c3245308e6379fb94358955819d) is not present in table "scan_requests".
+
+2025-05-19 01:01:16,352 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 01:01:57,250 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 01:01:57,250 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 01:01:57,251 - networkscan - INFO - Generated scan ID: 334ac4c885021e83ab221cbce0571ed01085ab956f3da0fccb285a7efca2bbbb
+2025-05-19 01:01:57,252 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:01:57,257 - networkscan - INFO - Scan request saved with ID: 17
+2025-05-19 01:01:57,258 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:01:57,262 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:01:57,285 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:01:57,286 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:01:57,931 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:01 India Standard Time
+2025-05-19 01:03:09,734 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 01:03:09,734 - networkscan - DEBUG - Nmap output: Host is up (0.017s latency).
+2025-05-19 01:03:09,734 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 01:03:09,735 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 01:03:09,737 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 01:03:09,738 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 01:03:09,738 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:03:09,738 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:03:09,740 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 72.04 seconds
+2025-05-19 01:03:09,776 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:03:09,783 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:19:28,654 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 01:19:33,066 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 01:19:33,067 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 01:19:33,068 - networkscan - INFO - Generated scan ID: 2518b9ad380b645d7cef765c313250b3d01a3fd88f2776fd7cb86064845c4caf
+2025-05-19 01:19:33,068 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:19:33,075 - networkscan - INFO - Scan request saved with ID: 18
+2025-05-19 01:19:33,076 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:19:33,079 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:19:33,103 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:19:33,103 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:19:33,819 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:19 India Standard Time
+2025-05-19 01:20:45,432 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 01:20:45,433 - networkscan - DEBUG - Nmap output: Host is up (0.017s latency).
+2025-05-19 01:20:45,434 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 01:20:45,434 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 01:20:45,435 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 01:20:45,436 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https  HTTP server (unknown)
+2025-05-19 01:20:45,436 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:20:45,437 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:20:45,437 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 71.93 seconds
+2025-05-19 01:20:45,462 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:20:45,462 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:22:54,247 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 01:22:54,247 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 01:22:54,248 - networkscan - INFO - Generated scan ID: ae35fdc49db4daae7a70329bb53b0dabde9fa8e5b6139386fb8cb6ca09509def
+2025-05-19 01:22:54,248 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:22:54,250 - networkscan - INFO - Scan request saved with ID: 19
+2025-05-19 01:22:54,250 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:22:54,252 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:22:54,254 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:22:54,254 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:22:54,370 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:22 India Standard Time
+2025-05-19 01:24:05,456 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 01:24:05,457 - networkscan - DEBUG - Nmap output: Host is up (0.029s latency).
+2025-05-19 01:24:05,457 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 01:24:05,458 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 01:24:05,458 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 01:24:05,459 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 01:24:05,459 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:24:05,460 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:24:05,460 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 71.13 seconds
+2025-05-19 01:24:05,500 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:24:05,500 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:27:24,977 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 01:36:24,916 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.1.10
+2025-05-19 01:36:24,916 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 01:36:24,916 - networkscan - INFO - Generated scan ID: 0af6a77d08f753da647ba6073574bf6798e7eb9aa1a0ddfb25e75fdff68a589f
+2025-05-19 01:36:24,917 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:36:24,926 - networkscan - INFO - Scan request saved with ID: 20
+2025-05-19 01:36:24,926 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:36:24,929 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:36:24,948 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:36:24,948 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:36:24,949 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 31.170.165.221
+2025-05-19 01:36:25,027 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:36 India Standard Time
+2025-05-19 01:38:17,867 - networkscan - DEBUG - Nmap output: Nmap scan report for 31.170.165.221
+2025-05-19 01:38:17,868 - networkscan - DEBUG - Nmap output: Host is up (0.24s latency).
+2025-05-19 01:38:17,868 - networkscan - DEBUG - Nmap output: Not shown: 91 filtered tcp ports (no-response)
+2025-05-19 01:38:17,869 - networkscan - DEBUG - Nmap output: PORT     STATE SERVICE             VERSION
+2025-05-19 01:38:17,869 - networkscan - DEBUG - Nmap output: 22/tcp   open  ssh                 OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)
+2025-05-19 01:38:17,869 - networkscan - DEBUG - Nmap output: 25/tcp   open  smtp                Postfix smtpd
+2025-05-19 01:38:17,870 - networkscan - DEBUG - Nmap output: 80/tcp   open  http                nginx 1.24.0 (Ubuntu)
+2025-05-19 01:38:17,870 - networkscan - DEBUG - Nmap output: 81/tcp   open  http                nginx
+2025-05-19 01:38:17,871 - networkscan - DEBUG - Nmap output: 444/tcp  open  ssl/http            nginx
+2025-05-19 01:38:17,871 - networkscan - DEBUG - Nmap output: 3389/tcp open  ms-wbt-server       Microsoft Terminal Service
+2025-05-19 01:38:17,872 - networkscan - DEBUG - Nmap output: 5000/tcp open  upnp?
+2025-05-19 01:38:17,872 - networkscan - DEBUG - Nmap output: 5900/tcp open  vnc                 VNC (protocol 3.8)
+2025-05-19 01:38:17,872 - networkscan - DEBUG - Nmap output: 8888/tcp open  ssl/sun-answerbook?
+2025-05-19 01:38:17,872 - networkscan - DEBUG - Nmap output: 2 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+2025-05-19 01:38:17,873 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 01:38:17,873 - networkscan - DEBUG - Nmap output: SF-Port5000-TCP:V=7.96%I=7%D=5/19%Time=682A3DCE%P=i686-pc-windows-windows%
+2025-05-19 01:38:17,873 - networkscan - DEBUG - Nmap output: SF:r(GetRequest,17E,"HTTP/1\.1\x20404\x20NOT\x20FOUND\r\nContent-Type:\x20
+2025-05-19 01:38:17,874 - networkscan - DEBUG - Nmap output: SF:text/html;\x20charset=utf-8\r\nContent-Length:\x20207\r\nAccess-Control
+2025-05-19 01:38:17,874 - networkscan - DEBUG - Nmap output: SF:-Allow-Origin:\x20\*\r\nDate:\x20Sun,\x2018\x20May\x202025\x2020:06:38\
+2025-05-19 01:38:17,875 - networkscan - DEBUG - Nmap output: SF:x20GMT\r\nConnection:\x20close\r\n\r\n<!doctype\x20html>\n<html\x20lang
+2025-05-19 01:38:17,875 - networkscan - DEBUG - Nmap output: SF:=en>\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1>\n<p>The
+2025-05-19 01:38:17,875 - networkscan - DEBUG - Nmap output: SF:\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20server\.\x2
+2025-05-19 01:38:17,877 - networkscan - DEBUG - Nmap output: SF:0If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20check\x20y
+2025-05-19 01:38:17,877 - networkscan - DEBUG - Nmap output: SF:our\x20spelling\x20and\x20try\x20again\.</p>\n")%r(RTSPRequest,16C,"<!D
+2025-05-19 01:38:17,878 - networkscan - DEBUG - Nmap output: SF:OCTYPE\x20HTML>\n<html\x20lang=\"en\">\n\x20\x20\x20\x20<head>\n\x20\x2
+2025-05-19 01:38:17,879 - networkscan - DEBUG - Nmap output: SF:0\x20\x20\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x20\
+2025-05-19 01:38:17,879 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20\x20<title>Error\x20response</title>\n\x20\x20\x20\x20</head
+2025-05-19 01:38:17,880 - networkscan - DEBUG - Nmap output: SF:>\n\x20\x20\x20\x20<body>\n\x20\x20\x20\x20\x20\x20\x20\x20<h1>Error\x2
+2025-05-19 01:38:17,880 - networkscan - DEBUG - Nmap output: SF:0response</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20code:\x2040
+2025-05-19 01:38:17,881 - networkscan - DEBUG - Nmap output: SF:0</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Message:\x20Bad\x20request\x2
+2025-05-19 01:38:17,882 - networkscan - DEBUG - Nmap output: SF:0version\x20\('RTSP/1\.0'\)\.</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>E
+2025-05-19 01:38:17,882 - networkscan - DEBUG - Nmap output: SF:rror\x20code\x20explanation:\x20400\x20-\x20Bad\x20request\x20syntax\x2
+2025-05-19 01:38:17,882 - networkscan - DEBUG - Nmap output: SF:0or\x20unsupported\x20method\.</p>\n\x20\x20\x20\x20</body>\n</html>\n"
+2025-05-19 01:38:17,883 - networkscan - DEBUG - Nmap output: SF:)%r(HTTPOptions,17E,"HTTP/1\.1\x20404\x20NOT\x20FOUND\r\nContent-Type:\
+2025-05-19 01:38:17,883 - networkscan - DEBUG - Nmap output: SF:x20text/html;\x20charset=utf-8\r\nContent-Length:\x20207\r\nAccess-Cont
+2025-05-19 01:38:17,884 - networkscan - DEBUG - Nmap output: SF:rol-Allow-Origin:\x20\*\r\nDate:\x20Sun,\x2018\x20May\x202025\x2020:06:
+2025-05-19 01:38:17,884 - networkscan - DEBUG - Nmap output: SF:55\x20GMT\r\nConnection:\x20close\r\n\r\n<!doctype\x20html>\n<html\x20l
+2025-05-19 01:38:17,885 - networkscan - DEBUG - Nmap output: SF:ang=en>\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1>\n<p>
+2025-05-19 01:38:17,885 - networkscan - DEBUG - Nmap output: SF:The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20server\.
+2025-05-19 01:38:17,886 - networkscan - DEBUG - Nmap output: SF:\x20If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20check\x
+2025-05-19 01:38:17,886 - networkscan - DEBUG - Nmap output: SF:20your\x20spelling\x20and\x20try\x20again\.</p>\n")%r(Help,167,"<!DOCTY
+2025-05-19 01:38:17,886 - networkscan - DEBUG - Nmap output: SF:PE\x20HTML>\n<html\x20lang=\"en\">\n\x20\x20\x20\x20<head>\n\x20\x20\x2
+2025-05-19 01:38:17,887 - networkscan - DEBUG - Nmap output: SF:0\x20\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x20\x20\
+2025-05-19 01:38:17,887 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20<title>Error\x20response</title>\n\x20\x20\x20\x20</head>\n\
+2025-05-19 01:38:17,887 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20\x20<body>\n\x20\x20\x20\x20\x20\x20\x20\x20<h1>Error\x20res
+2025-05-19 01:38:17,888 - networkscan - DEBUG - Nmap output: SF:ponse</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20code:\x20400</p
+2025-05-19 01:38:17,888 - networkscan - DEBUG - Nmap output: SF:>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Message:\x20Bad\x20request\x20syn
+2025-05-19 01:38:17,888 - networkscan - DEBUG - Nmap output: SF:tax\x20\('HELP'\)\.</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20co
+2025-05-19 01:38:17,889 - networkscan - DEBUG - Nmap output: SF:de\x20explanation:\x20400\x20-\x20Bad\x20request\x20syntax\x20or\x20uns
+2025-05-19 01:38:17,889 - networkscan - DEBUG - Nmap output: SF:upported\x20method\.</p>\n\x20\x20\x20\x20</body>\n</html>\n");
+2025-05-19 01:38:17,889 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 01:38:17,890 - networkscan - DEBUG - Nmap output: SF-Port8888-TCP:V=7.96%T=SSL%I=7%D=5/19%Time=682A3DE4%P=i686-pc-windows-wi
+2025-05-19 01:38:17,890 - networkscan - DEBUG - Nmap output: SF:ndows%r(GetRequest,159,"HTTP/1\.1\x20302\x20Found\r\nlocation:\x20/app/
+2025-05-19 01:38:17,891 - networkscan - DEBUG - Nmap output: SF:login\?\r\nosd-name:\x20srv586371\r\nx-frame-options:\x20sameorigin\r\n
+2025-05-19 01:38:17,891 - networkscan - DEBUG - Nmap output: SF:cache-control:\x20private,\x20no-cache,\x20no-store,\x20must-revalidate
+2025-05-19 01:38:17,891 - networkscan - DEBUG - Nmap output: SF:\r\nset-cookie:\x20security_authentication=;\x20Max-Age=0;\x20Expires=T
+2025-05-19 01:38:17,892 - networkscan - DEBUG - Nmap output: SF:hu,\x2001\x20Jan\x201970\x2000:00:00\x20GMT;\x20Secure;\x20HttpOnly;\x2
+2025-05-19 01:38:17,893 - networkscan - DEBUG - Nmap output: SF:0Path=/\r\ncontent-length:\x200\r\nDate:\x20Sun,\x2018\x20May\x202025\x
+2025-05-19 01:38:17,893 - networkscan - DEBUG - Nmap output: SF:2020:07:00\x20GMT\r\nConnection:\x20close\r\n\r\n")%r(HTTPOptions,140,"
+2025-05-19 01:38:17,894 - networkscan - DEBUG - Nmap output: SF:HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx-frame-o
+2025-05-19 01:38:17,894 - networkscan - DEBUG - Nmap output: SF:ptions:\x20sameorigin\r\ncontent-type:\x20application/json;\x20charset=
+2025-05-19 01:38:17,895 - networkscan - DEBUG - Nmap output: SF:utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x20must-r
+2025-05-19 01:38:17,895 - networkscan - DEBUG - Nmap output: SF:evalidate\r\ncontent-length:\x2060\r\nDate:\x20Sun,\x2018\x20May\x20202
+2025-05-19 01:38:17,895 - networkscan - DEBUG - Nmap output: SF:5\x2020:07:01\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCode\":404
+2025-05-19 01:38:17,896 - networkscan - DEBUG - Nmap output: SF:,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(RTSPReque
+2025-05-19 01:38:17,896 - networkscan - DEBUG - Nmap output: SF:st,140,"HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx
+2025-05-19 01:38:17,898 - networkscan - DEBUG - Nmap output: SF:-frame-options:\x20sameorigin\r\ncontent-type:\x20application/json;\x20
+2025-05-19 01:38:17,898 - networkscan - DEBUG - Nmap output: SF:charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x
+2025-05-19 01:38:17,898 - networkscan - DEBUG - Nmap output: SF:20must-revalidate\r\ncontent-length:\x2060\r\nDate:\x20Sun,\x2018\x20Ma
+2025-05-19 01:38:17,899 - networkscan - DEBUG - Nmap output: SF:y\x202025\x2020:07:02\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCo
+2025-05-19 01:38:17,899 - networkscan - DEBUG - Nmap output: SF:de\":404,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(F
+2025-05-19 01:38:17,900 - networkscan - DEBUG - Nmap output: SF:ourOhFourRequest,1C6,"HTTP/1\.1\x20401\x20Unauthorized\r\nosd-name:\x20
+2025-05-19 01:38:17,900 - networkscan - DEBUG - Nmap output: SF:srv586371\r\nx-frame-options:\x20sameorigin\r\ncontent-type:\x20applica
+2025-05-19 01:38:17,900 - networkscan - DEBUG - Nmap output: SF:tion/json;\x20charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\
+2025-05-19 01:38:17,901 - networkscan - DEBUG - Nmap output: SF:x20no-store,\x20must-revalidate\r\nset-cookie:\x20security_authenticati
+2025-05-19 01:38:17,901 - networkscan - DEBUG - Nmap output: SF:on=;\x20Max-Age=0;\x20Expires=Thu,\x2001\x20Jan\x201970\x2000:00:00\x20
+2025-05-19 01:38:17,901 - networkscan - DEBUG - Nmap output: SF:GMT;\x20Secure;\x20HttpOnly;\x20Path=/\r\ncontent-length:\x2077\r\nDate
+2025-05-19 01:38:17,901 - networkscan - DEBUG - Nmap output: SF::\x20Sun,\x2018\x20May\x202025\x2020:07:13\x20GMT\r\nConnection:\x20clo
+2025-05-19 01:38:17,902 - networkscan - DEBUG - Nmap output: SF:se\r\n\r\n{\"statusCode\":401,\"error\":\"Unauthorized\",\"message\":\"
+2025-05-19 01:38:17,902 - networkscan - DEBUG - Nmap output: SF:Authentication\x20required\"}");
+2025-05-19 01:38:17,902 - networkscan - DEBUG - Nmap output: Service Info: Host:  srv586371.hstgr.cloud; OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows
+2025-05-19 01:38:17,902 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:38:17,903 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:38:17,903 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 112.88 seconds
+2025-05-19 01:38:17,903 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:38:17,905 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:40:39,184 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 01:40:39,184 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 01:40:39,185 - networkscan - INFO - Generated scan ID: 36e126377609cf53306061b18df7877a011aba8ce355c2c212b07b33f3afa7b3
+2025-05-19 01:40:39,185 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:40:39,190 - networkscan - INFO - Scan request saved with ID: 21
+2025-05-19 01:40:39,190 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:40:39,193 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:40:39,193 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:40:39,195 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:40:39,195 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 01:40:39,286 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:40 India Standard Time
+2025-05-19 01:41:50,037 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 01:41:50,037 - networkscan - DEBUG - Nmap output: Host is up (0.025s latency).
+2025-05-19 01:41:50,037 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 01:41:50,038 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 01:41:50,038 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 01:41:50,038 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 01:41:50,040 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:41:50,040 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:41:50,041 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 70.79 seconds
+2025-05-19 01:41:50,084 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:41:50,084 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:44:38,788 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 01:44:38,789 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 01:44:38,789 - networkscan - INFO - Generated scan ID: 56f44d14e33bf8cb357b80ba65c2d6ff5062a1df98223b8d0a11eb266d74dabe
+2025-05-19 01:44:38,790 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:44:38,792 - networkscan - INFO - Scan request saved with ID: 22
+2025-05-19 01:44:38,793 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:44:38,794 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:44:38,795 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:44:38,795 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:44:38,796 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 01:44:38,888 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:44 India Standard Time
+2025-05-19 01:45:49,662 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 01:45:49,662 - networkscan - DEBUG - Nmap output: Host is up (0.027s latency).
+2025-05-19 01:45:49,662 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 01:45:49,663 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 01:45:49,663 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 01:45:49,663 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 01:45:49,665 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:45:49,665 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:45:49,665 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 70.81 seconds
+2025-05-19 01:45:49,696 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:45:49,696 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:51:22,555 - networkscan - INFO - Starting network scan for IP: 44.228.249.3 from requester: 192.168.1.10
+2025-05-19 01:51:22,556 - networkscan - INFO - IP validation for 44.228.249.3: valid public IP
+2025-05-19 01:51:22,557 - networkscan - INFO - Generated scan ID: cc360ac23f9a3fe304af8351f1f3dd4cb9c689710659bfb9c8e667e6c6b4d193
+2025-05-19 01:51:22,557 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:51:22,562 - networkscan - INFO - Scan request saved with ID: 23
+2025-05-19 01:51:22,562 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:51:22,564 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:51:22,564 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:51:22,565 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:51:22,565 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 44.228.249.3
+2025-05-19 01:51:22,693 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:51 India Standard Time
+2025-05-19 01:51:53,946 - networkscan - DEBUG - Nmap output: Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+2025-05-19 01:51:53,947 - networkscan - DEBUG - Nmap output: Host is up (0.25s latency).
+2025-05-19 01:51:53,947 - networkscan - DEBUG - Nmap output: Not shown: 99 filtered tcp ports (no-response)
+2025-05-19 01:51:53,947 - networkscan - DEBUG - Nmap output: PORT   STATE SERVICE VERSION
+2025-05-19 01:51:53,947 - networkscan - DEBUG - Nmap output: 80/tcp open  http    nginx 1.19.0
+2025-05-19 01:51:53,948 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:51:53,948 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:51:53,948 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 31.29 seconds
+2025-05-19 01:51:53,987 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:51:53,987 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:55:00,694 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 01:55:38,489 - networkscan - INFO - Starting network scan for IP: 44.228.249.3 from requester: 192.168.1.10
+2025-05-19 01:55:38,490 - networkscan - INFO - IP validation for 44.228.249.3: valid public IP
+2025-05-19 01:55:38,490 - networkscan - INFO - Generated scan ID: 7155d1a596d072ed307c7cb9bf8f5b4a12d06a75de1fc8a2f49992a34b69d9e4
+2025-05-19 01:55:38,490 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:55:38,500 - networkscan - INFO - Scan request saved with ID: 1
+2025-05-19 01:55:38,501 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:55:38,509 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:55:38,536 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:55:38,537 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:55:38,537 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 44.228.249.3
+2025-05-19 01:55:38,616 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:55 India Standard Time
+2025-05-19 01:56:06,358 - networkscan - DEBUG - Nmap output: Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+2025-05-19 01:56:06,358 - networkscan - DEBUG - Nmap output: Host is up (0.25s latency).
+2025-05-19 01:56:06,359 - networkscan - DEBUG - Nmap output: Not shown: 99 filtered tcp ports (no-response)
+2025-05-19 01:56:06,359 - networkscan - DEBUG - Nmap output: PORT   STATE SERVICE VERSION
+2025-05-19 01:56:06,359 - networkscan - DEBUG - Nmap output: 80/tcp open  http    nginx 1.19.0
+2025-05-19 01:56:06,360 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:56:06,360 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:56:06,360 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 27.78 seconds
+2025-05-19 01:56:06,395 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:56:06,395 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:56:06,397 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 01:56:06,397 - networkscan - DEBUG - Parsed results: {
+  "hostname": "ec2-44-228-249-3.us-west-2.compute.amazonaws.com",
+  "ip": "44.228.249.3",
+  "open_ports": [
+    80
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": "nginx 1.19.0"
+    }
+  ]
+}
+2025-05-19 01:56:06,397 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 01:56:06,398 - networkscan - DEBUG - Scan results preview: {"hostname": "ec2-44-228-249-3.us-west-2.compute.amazonaws.com", "ip": "44.228.249.3", "open_ports":...
+2025-05-19 01:58:00,896 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.1.10
+2025-05-19 01:58:00,896 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 01:58:00,896 - networkscan - INFO - Generated scan ID: 9336980d9d2c94ecccddb1769fefc666e6e129a90b99bae4270b69d4d6b35a28
+2025-05-19 01:58:00,897 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 01:58:00,899 - networkscan - INFO - Scan request saved with ID: 2
+2025-05-19 01:58:00,899 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 01:58:00,901 - networkscan - INFO - Starting Nmap scan
+2025-05-19 01:58:00,902 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:58:00,903 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 01:58:00,903 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 31.170.165.221
+2025-05-19 01:58:00,999 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 01:58 India Standard Time
+2025-05-19 01:59:06,886 - networkscan - DEBUG - Nmap output: Nmap scan report for srv586371.hstgr.cloud (31.170.165.221)
+2025-05-19 01:59:06,887 - networkscan - DEBUG - Nmap output: Host is up (0.24s latency).
+2025-05-19 01:59:06,887 - networkscan - DEBUG - Nmap output: Not shown: 93 filtered tcp ports (no-response)
+2025-05-19 01:59:06,888 - networkscan - DEBUG - Nmap output: PORT     STATE SERVICE             VERSION
+2025-05-19 01:59:06,888 - networkscan - DEBUG - Nmap output: 22/tcp   open  ssh                 OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)
+2025-05-19 01:59:06,888 - networkscan - DEBUG - Nmap output: 25/tcp   open  smtp                Postfix smtpd
+2025-05-19 01:59:06,889 - networkscan - DEBUG - Nmap output: 80/tcp   open  http                nginx 1.24.0 (Ubuntu)
+2025-05-19 01:59:06,889 - networkscan - DEBUG - Nmap output: 444/tcp  open  ssl/http            nginx
+2025-05-19 01:59:06,889 - networkscan - DEBUG - Nmap output: 3389/tcp open  ms-wbt-server       Microsoft Terminal Service
+2025-05-19 01:59:06,890 - networkscan - DEBUG - Nmap output: 5900/tcp open  vnc                 VNC (protocol 3.8)
+2025-05-19 01:59:06,890 - networkscan - DEBUG - Nmap output: 8888/tcp open  ssl/sun-answerbook?
+2025-05-19 01:59:06,890 - networkscan - DEBUG - Nmap output: 1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+2025-05-19 01:59:06,891 - networkscan - DEBUG - Nmap output: SF-Port8888-TCP:V=7.96%T=SSL%I=7%D=5/19%Time=682A42F3%P=i686-pc-windows-wi
+2025-05-19 01:59:06,891 - networkscan - DEBUG - Nmap output: SF:ndows%r(GetRequest,159,"HTTP/1\.1\x20302\x20Found\r\nlocation:\x20/app/
+2025-05-19 01:59:06,891 - networkscan - DEBUG - Nmap output: SF:login\?\r\nosd-name:\x20srv586371\r\nx-frame-options:\x20sameorigin\r\n
+2025-05-19 01:59:06,892 - networkscan - DEBUG - Nmap output: SF:cache-control:\x20private,\x20no-cache,\x20no-store,\x20must-revalidate
+2025-05-19 01:59:06,892 - networkscan - DEBUG - Nmap output: SF:\r\nset-cookie:\x20security_authentication=;\x20Max-Age=0;\x20Expires=T
+2025-05-19 01:59:06,892 - networkscan - DEBUG - Nmap output: SF:hu,\x2001\x20Jan\x201970\x2000:00:00\x20GMT;\x20Secure;\x20HttpOnly;\x2
+2025-05-19 01:59:06,893 - networkscan - DEBUG - Nmap output: SF:0Path=/\r\ncontent-length:\x200\r\nDate:\x20Sun,\x2018\x20May\x202025\x
+2025-05-19 01:59:06,893 - networkscan - DEBUG - Nmap output: SF:2020:28:35\x20GMT\r\nConnection:\x20close\r\n\r\n")%r(HTTPOptions,140,"
+2025-05-19 01:59:06,893 - networkscan - DEBUG - Nmap output: SF:HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx-frame-o
+2025-05-19 01:59:06,894 - networkscan - DEBUG - Nmap output: SF:ptions:\x20sameorigin\r\ncontent-type:\x20application/json;\x20charset=
+2025-05-19 01:59:06,894 - networkscan - DEBUG - Nmap output: SF:utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x20must-r
+2025-05-19 01:59:06,894 - networkscan - DEBUG - Nmap output: SF:evalidate\r\ncontent-length:\x2060\r\nDate:\x20Sun,\x2018\x20May\x20202
+2025-05-19 01:59:06,895 - networkscan - DEBUG - Nmap output: SF:5\x2020:28:36\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCode\":404
+2025-05-19 01:59:06,895 - networkscan - DEBUG - Nmap output: SF:,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(RTSPReque
+2025-05-19 01:59:06,895 - networkscan - DEBUG - Nmap output: SF:st,140,"HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx
+2025-05-19 01:59:06,896 - networkscan - DEBUG - Nmap output: SF:-frame-options:\x20sameorigin\r\ncontent-type:\x20application/json;\x20
+2025-05-19 01:59:06,896 - networkscan - DEBUG - Nmap output: SF:charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x
+2025-05-19 01:59:06,896 - networkscan - DEBUG - Nmap output: SF:20must-revalidate\r\ncontent-length:\x2060\r\nDate:\x20Sun,\x2018\x20Ma
+2025-05-19 01:59:06,897 - networkscan - DEBUG - Nmap output: SF:y\x202025\x2020:28:37\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCo
+2025-05-19 01:59:06,897 - networkscan - DEBUG - Nmap output: SF:de\":404,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(F
+2025-05-19 01:59:06,897 - networkscan - DEBUG - Nmap output: SF:ourOhFourRequest,1C6,"HTTP/1\.1\x20401\x20Unauthorized\r\nosd-name:\x20
+2025-05-19 01:59:06,898 - networkscan - DEBUG - Nmap output: SF:srv586371\r\nx-frame-options:\x20sameorigin\r\ncontent-type:\x20applica
+2025-05-19 01:59:06,898 - networkscan - DEBUG - Nmap output: SF:tion/json;\x20charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\
+2025-05-19 01:59:06,899 - networkscan - DEBUG - Nmap output: SF:x20no-store,\x20must-revalidate\r\nset-cookie:\x20security_authenticati
+2025-05-19 01:59:06,899 - networkscan - DEBUG - Nmap output: SF:on=;\x20Max-Age=0;\x20Expires=Thu,\x2001\x20Jan\x201970\x2000:00:00\x20
+2025-05-19 01:59:06,899 - networkscan - DEBUG - Nmap output: SF:GMT;\x20Secure;\x20HttpOnly;\x20Path=/\r\ncontent-length:\x2077\r\nDate
+2025-05-19 01:59:06,900 - networkscan - DEBUG - Nmap output: SF::\x20Sun,\x2018\x20May\x202025\x2020:28:48\x20GMT\r\nConnection:\x20clo
+2025-05-19 01:59:06,900 - networkscan - DEBUG - Nmap output: SF:se\r\n\r\n{\"statusCode\":401,\"error\":\"Unauthorized\",\"message\":\"
+2025-05-19 01:59:06,900 - networkscan - DEBUG - Nmap output: SF:Authentication\x20required\"}");
+2025-05-19 01:59:06,900 - networkscan - DEBUG - Nmap output: Service Info: Host:  srv586371.hstgr.cloud; OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows
+2025-05-19 01:59:06,901 - networkscan - DEBUG - Nmap output: 
+2025-05-19 01:59:06,901 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 01:59:06,901 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 65.93 seconds
+2025-05-19 01:59:06,929 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 01:59:06,929 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 01:59:06,930 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 01:59:06,930 - networkscan - DEBUG - Parsed results: {
+  "hostname": "srv586371.hstgr.cloud",
+  "ip": "31.170.165.221",
+  "open_ports": [
+    22,
+    25,
+    80,
+    444,
+    3389,
+    5900,
+    8888
+  ],
+  "scan_time": null,
+  "os_info": "Host:  srv586371.hstgr.cloud; OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows",
+  "services": [
+    {
+      "port": 22,
+      "state": "open",
+      "service": "ssh",
+      "version": "OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)"
+    },
+    {
+      "port": 25,
+      "state": "open",
+      "service": "smtp",
+      "version": "Postfix smtpd"
+    },
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": "nginx 1.24.0 (Ubuntu)"
+    },
+    {
+      "port": 444,
+      "state": "open",
+      "service": "ssl/http",
+      "version": "nginx"
+    },
+    {
+      "port": 3389,
+      "state": "open",
+      "service": "ms-wbt-server",
+      "version": "Microsoft Terminal Service"
+    },
+    {
+      "port": 5900,
+      "state": "open",
+      "service": "vnc",
+      "version": "VNC (protocol 3.8)"
+    },
+    {
+      "port": 8888,
+      "state": "open",
+      "service": "ssl/sun-answerbook?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 01:59:06,930 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 01:59:06,931 - networkscan - DEBUG - Scan results preview: {"hostname": "srv586371.hstgr.cloud", "ip": "31.170.165.221", "open_ports": [22, 25, 80, 444, 3389, ...
+2025-05-19 02:02:18,852 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 02:03:11,112 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.1.10
+2025-05-19 02:03:11,113 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 02:03:11,113 - networkscan - INFO - Generated scan ID: f4271c743a239e7e07f12e8d8995daab9520a211da8721429e2ee04af761dd04
+2025-05-19 02:03:11,113 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:03:11,118 - networkscan - INFO - Scan request saved with ID: 3
+2025-05-19 02:03:11,118 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:03:11,123 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:03:11,145 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:03:11,145 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:03:11,147 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 31.170.165.221
+2025-05-19 02:03:11,228 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:03 India Standard Time
+2025-05-19 02:05:02,723 - networkscan - DEBUG - Nmap output: Nmap scan report for srv586371.hstgr.cloud (31.170.165.221)
+2025-05-19 02:05:02,723 - networkscan - DEBUG - Nmap output: Host is up (0.24s latency).
+2025-05-19 02:05:02,723 - networkscan - DEBUG - Nmap output: Not shown: 91 filtered tcp ports (no-response)
+2025-05-19 02:05:02,724 - networkscan - DEBUG - Nmap output: PORT     STATE SERVICE             VERSION
+2025-05-19 02:05:02,724 - networkscan - DEBUG - Nmap output: 22/tcp   open  ssh                 OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)
+2025-05-19 02:05:02,724 - networkscan - DEBUG - Nmap output: 25/tcp   open  smtp                Postfix smtpd
+2025-05-19 02:05:02,724 - networkscan - DEBUG - Nmap output: 80/tcp   open  http                nginx 1.24.0 (Ubuntu)
+2025-05-19 02:05:02,726 - networkscan - DEBUG - Nmap output: 81/tcp   open  http                nginx
+2025-05-19 02:05:02,726 - networkscan - DEBUG - Nmap output: 444/tcp  open  ssl/http            nginx
+2025-05-19 02:05:02,726 - networkscan - DEBUG - Nmap output: 3389/tcp open  ms-wbt-server       Microsoft Terminal Service
+2025-05-19 02:05:02,727 - networkscan - DEBUG - Nmap output: 5000/tcp open  upnp?
+2025-05-19 02:05:02,727 - networkscan - DEBUG - Nmap output: 5900/tcp open  vnc                 VNC (protocol 3.8)
+2025-05-19 02:05:02,727 - networkscan - DEBUG - Nmap output: 8888/tcp open  ssl/sun-answerbook?
+2025-05-19 02:05:02,727 - networkscan - DEBUG - Nmap output: 2 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+2025-05-19 02:05:02,728 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 02:05:02,728 - networkscan - DEBUG - Nmap output: SF-Port5000-TCP:V=7.96%I=7%D=5/19%Time=682A4412%P=i686-pc-windows-windows%
+2025-05-19 02:05:02,728 - networkscan - DEBUG - Nmap output: SF:r(GetRequest,17E,"HTTP/1\.1\x20404\x20NOT\x20FOUND\r\nContent-Type:\x20
+2025-05-19 02:05:02,728 - networkscan - DEBUG - Nmap output: SF:text/html;\x20charset=utf-8\r\nContent-Length:\x20207\r\nAccess-Control
+2025-05-19 02:05:02,730 - networkscan - DEBUG - Nmap output: SF:-Allow-Origin:\x20\*\r\nDate:\x20Sun,\x2018\x20May\x202025\x2020:33:23\
+2025-05-19 02:05:02,730 - networkscan - DEBUG - Nmap output: SF:x20GMT\r\nConnection:\x20close\r\n\r\n<!doctype\x20html>\n<html\x20lang
+2025-05-19 02:05:02,730 - networkscan - DEBUG - Nmap output: SF:=en>\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1>\n<p>The
+2025-05-19 02:05:02,731 - networkscan - DEBUG - Nmap output: SF:\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20server\.\x2
+2025-05-19 02:05:02,731 - networkscan - DEBUG - Nmap output: SF:0If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20check\x20y
+2025-05-19 02:05:02,731 - networkscan - DEBUG - Nmap output: SF:our\x20spelling\x20and\x20try\x20again\.</p>\n")%r(RTSPRequest,16C,"<!D
+2025-05-19 02:05:02,731 - networkscan - DEBUG - Nmap output: SF:OCTYPE\x20HTML>\n<html\x20lang=\"en\">\n\x20\x20\x20\x20<head>\n\x20\x2
+2025-05-19 02:05:02,732 - networkscan - DEBUG - Nmap output: SF:0\x20\x20\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x20\
+2025-05-19 02:05:02,732 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20\x20<title>Error\x20response</title>\n\x20\x20\x20\x20</head
+2025-05-19 02:05:02,732 - networkscan - DEBUG - Nmap output: SF:>\n\x20\x20\x20\x20<body>\n\x20\x20\x20\x20\x20\x20\x20\x20<h1>Error\x2
+2025-05-19 02:05:02,733 - networkscan - DEBUG - Nmap output: SF:0response</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20code:\x2040
+2025-05-19 02:05:02,733 - networkscan - DEBUG - Nmap output: SF:0</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Message:\x20Bad\x20request\x2
+2025-05-19 02:05:02,734 - networkscan - DEBUG - Nmap output: SF:0version\x20\('RTSP/1\.0'\)\.</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>E
+2025-05-19 02:05:02,734 - networkscan - DEBUG - Nmap output: SF:rror\x20code\x20explanation:\x20400\x20-\x20Bad\x20request\x20syntax\x2
+2025-05-19 02:05:02,734 - networkscan - DEBUG - Nmap output: SF:0or\x20unsupported\x20method\.</p>\n\x20\x20\x20\x20</body>\n</html>\n"
+2025-05-19 02:05:02,734 - networkscan - DEBUG - Nmap output: SF:)%r(HTTPOptions,17E,"HTTP/1\.1\x20404\x20NOT\x20FOUND\r\nContent-Type:\
+2025-05-19 02:05:02,735 - networkscan - DEBUG - Nmap output: SF:x20text/html;\x20charset=utf-8\r\nContent-Length:\x20207\r\nAccess-Cont
+2025-05-19 02:05:02,735 - networkscan - DEBUG - Nmap output: SF:rol-Allow-Origin:\x20\*\r\nDate:\x20Sun,\x2018\x20May\x202025\x2020:33:
+2025-05-19 02:05:02,736 - networkscan - DEBUG - Nmap output: SF:39\x20GMT\r\nConnection:\x20close\r\n\r\n<!doctype\x20html>\n<html\x20l
+2025-05-19 02:05:02,736 - networkscan - DEBUG - Nmap output: SF:ang=en>\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1>\n<p>
+2025-05-19 02:05:02,736 - networkscan - DEBUG - Nmap output: SF:The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20server\.
+2025-05-19 02:05:02,737 - networkscan - DEBUG - Nmap output: SF:\x20If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20check\x
+2025-05-19 02:05:02,737 - networkscan - DEBUG - Nmap output: SF:20your\x20spelling\x20and\x20try\x20again\.</p>\n")%r(Help,167,"<!DOCTY
+2025-05-19 02:05:02,737 - networkscan - DEBUG - Nmap output: SF:PE\x20HTML>\n<html\x20lang=\"en\">\n\x20\x20\x20\x20<head>\n\x20\x20\x2
+2025-05-19 02:05:02,737 - networkscan - DEBUG - Nmap output: SF:0\x20\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x20\x20\
+2025-05-19 02:05:02,738 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20<title>Error\x20response</title>\n\x20\x20\x20\x20</head>\n\
+2025-05-19 02:05:02,738 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20\x20<body>\n\x20\x20\x20\x20\x20\x20\x20\x20<h1>Error\x20res
+2025-05-19 02:05:02,738 - networkscan - DEBUG - Nmap output: SF:ponse</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20code:\x20400</p
+2025-05-19 02:05:02,738 - networkscan - DEBUG - Nmap output: SF:>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Message:\x20Bad\x20request\x20syn
+2025-05-19 02:05:02,740 - networkscan - DEBUG - Nmap output: SF:tax\x20\('HELP'\)\.</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20co
+2025-05-19 02:05:02,740 - networkscan - DEBUG - Nmap output: SF:de\x20explanation:\x20400\x20-\x20Bad\x20request\x20syntax\x20or\x20uns
+2025-05-19 02:05:02,740 - networkscan - DEBUG - Nmap output: SF:upported\x20method\.</p>\n\x20\x20\x20\x20</body>\n</html>\n");
+2025-05-19 02:05:02,740 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 02:05:02,740 - networkscan - DEBUG - Nmap output: SF-Port8888-TCP:V=7.96%T=SSL%I=7%D=5/19%Time=682A4428%P=i686-pc-windows-wi
+2025-05-19 02:05:02,741 - networkscan - DEBUG - Nmap output: SF:ndows%r(GetRequest,159,"HTTP/1\.1\x20302\x20Found\r\nlocation:\x20/app/
+2025-05-19 02:05:02,741 - networkscan - DEBUG - Nmap output: SF:login\?\r\nosd-name:\x20srv586371\r\nx-frame-options:\x20sameorigin\r\n
+2025-05-19 02:05:02,741 - networkscan - DEBUG - Nmap output: SF:cache-control:\x20private,\x20no-cache,\x20no-store,\x20must-revalidate
+2025-05-19 02:05:02,741 - networkscan - DEBUG - Nmap output: SF:\r\nset-cookie:\x20security_authentication=;\x20Max-Age=0;\x20Expires=T
+2025-05-19 02:05:02,742 - networkscan - DEBUG - Nmap output: SF:hu,\x2001\x20Jan\x201970\x2000:00:00\x20GMT;\x20Secure;\x20HttpOnly;\x2
+2025-05-19 02:05:02,742 - networkscan - DEBUG - Nmap output: SF:0Path=/\r\ncontent-length:\x200\r\nDate:\x20Sun,\x2018\x20May\x202025\x
+2025-05-19 02:05:02,742 - networkscan - DEBUG - Nmap output: SF:2020:33:45\x20GMT\r\nConnection:\x20close\r\n\r\n")%r(HTTPOptions,140,"
+2025-05-19 02:05:02,742 - networkscan - DEBUG - Nmap output: SF:HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx-frame-o
+2025-05-19 02:05:02,743 - networkscan - DEBUG - Nmap output: SF:ptions:\x20sameorigin\r\ncontent-type:\x20application/json;\x20charset=
+2025-05-19 02:05:02,743 - networkscan - DEBUG - Nmap output: SF:utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x20must-r
+2025-05-19 02:05:02,743 - networkscan - DEBUG - Nmap output: SF:evalidate\r\ncontent-length:\x2060\r\nDate:\x20Sun,\x2018\x20May\x20202
+2025-05-19 02:05:02,745 - networkscan - DEBUG - Nmap output: SF:5\x2020:33:46\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCode\":404
+2025-05-19 02:05:02,745 - networkscan - DEBUG - Nmap output: SF:,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(RTSPReque
+2025-05-19 02:05:02,745 - networkscan - DEBUG - Nmap output: SF:st,140,"HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx
+2025-05-19 02:05:02,746 - networkscan - DEBUG - Nmap output: SF:-frame-options:\x20sameorigin\r\ncontent-type:\x20application/json;\x20
+2025-05-19 02:05:02,746 - networkscan - DEBUG - Nmap output: SF:charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x
+2025-05-19 02:05:02,747 - networkscan - DEBUG - Nmap output: SF:20must-revalidate\r\ncontent-length:\x2060\r\nDate:\x20Sun,\x2018\x20Ma
+2025-05-19 02:05:02,747 - networkscan - DEBUG - Nmap output: SF:y\x202025\x2020:33:47\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCo
+2025-05-19 02:05:02,748 - networkscan - DEBUG - Nmap output: SF:de\":404,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(F
+2025-05-19 02:05:02,748 - networkscan - DEBUG - Nmap output: SF:ourOhFourRequest,1C6,"HTTP/1\.1\x20401\x20Unauthorized\r\nosd-name:\x20
+2025-05-19 02:05:02,748 - networkscan - DEBUG - Nmap output: SF:srv586371\r\nx-frame-options:\x20sameorigin\r\ncontent-type:\x20applica
+2025-05-19 02:05:02,748 - networkscan - DEBUG - Nmap output: SF:tion/json;\x20charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\
+2025-05-19 02:05:02,750 - networkscan - DEBUG - Nmap output: SF:x20no-store,\x20must-revalidate\r\nset-cookie:\x20security_authenticati
+2025-05-19 02:05:02,750 - networkscan - DEBUG - Nmap output: SF:on=;\x20Max-Age=0;\x20Expires=Thu,\x2001\x20Jan\x201970\x2000:00:00\x20
+2025-05-19 02:05:02,750 - networkscan - DEBUG - Nmap output: SF:GMT;\x20Secure;\x20HttpOnly;\x20Path=/\r\ncontent-length:\x2077\r\nDate
+2025-05-19 02:05:02,750 - networkscan - DEBUG - Nmap output: SF::\x20Sun,\x2018\x20May\x202025\x2020:33:58\x20GMT\r\nConnection:\x20clo
+2025-05-19 02:05:02,750 - networkscan - DEBUG - Nmap output: SF:se\r\n\r\n{\"statusCode\":401,\"error\":\"Unauthorized\",\"message\":\"
+2025-05-19 02:05:02,751 - networkscan - DEBUG - Nmap output: SF:Authentication\x20required\"}");
+2025-05-19 02:05:02,751 - networkscan - DEBUG - Nmap output: Service Info: Host:  srv586371.hstgr.cloud; OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows
+2025-05-19 02:05:02,751 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:05:02,751 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:05:02,751 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 111.53 seconds
+2025-05-19 02:05:02,752 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:05:02,752 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:05:02,752 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:05:02,752 - networkscan - DEBUG - Parsed results: {
+  "hostname": "srv586371.hstgr.cloud",
+  "ip": "31.170.165.221",
+  "open_ports": [
+    22,
+    25,
+    80,
+    81,
+    444,
+    3389,
+    5000,
+    5900,
+    8888
+  ],
+  "scan_time": null,
+  "os_info": "Host:  srv586371.hstgr.cloud; OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows",
+  "services": [
+    {
+      "port": 22,
+      "state": "open",
+      "service": "ssh",
+      "version": "OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)"
+    },
+    {
+      "port": 25,
+      "state": "open",
+      "service": "smtp",
+      "version": "Postfix smtpd"
+    },
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": "nginx 1.24.0 (Ubuntu)"
+    },
+    {
+      "port": 81,
+      "state": "open",
+      "service": "http",
+      "version": "nginx"
+    },
+    {
+      "port": 444,
+      "state": "open",
+      "service": "ssl/http",
+      "version": "nginx"
+    },
+    {
+      "port": 3389,
+      "state": "open",
+      "service": "ms-wbt-server",
+      "version": "Microsoft Terminal Service"
+    },
+    {
+      "port": 5000,
+      "state": "open",
+      "service": "upnp?",
+      "version": null
+    },
+    {
+      "port": 5900,
+      "state": "open",
+      "service": "vnc",
+      "version": "VNC (protocol 3.8)"
+    },
+    {
+      "port": 8888,
+      "state": "open",
+      "service": "ssl/sun-answerbook?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 02:05:02,753 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:05:02,753 - networkscan - DEBUG - Scan results preview: {"hostname": "srv586371.hstgr.cloud", "ip": "31.170.165.221", "open_ports": [22, 25, 80, 81, 444, 33...
+2025-05-19 02:09:32,351 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 02:09:32,351 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 02:09:32,352 - networkscan - INFO - Generated scan ID: 019cc3127dabee16f3082c402efc55f4e26f1db4b55268b0e6547f44a953c29e
+2025-05-19 02:09:32,352 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:09:32,357 - networkscan - INFO - Scan request saved with ID: 4
+2025-05-19 02:09:32,357 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:09:32,359 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:09:32,360 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:09:32,360 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:09:32,360 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 02:09:32,441 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:09 India Standard Time
+2025-05-19 02:10:43,216 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 02:10:43,217 - networkscan - DEBUG - Nmap output: Host is up (0.026s latency).
+2025-05-19 02:10:43,217 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 02:10:43,217 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 02:10:43,218 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 02:10:43,218 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 02:10:43,218 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:10:43,219 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:10:43,219 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 70.82 seconds
+2025-05-19 02:10:43,248 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:10:43,248 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:10:43,249 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:10:43,249 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "tcpwrapped",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 02:10:43,249 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:10:43,250 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 02:15:10,601 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 02:15:31,128 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 02:15:31,130 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 02:15:31,130 - networkscan - INFO - Generated scan ID: 39a2e5d448fe59791fcff0c9c9663fbdd8b530192f7b8160e5ee3c6f791df3e1
+2025-05-19 02:15:31,131 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:15:31,138 - networkscan - INFO - Scan request saved with ID: 5
+2025-05-19 02:15:31,139 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:15:31,156 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:15:31,188 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:15:31,189 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:15:31,189 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 02:15:31,277 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:15 India Standard Time
+2025-05-19 02:16:42,057 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 02:16:42,058 - networkscan - DEBUG - Nmap output: Host is up (0.034s latency).
+2025-05-19 02:16:42,058 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 02:16:42,058 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 02:16:42,058 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 02:16:42,059 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 02:16:42,059 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:16:42,060 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:16:42,060 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 70.83 seconds
+2025-05-19 02:16:42,098 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:16:42,099 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:16:42,100 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:16:42,100 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "tcpwrapped",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 02:16:42,100 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:16:42,101 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 02:19:45,071 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 02:20:07,576 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 02:20:07,578 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 02:20:07,579 - networkscan - INFO - Generated scan ID: 4fb6f367e66dd4164f85fa609462cd820262f7b0419941dfe6d9a27a8c2557dc
+2025-05-19 02:20:07,579 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:20:07,585 - networkscan - INFO - Scan request saved with ID: 1
+2025-05-19 02:20:07,585 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:20:07,593 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:20:07,647 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:20:07,648 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:20:07,648 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 02:20:07,744 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:20 India Standard Time
+2025-05-19 02:21:19,074 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 02:21:19,074 - networkscan - DEBUG - Nmap output: Host is up (0.025s latency).
+2025-05-19 02:21:19,075 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 02:21:19,075 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 02:21:19,075 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 02:21:19,076 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 02:21:19,076 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:21:19,076 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:21:19,076 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 71.38 seconds
+2025-05-19 02:21:19,111 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:21:19,112 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:21:19,112 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:21:19,113 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "tcpwrapped",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 02:21:19,113 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:21:19,114 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 02:23:32,701 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 02:23:49,778 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 02:23:49,779 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 02:23:49,780 - networkscan - INFO - Generated scan ID: 947786b1ff98fbd062c469dbc9145ae85221797cc5c822dc38155ee35b5c14a0
+2025-05-19 02:23:49,780 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:23:49,786 - networkscan - INFO - Scan request saved with ID: 2
+2025-05-19 02:23:49,787 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:23:49,793 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:23:49,815 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:23:49,816 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:23:49,816 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 02:23:49,917 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:23 India Standard Time
+2025-05-19 02:25:00,124 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 02:25:00,124 - networkscan - DEBUG - Nmap output: Host is up (0.024s latency).
+2025-05-19 02:25:00,125 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 02:25:00,125 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 02:25:00,125 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 02:25:00,126 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 02:25:00,126 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:25:00,127 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:25:00,127 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 70.26 seconds
+2025-05-19 02:25:00,156 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:25:00,157 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:25:00,157 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:25:00,158 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "tcpwrapped",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 02:25:00,158 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:25:00,159 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 02:29:05,670 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 02:29:19,481 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.10
+2025-05-19 02:29:19,482 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 02:29:19,482 - networkscan - INFO - Generated scan ID: 322c46b89b7981893822a448eeacaee72e47b8aef28b71189e50a3eb1adb3fe4
+2025-05-19 02:29:19,482 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:29:19,487 - networkscan - INFO - Scan request saved with ID: 1
+2025-05-19 02:29:19,488 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:29:19,497 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:29:19,523 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:29:19,524 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:29:19,524 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 02:29:19,603 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:29 India Standard Time
+2025-05-19 02:30:30,453 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 02:30:30,453 - networkscan - DEBUG - Nmap output: Host is up (0.024s latency).
+2025-05-19 02:30:30,454 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 02:30:30,454 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 02:30:30,454 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 02:30:30,455 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 02:30:30,455 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:30:30,455 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:30:30,455 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 70.89 seconds
+2025-05-19 02:30:30,484 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:30:30,484 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:30:30,486 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:30:30,486 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "tcpwrapped",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 02:30:30,486 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:30:30,487 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 02:34:15,674 - networkscan - INFO - Starting network scan for IP: 44.228.249.3 from requester: 192.168.1.10
+2025-05-19 02:34:15,675 - networkscan - INFO - IP validation for 44.228.249.3: valid public IP
+2025-05-19 02:34:15,676 - networkscan - INFO - Generated scan ID: d3b805a698f47d4ffba8876cd034ee8bf0395c2cf64fca61ab1c4bae236122a8
+2025-05-19 02:34:15,676 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 02:34:15,679 - networkscan - INFO - Scan request saved with ID: 2
+2025-05-19 02:34:15,679 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 02:34:15,681 - networkscan - INFO - Starting Nmap scan
+2025-05-19 02:34:15,681 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:34:15,682 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 02:34:15,682 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 44.228.249.3
+2025-05-19 02:34:15,768 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 02:34 India Standard Time
+2025-05-19 02:34:43,496 - networkscan - DEBUG - Nmap output: Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+2025-05-19 02:34:43,497 - networkscan - DEBUG - Nmap output: Host is up (0.25s latency).
+2025-05-19 02:34:43,498 - networkscan - DEBUG - Nmap output: Not shown: 99 filtered tcp ports (no-response)
+2025-05-19 02:34:43,498 - networkscan - DEBUG - Nmap output: PORT   STATE SERVICE VERSION
+2025-05-19 02:34:43,498 - networkscan - DEBUG - Nmap output: 80/tcp open  http    nginx 1.19.0
+2025-05-19 02:34:43,498 - networkscan - DEBUG - Nmap output: 
+2025-05-19 02:34:43,499 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 02:34:43,499 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 27.77 seconds
+2025-05-19 02:34:43,526 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 02:34:43,526 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 02:34:43,527 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 02:34:43,527 - networkscan - DEBUG - Parsed results: {
+  "hostname": "ec2-44-228-249-3.us-west-2.compute.amazonaws.com",
+  "ip": "44.228.249.3",
+  "open_ports": [
+    80
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": "nginx 1.19.0"
+    }
+  ]
+}
+2025-05-19 02:34:43,527 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 02:34:43,527 - networkscan - DEBUG - Scan results preview: {"hostname": "ec2-44-228-249-3.us-west-2.compute.amazonaws.com", "ip": "44.228.249.3", "open_ports":...
+2025-05-19 10:58:17,280 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 11:09:43,140 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 11:23:00,482 - engineio.server - INFO - PBqIVuZmMv4WFNoaAAAA: Sending packet OPEN data {'sid': 'PBqIVuZmMv4WFNoaAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:23:00,495 - engineio.server - INFO - PBqIVuZmMv4WFNoaAAAA: Received request to upgrade to websocket
+2025-05-19 11:23:00,502 - engineio.server - INFO - PBqIVuZmMv4WFNoaAAAA: Upgrade to websocket successful
+2025-05-19 11:23:00,540 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet OPEN data {'sid': 'GY3YiscKsh2g76B1AAAB', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:23:00,551 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received request to upgrade to websocket
+2025-05-19 11:23:00,555 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Upgrade to websocket successful
+2025-05-19 11:23:00,850 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet MESSAGE data 0
+2025-05-19 11:23:00,916 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet MESSAGE data 0{"sid":"WCLxCIf3kjEEOtmaAAAC"}
+2025-05-19 11:23:00,920 - socketio.server - INFO - emitting event "server_update" to WCLxCIf3kjEEOtmaAAAC [/]
+2025-05-19 11:23:00,922 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet MESSAGE data 2["server_update",{"message":"Connected to server successfully"}]
+2025-05-19 11:23:25,564 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:23:25,570 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:23:50,589 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:23:50,591 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:24:15,596 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:24:15,597 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:24:40,602 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:24:40,604 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:25:05,611 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:25:05,613 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:25:30,612 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:25:30,615 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:25:55,614 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:25:55,617 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:26:20,630 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:26:20,632 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:26:45,651 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:26:45,652 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:27:10,669 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:27:10,671 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:27:35,684 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:27:35,687 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:28:00,691 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:28:00,695 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:28:25,699 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:28:25,703 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:28:50,716 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:28:50,717 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:29:15,716 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:29:15,719 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:29:40,725 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:29:40,731 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:30:05,743 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:30:05,747 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:30:30,748 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:30:30,753 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:30:55,760 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:30:55,762 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:31:20,770 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Sending packet PING data None
+2025-05-19 11:31:20,775 - engineio.server - INFO - GY3YiscKsh2g76B1AAAB: Received packet PONG data 
+2025-05-19 11:32:24,070 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 11:33:09,776 - engineio.server - INFO - zMPU_0-FixT9CFKIAAAA: Sending packet OPEN data {'sid': 'zMPU_0-FixT9CFKIAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:33:09,777 - engineio.server - INFO - zMPU_0-FixT9CFKIAAAA: Received request to upgrade to websocket
+2025-05-19 11:33:09,778 - engineio.server - INFO - zMPU_0-FixT9CFKIAAAA: Upgrade to websocket successful
+2025-05-19 11:33:09,793 - engineio.server - INFO - ov8cp_7H5_fw6BI5AAAB: Sending packet OPEN data {'sid': 'ov8cp_7H5_fw6BI5AAAB', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:33:09,794 - engineio.server - INFO - ov8cp_7H5_fw6BI5AAAB: Received request to upgrade to websocket
+2025-05-19 11:33:09,796 - engineio.server - INFO - ov8cp_7H5_fw6BI5AAAB: Upgrade to websocket successful
+2025-05-19 11:33:09,877 - engineio.server - INFO - ov8cp_7H5_fw6BI5AAAB: Received packet MESSAGE data 0
+2025-05-19 11:33:09,880 - engineio.server - INFO - ov8cp_7H5_fw6BI5AAAB: Sending packet MESSAGE data 0{"sid":"Xt87VYabKugVRGSJAAAC"}
+2025-05-19 11:33:09,883 - socketio.server - INFO - emitting event "server_update" to Xt87VYabKugVRGSJAAAC [/]
+2025-05-19 11:33:09,884 - engineio.server - INFO - ov8cp_7H5_fw6BI5AAAB: Sending packet MESSAGE data 2["server_update",{"message":"Connected to server successfully"}]
+2025-05-19 11:33:21,826 - engineio.server - INFO - dy826cBcNoxp3BFVAAAD: Sending packet OPEN data {'sid': 'dy826cBcNoxp3BFVAAAD', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:33:21,828 - engineio.server - INFO - dy826cBcNoxp3BFVAAAD: Received request to upgrade to websocket
+2025-05-19 11:33:21,829 - engineio.server - INFO - dy826cBcNoxp3BFVAAAD: Upgrade to websocket successful
+2025-05-19 11:33:21,843 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Sending packet OPEN data {'sid': 'u1AuhTmUzv-kfBf7AAAE', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:33:21,845 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Received request to upgrade to websocket
+2025-05-19 11:33:21,847 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Upgrade to websocket successful
+2025-05-19 11:33:21,971 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Received packet MESSAGE data 0
+2025-05-19 11:33:21,973 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Sending packet MESSAGE data 0{"sid":"V18mJmeUmJvtLYi6AAAF"}
+2025-05-19 11:33:21,975 - socketio.server - INFO - emitting event "server_update" to V18mJmeUmJvtLYi6AAAF [/]
+2025-05-19 11:33:21,977 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Sending packet MESSAGE data 2["server_update",{"message":"Connected to server successfully"}]
+2025-05-19 11:33:46,848 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Sending packet PING data None
+2025-05-19 11:33:46,850 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Received packet PONG data 
+2025-05-19 11:34:11,853 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Sending packet PING data None
+2025-05-19 11:34:11,855 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Received packet PONG data 
+2025-05-19 11:34:36,876 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Sending packet PING data None
+2025-05-19 11:34:36,879 - engineio.server - INFO - u1AuhTmUzv-kfBf7AAAE: Received packet PONG data 
+2025-05-19 11:35:31,249 - engineio.server - INFO - oo07aR7o5nDAfiNlAAAG: Sending packet OPEN data {'sid': 'oo07aR7o5nDAfiNlAAAG', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:35:31,249 - engineio.server - INFO - oo07aR7o5nDAfiNlAAAG: Received request to upgrade to websocket
+2025-05-19 11:35:31,251 - engineio.server - INFO - oo07aR7o5nDAfiNlAAAG: Upgrade to websocket successful
+2025-05-19 11:35:31,278 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Sending packet OPEN data {'sid': 'BdkbdwD2BItF7Os9AAAH', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:35:31,279 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Received request to upgrade to websocket
+2025-05-19 11:35:31,280 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Upgrade to websocket successful
+2025-05-19 11:35:31,285 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Received packet MESSAGE data 0
+2025-05-19 11:35:31,287 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Sending packet MESSAGE data 0{"sid":"WbQx9SFVxhTYV_rbAAAI"}
+2025-05-19 11:35:31,289 - socketio.server - INFO - emitting event "server_update" to WbQx9SFVxhTYV_rbAAAI [/]
+2025-05-19 11:35:31,290 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Sending packet MESSAGE data 2["server_update",{"message":"Connected to server successfully"}]
+2025-05-19 11:35:35,011 - engineio.server - INFO - BdkbdwD2BItF7Os9AAAH: Received packet MESSAGE data 1
+2025-05-19 11:35:37,030 - engineio.server - INFO - shX1kU_8R2gRpJ9kAAAJ: Sending packet OPEN data {'sid': 'shX1kU_8R2gRpJ9kAAAJ', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:35:37,031 - engineio.server - INFO - shX1kU_8R2gRpJ9kAAAJ: Received request to upgrade to websocket
+2025-05-19 11:35:37,031 - engineio.server - INFO - shX1kU_8R2gRpJ9kAAAJ: Upgrade to websocket successful
+2025-05-19 11:35:37,049 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Sending packet OPEN data {'sid': 'TnxY8ti-Fal5ub_sAAAK', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-05-19 11:35:37,050 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Received request to upgrade to websocket
+2025-05-19 11:35:37,051 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Upgrade to websocket successful
+2025-05-19 11:35:37,054 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Received packet MESSAGE data 0
+2025-05-19 11:35:37,055 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Sending packet MESSAGE data 0{"sid":"Oq-yeOkmAcXhH7t-AAAL"}
+2025-05-19 11:35:37,057 - socketio.server - INFO - emitting event "server_update" to Oq-yeOkmAcXhH7t-AAAL [/]
+2025-05-19 11:35:37,057 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Sending packet MESSAGE data 2["server_update",{"message":"Connected to server successfully"}]
+2025-05-19 11:35:40,141 - engineio.server - INFO - TnxY8ti-Fal5ub_sAAAK: Received packet MESSAGE data 1
+2025-05-19 11:35:56,450 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 10.10.0.134
+2025-05-19 11:35:56,453 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 11:35:56,455 - networkscan - INFO - Generated scan ID: 2f2738bed6eb53d8a464737570ec885f1c7336037fea8135203fd1c58f9c2bc0
+2025-05-19 11:35:56,455 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 11:35:56,466 - networkscan - INFO - Scan request saved with ID: 3
+2025-05-19 11:35:56,468 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 11:35:56,475 - networkscan - INFO - Starting Nmap scan
+2025-05-19 11:35:56,495 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 11:35:56,496 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 11:35:56,497 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 11:35:56,997 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 11:35 India Standard Time
+2025-05-19 11:37:11,706 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 11:37:11,708 - networkscan - DEBUG - Nmap output: Host is up (0.023s latency).
+2025-05-19 11:37:11,709 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 11:37:11,710 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE    VERSION
+2025-05-19 11:37:11,711 - networkscan - DEBUG - Nmap output: 53/tcp  open  tcpwrapped
+2025-05-19 11:37:11,712 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https?
+2025-05-19 11:37:11,712 - networkscan - DEBUG - Nmap output: 
+2025-05-19 11:37:11,713 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 11:37:11,713 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 74.88 seconds
+2025-05-19 11:37:11,822 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 11:37:11,831 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 11:37:11,832 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 11:37:11,832 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "tcpwrapped",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 11:37:11,833 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 11:37:11,833 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 11:48:02,273 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 10.10.0.134
+2025-05-19 11:48:02,276 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 11:48:02,276 - networkscan - INFO - Generated scan ID: bdfafed7bcc4ba794a3e9e51672a21fb2d02329f4ef9356b6760314f3329bd98
+2025-05-19 11:48:02,276 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 11:48:02,278 - networkscan - INFO - Scan request saved with ID: 4
+2025-05-19 11:48:02,278 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 11:48:02,280 - networkscan - INFO - Starting Nmap scan
+2025-05-19 11:48:02,284 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 11:48:02,284 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 11:48:02,284 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 31.170.165.221
+2025-05-19 11:48:02,384 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 11:48 India Standard Time
+2025-05-19 11:50:07,128 - networkscan - DEBUG - Nmap output: Nmap scan report for srv586371.hstgr.cloud (31.170.165.221)
+2025-05-19 11:50:07,128 - networkscan - DEBUG - Nmap output: Host is up (0.29s latency).
+2025-05-19 11:50:07,129 - networkscan - DEBUG - Nmap output: Not shown: 90 filtered tcp ports (no-response)
+2025-05-19 11:50:07,129 - networkscan - DEBUG - Nmap output: PORT     STATE SERVICE             VERSION
+2025-05-19 11:50:07,130 - networkscan - DEBUG - Nmap output: 22/tcp   open  ssh                 OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)
+2025-05-19 11:50:07,130 - networkscan - DEBUG - Nmap output: 25/tcp   open  smtp?
+2025-05-19 11:50:07,131 - networkscan - DEBUG - Nmap output: 53/tcp   open  domain              (generic dns response: NOTIMP)
+2025-05-19 11:50:07,131 - networkscan - DEBUG - Nmap output: 80/tcp   open  http                nginx 1.24.0 (Ubuntu)
+2025-05-19 11:50:07,131 - networkscan - DEBUG - Nmap output: 81/tcp   open  http                nginx
+2025-05-19 11:50:07,132 - networkscan - DEBUG - Nmap output: 444/tcp  open  ssl/http            nginx
+2025-05-19 11:50:07,132 - networkscan - DEBUG - Nmap output: 3389/tcp open  ms-wbt-server       Microsoft Terminal Service
+2025-05-19 11:50:07,132 - networkscan - DEBUG - Nmap output: 5000/tcp open  upnp?
+2025-05-19 11:50:07,133 - networkscan - DEBUG - Nmap output: 5900/tcp open  vnc                 VNC (protocol 3.8)
+2025-05-19 11:50:07,134 - networkscan - DEBUG - Nmap output: 8888/tcp open  ssl/sun-answerbook?
+2025-05-19 11:50:07,134 - networkscan - DEBUG - Nmap output: 4 services unrecognized despite returning data. If you know the service/version, please submit the following fingerprints at https://nmap.org/cgi-bin/submit.cgi?new-service :
+2025-05-19 11:50:07,135 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 11:50:07,135 - networkscan - DEBUG - Nmap output: SF-Port25-TCP:V=7.96%I=7%D=5/19%Time=682ACD29%P=i686-pc-windows-windows%r(
+2025-05-19 11:50:07,136 - networkscan - DEBUG - Nmap output: SF:Hello,2A,"552\x20Invalid\x20domain\x20name\x20in\x20EHLO\x20command\.\r
+2025-05-19 11:50:07,136 - networkscan - DEBUG - Nmap output: SF:\n")%r(GenericLines,28,"500\x20Syntax\x20error,\x20command\x20unrecogni
+2025-05-19 11:50:07,137 - networkscan - DEBUG - Nmap output: SF:zed\r\n")%r(GetRequest,28,"500\x20Syntax\x20error,\x20command\x20unreco
+2025-05-19 11:50:07,137 - networkscan - DEBUG - Nmap output: SF:gnized\r\n")%r(HTTPOptions,28,"500\x20Syntax\x20error,\x20command\x20un
+2025-05-19 11:50:07,137 - networkscan - DEBUG - Nmap output: SF:recognized\r\n")%r(RTSPRequest,28,"500\x20Syntax\x20error,\x20command\x
+2025-05-19 11:50:07,138 - networkscan - DEBUG - Nmap output: SF:20unrecognized\r\n")%r(RPCCheck,28,"500\x20Syntax\x20error,\x20command\
+2025-05-19 11:50:07,138 - networkscan - DEBUG - Nmap output: SF:x20unrecognized\r\n")%r(DNSVersionBindReqTCP,28,"500\x20Syntax\x20error
+2025-05-19 11:50:07,138 - networkscan - DEBUG - Nmap output: SF:,\x20command\x20unrecognized\r\n");
+2025-05-19 11:50:07,139 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 11:50:07,139 - networkscan - DEBUG - Nmap output: SF-Port53-TCP:V=7.96%I=7%D=5/19%Time=682ACD2E%P=i686-pc-windows-windows%r(
+2025-05-19 11:50:07,140 - networkscan - DEBUG - Nmap output: SF:DNSVersionBindReqTCP,E,"\0\x0c\0\x06\x81\x84\0\0\0\0\0\0\0\0");
+2025-05-19 11:50:07,140 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 11:50:07,141 - networkscan - DEBUG - Nmap output: SF-Port5000-TCP:V=7.96%I=7%D=5/19%Time=682ACD2A%P=i686-pc-windows-windows%
+2025-05-19 11:50:07,141 - networkscan - DEBUG - Nmap output: SF:r(GetRequest,17E,"HTTP/1\.1\x20404\x20NOT\x20FOUND\r\nContent-Type:\x20
+2025-05-19 11:50:07,143 - networkscan - DEBUG - Nmap output: SF:text/html;\x20charset=utf-8\r\nContent-Length:\x20207\r\nAccess-Control
+2025-05-19 11:50:07,143 - networkscan - DEBUG - Nmap output: SF:-Allow-Origin:\x20\*\r\nDate:\x20Mon,\x2019\x20May\x202025\x2006:18:18\
+2025-05-19 11:50:07,144 - networkscan - DEBUG - Nmap output: SF:x20GMT\r\nConnection:\x20close\r\n\r\n<!doctype\x20html>\n<html\x20lang
+2025-05-19 11:50:07,145 - networkscan - DEBUG - Nmap output: SF:=en>\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1>\n<p>The
+2025-05-19 11:50:07,145 - networkscan - DEBUG - Nmap output: SF:\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20server\.\x2
+2025-05-19 11:50:07,146 - networkscan - DEBUG - Nmap output: SF:0If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20check\x20y
+2025-05-19 11:50:07,146 - networkscan - DEBUG - Nmap output: SF:our\x20spelling\x20and\x20try\x20again\.</p>\n")%r(RTSPRequest,16C,"<!D
+2025-05-19 11:50:07,146 - networkscan - DEBUG - Nmap output: SF:OCTYPE\x20HTML>\n<html\x20lang=\"en\">\n\x20\x20\x20\x20<head>\n\x20\x2
+2025-05-19 11:50:07,147 - networkscan - DEBUG - Nmap output: SF:0\x20\x20\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x20\
+2025-05-19 11:50:07,147 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20\x20<title>Error\x20response</title>\n\x20\x20\x20\x20</head
+2025-05-19 11:50:07,148 - networkscan - DEBUG - Nmap output: SF:>\n\x20\x20\x20\x20<body>\n\x20\x20\x20\x20\x20\x20\x20\x20<h1>Error\x2
+2025-05-19 11:50:07,148 - networkscan - DEBUG - Nmap output: SF:0response</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20code:\x2040
+2025-05-19 11:50:07,149 - networkscan - DEBUG - Nmap output: SF:0</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Message:\x20Bad\x20request\x2
+2025-05-19 11:50:07,150 - networkscan - DEBUG - Nmap output: SF:0version\x20\('RTSP/1\.0'\)\.</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>E
+2025-05-19 11:50:07,150 - networkscan - DEBUG - Nmap output: SF:rror\x20code\x20explanation:\x20400\x20-\x20Bad\x20request\x20syntax\x2
+2025-05-19 11:50:07,151 - networkscan - DEBUG - Nmap output: SF:0or\x20unsupported\x20method\.</p>\n\x20\x20\x20\x20</body>\n</html>\n"
+2025-05-19 11:50:07,151 - networkscan - DEBUG - Nmap output: SF:)%r(HTTPOptions,17E,"HTTP/1\.1\x20404\x20NOT\x20FOUND\r\nContent-Type:\
+2025-05-19 11:50:07,151 - networkscan - DEBUG - Nmap output: SF:x20text/html;\x20charset=utf-8\r\nContent-Length:\x20207\r\nAccess-Cont
+2025-05-19 11:50:07,152 - networkscan - DEBUG - Nmap output: SF:rol-Allow-Origin:\x20\*\r\nDate:\x20Mon,\x2019\x20May\x202025\x2006:18:
+2025-05-19 11:50:07,152 - networkscan - DEBUG - Nmap output: SF:35\x20GMT\r\nConnection:\x20close\r\n\r\n<!doctype\x20html>\n<html\x20l
+2025-05-19 11:50:07,152 - networkscan - DEBUG - Nmap output: SF:ang=en>\n<title>404\x20Not\x20Found</title>\n<h1>Not\x20Found</h1>\n<p>
+2025-05-19 11:50:07,153 - networkscan - DEBUG - Nmap output: SF:The\x20requested\x20URL\x20was\x20not\x20found\x20on\x20the\x20server\.
+2025-05-19 11:50:07,153 - networkscan - DEBUG - Nmap output: SF:\x20If\x20you\x20entered\x20the\x20URL\x20manually\x20please\x20check\x
+2025-05-19 11:50:07,154 - networkscan - DEBUG - Nmap output: SF:20your\x20spelling\x20and\x20try\x20again\.</p>\n")%r(Help,167,"<!DOCTY
+2025-05-19 11:50:07,154 - networkscan - DEBUG - Nmap output: SF:PE\x20HTML>\n<html\x20lang=\"en\">\n\x20\x20\x20\x20<head>\n\x20\x20\x2
+2025-05-19 11:50:07,155 - networkscan - DEBUG - Nmap output: SF:0\x20\x20\x20\x20\x20<meta\x20charset=\"utf-8\">\n\x20\x20\x20\x20\x20\
+2025-05-19 11:50:07,155 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20<title>Error\x20response</title>\n\x20\x20\x20\x20</head>\n\
+2025-05-19 11:50:07,156 - networkscan - DEBUG - Nmap output: SF:x20\x20\x20\x20<body>\n\x20\x20\x20\x20\x20\x20\x20\x20<h1>Error\x20res
+2025-05-19 11:50:07,156 - networkscan - DEBUG - Nmap output: SF:ponse</h1>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20code:\x20400</p
+2025-05-19 11:50:07,157 - networkscan - DEBUG - Nmap output: SF:>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Message:\x20Bad\x20request\x20syn
+2025-05-19 11:50:07,157 - networkscan - DEBUG - Nmap output: SF:tax\x20\('HELP'\)\.</p>\n\x20\x20\x20\x20\x20\x20\x20\x20<p>Error\x20co
+2025-05-19 11:50:07,158 - networkscan - DEBUG - Nmap output: SF:de\x20explanation:\x20400\x20-\x20Bad\x20request\x20syntax\x20or\x20uns
+2025-05-19 11:50:07,158 - networkscan - DEBUG - Nmap output: SF:upported\x20method\.</p>\n\x20\x20\x20\x20</body>\n</html>\n");
+2025-05-19 11:50:07,159 - networkscan - DEBUG - Nmap output: ==============NEXT SERVICE FINGERPRINT (SUBMIT INDIVIDUALLY)==============
+2025-05-19 11:50:07,159 - networkscan - DEBUG - Nmap output: SF-Port8888-TCP:V=7.96%T=SSL%I=7%D=5/19%Time=682ACD41%P=i686-pc-windows-wi
+2025-05-19 11:50:07,159 - networkscan - DEBUG - Nmap output: SF:ndows%r(GetRequest,159,"HTTP/1\.1\x20302\x20Found\r\nlocation:\x20/app/
+2025-05-19 11:50:07,160 - networkscan - DEBUG - Nmap output: SF:login\?\r\nosd-name:\x20srv586371\r\nx-frame-options:\x20sameorigin\r\n
+2025-05-19 11:50:07,160 - networkscan - DEBUG - Nmap output: SF:cache-control:\x20private,\x20no-cache,\x20no-store,\x20must-revalidate
+2025-05-19 11:50:07,161 - networkscan - DEBUG - Nmap output: SF:\r\nset-cookie:\x20security_authentication=;\x20Max-Age=0;\x20Expires=T
+2025-05-19 11:50:07,161 - networkscan - DEBUG - Nmap output: SF:hu,\x2001\x20Jan\x201970\x2000:00:00\x20GMT;\x20Secure;\x20HttpOnly;\x2
+2025-05-19 11:50:07,161 - networkscan - DEBUG - Nmap output: SF:0Path=/\r\ncontent-length:\x200\r\nDate:\x20Mon,\x2019\x20May\x202025\x
+2025-05-19 11:50:07,162 - networkscan - DEBUG - Nmap output: SF:2006:18:41\x20GMT\r\nConnection:\x20close\r\n\r\n")%r(HTTPOptions,140,"
+2025-05-19 11:50:07,162 - networkscan - DEBUG - Nmap output: SF:HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx-frame-o
+2025-05-19 11:50:07,162 - networkscan - DEBUG - Nmap output: SF:ptions:\x20sameorigin\r\ncontent-type:\x20application/json;\x20charset=
+2025-05-19 11:50:07,163 - networkscan - DEBUG - Nmap output: SF:utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x20must-r
+2025-05-19 11:50:07,163 - networkscan - DEBUG - Nmap output: SF:evalidate\r\ncontent-length:\x2060\r\nDate:\x20Mon,\x2019\x20May\x20202
+2025-05-19 11:50:07,164 - networkscan - DEBUG - Nmap output: SF:5\x2006:18:43\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCode\":404
+2025-05-19 11:50:07,164 - networkscan - DEBUG - Nmap output: SF:,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(RTSPReque
+2025-05-19 11:50:07,164 - networkscan - DEBUG - Nmap output: SF:st,140,"HTTP/1\.1\x20404\x20Not\x20Found\r\nosd-name:\x20srv586371\r\nx
+2025-05-19 11:50:07,164 - networkscan - DEBUG - Nmap output: SF:-frame-options:\x20sameorigin\r\ncontent-type:\x20application/json;\x20
+2025-05-19 11:50:07,165 - networkscan - DEBUG - Nmap output: SF:charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\x20no-store,\x
+2025-05-19 11:50:07,165 - networkscan - DEBUG - Nmap output: SF:20must-revalidate\r\ncontent-length:\x2060\r\nDate:\x20Mon,\x2019\x20Ma
+2025-05-19 11:50:07,165 - networkscan - DEBUG - Nmap output: SF:y\x202025\x2006:18:44\x20GMT\r\nConnection:\x20close\r\n\r\n{\"statusCo
+2025-05-19 11:50:07,166 - networkscan - DEBUG - Nmap output: SF:de\":404,\"error\":\"Not\x20Found\",\"message\":\"Not\x20Found\"}")%r(F
+2025-05-19 11:50:07,166 - networkscan - DEBUG - Nmap output: SF:ourOhFourRequest,1C6,"HTTP/1\.1\x20401\x20Unauthorized\r\nosd-name:\x20
+2025-05-19 11:50:07,166 - networkscan - DEBUG - Nmap output: SF:srv586371\r\nx-frame-options:\x20sameorigin\r\ncontent-type:\x20applica
+2025-05-19 11:50:07,167 - networkscan - DEBUG - Nmap output: SF:tion/json;\x20charset=utf-8\r\ncache-control:\x20private,\x20no-cache,\
+2025-05-19 11:50:07,168 - networkscan - DEBUG - Nmap output: SF:x20no-store,\x20must-revalidate\r\nset-cookie:\x20security_authenticati
+2025-05-19 11:50:07,168 - networkscan - DEBUG - Nmap output: SF:on=;\x20Max-Age=0;\x20Expires=Thu,\x2001\x20Jan\x201970\x2000:00:00\x20
+2025-05-19 11:50:07,169 - networkscan - DEBUG - Nmap output: SF:GMT;\x20Secure;\x20HttpOnly;\x20Path=/\r\ncontent-length:\x2077\r\nDate
+2025-05-19 11:50:07,169 - networkscan - DEBUG - Nmap output: SF::\x20Mon,\x2019\x20May\x202025\x2006:18:56\x20GMT\r\nConnection:\x20clo
+2025-05-19 11:50:07,169 - networkscan - DEBUG - Nmap output: SF:se\r\n\r\n{\"statusCode\":401,\"error\":\"Unauthorized\",\"message\":\"
+2025-05-19 11:50:07,170 - networkscan - DEBUG - Nmap output: SF:Authentication\x20required\"}");
+2025-05-19 11:50:07,170 - networkscan - DEBUG - Nmap output: Service Info: OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows
+2025-05-19 11:50:07,171 - networkscan - DEBUG - Nmap output: 
+2025-05-19 11:50:07,172 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 11:50:07,172 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 124.79 seconds
+2025-05-19 11:50:07,172 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 11:50:07,173 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 11:50:07,173 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 11:50:07,174 - networkscan - DEBUG - Parsed results: {
+  "hostname": "srv586371.hstgr.cloud",
+  "ip": "31.170.165.221",
+  "open_ports": [
+    22,
+    25,
+    53,
+    80,
+    81,
+    444,
+    3389,
+    5000,
+    5900,
+    8888
+  ],
+  "scan_time": null,
+  "os_info": "OSs: Linux, Windows; CPE: cpe:/o:linux:linux_kernel, cpe:/o:microsoft:windows",
+  "services": [
+    {
+      "port": 22,
+      "state": "open",
+      "service": "ssh",
+      "version": "OpenSSH 9.6p1 Ubuntu 3ubuntu13.11 (Ubuntu Linux; protocol 2.0)"
+    },
+    {
+      "port": 25,
+      "state": "open",
+      "service": "smtp?",
+      "version": null
+    },
+    {
+      "port": 53,
+      "state": "open",
+      "service": "domain",
+      "version": "(generic dns response: NOTIMP)"
+    },
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": "nginx 1.24.0 (Ubuntu)"
+    },
+    {
+      "port": 81,
+      "state": "open",
+      "service": "http",
+      "version": "nginx"
+    },
+    {
+      "port": 444,
+      "state": "open",
+      "service": "ssl/http",
+      "version": "nginx"
+    },
+    {
+      "port": 3389,
+      "state": "open",
+      "service": "ms-wbt-server",
+      "version": "Microsoft Terminal Service"
+    },
+    {
+      "port": 5000,
+      "state": "open",
+      "service": "upnp?",
+      "version": null
+    },
+    {
+      "port": 5900,
+      "state": "open",
+      "service": "vnc",
+      "version": "VNC (protocol 3.8)"
+    },
+    {
+      "port": 8888,
+      "state": "open",
+      "service": "ssl/sun-answerbook?",
+      "version": null
+    }
+  ]
+}
+2025-05-19 11:50:07,175 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 11:50:07,175 - networkscan - DEBUG - Scan results preview: {"hostname": "srv586371.hstgr.cloud", "ip": "31.170.165.221", "open_ports": [22, 25, 53, 80, 81, 444...
+2025-05-19 11:56:13,771 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 11:56:49,806 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 10.10.0.134
+2025-05-19 11:56:49,807 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 11:56:49,807 - networkscan - INFO - Generated scan ID: 70c9f58584ad070cd1da98a48eb788e5f9490c095ce835b334f87be946522caf
+2025-05-19 11:56:49,807 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 11:56:49,811 - networkscan - INFO - Scan request saved with ID: 5
+2025-05-19 11:56:49,811 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 11:56:49,820 - networkscan - INFO - Starting Nmap scan
+2025-05-19 11:56:49,840 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 11:56:49,841 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 11:56:49,841 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 11:56:49,912 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 11:56 India Standard Time
+2025-05-19 11:58:01,161 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 11:58:01,162 - networkscan - DEBUG - Nmap output: Host is up (0.019s latency).
+2025-05-19 11:58:01,163 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 11:58:01,163 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE   VERSION
+2025-05-19 11:58:01,163 - networkscan - DEBUG - Nmap output: 53/tcp  open  domain    (generic dns response: NOTIMP)
+2025-05-19 11:58:01,164 - networkscan - DEBUG - Nmap output: 443/tcp open  ssl/https HTTP server (unknown)
+2025-05-19 11:58:01,165 - networkscan - DEBUG - Nmap output: 1 service unrecognized despite returning data. If you know the service/version, please submit the following fingerprint at https://nmap.org/cgi-bin/submit.cgi?new-service :
+2025-05-19 11:58:01,165 - networkscan - DEBUG - Nmap output: SF-Port53-TCP:V=7.96%I=7%D=5/19%Time=682ACF37%P=i686-pc-windows-windows%r(
+2025-05-19 11:58:01,165 - networkscan - DEBUG - Nmap output: SF:DNSVersionBindReqTCP,E,"\0\x0c\0\x06\x81\x84\0\0\0\0\0\0\0\0");
+2025-05-19 11:58:01,165 - networkscan - DEBUG - Nmap output: 
+2025-05-19 11:58:01,166 - networkscan - DEBUG - Nmap output: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+2025-05-19 11:58:01,166 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 71.28 seconds
+2025-05-19 11:58:01,196 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 11:58:01,196 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 11:58:01,198 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 11:58:01,198 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "domain",
+      "version": "(generic dns response: NOTIMP)"
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "ssl/https",
+      "version": "HTTP server (unknown)"
+    }
+  ]
+}
+2025-05-19 11:58:01,198 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 11:58:01,198 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 12:12:57,221 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 12:13:25,761 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 10.10.0.134
+2025-05-19 12:13:25,782 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 12:13:25,790 - networkscan - INFO - Generated scan ID: c5a28cdba9e80cd995a19a1c5dbdb7409841e56294193efa796848678843ba8d
+2025-05-19 12:13:25,791 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 12:13:25,806 - networkscan - INFO - Scan request saved with ID: 6
+2025-05-19 12:13:25,806 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 12:13:25,810 - networkscan - INFO - Starting Nmap scan
+2025-05-19 12:13:25,848 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 12:13:25,849 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 12:13:25,849 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 31.170.165.221
+2025-05-19 12:13:25,983 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 12:13 India Standard Time
+2025-05-19 12:13:30,478 - networkscan - DEBUG - Nmap output: Nmap scan report for srv586371.hstgr.cloud (31.170.165.221)
+2025-05-19 12:13:30,480 - networkscan - DEBUG - Nmap output: Host is up (0.23s latency).
+2025-05-19 12:13:30,481 - networkscan - DEBUG - Nmap output: Not shown: 91 filtered tcp ports (no-response)
+2025-05-19 12:13:30,483 - networkscan - DEBUG - Nmap output: PORT     STATE SERVICE
+2025-05-19 12:13:30,484 - networkscan - DEBUG - Nmap output: 22/tcp   open  ssh
+2025-05-19 12:13:30,485 - networkscan - DEBUG - Nmap output: 25/tcp   open  smtp
+2025-05-19 12:13:30,485 - networkscan - DEBUG - Nmap output: 53/tcp   open  domain
+2025-05-19 12:13:30,486 - networkscan - DEBUG - Nmap output: 80/tcp   open  http
+2025-05-19 12:13:30,488 - networkscan - DEBUG - Nmap output: 81/tcp   open  hosts2-ns
+2025-05-19 12:13:30,488 - networkscan - DEBUG - Nmap output: 444/tcp  open  snpp
+2025-05-19 12:13:30,489 - networkscan - DEBUG - Nmap output: 3389/tcp open  ms-wbt-server
+2025-05-19 12:13:30,489 - networkscan - DEBUG - Nmap output: 5900/tcp open  vnc
+2025-05-19 12:13:30,490 - networkscan - DEBUG - Nmap output: 8888/tcp open  sun-answerbook
+2025-05-19 12:13:30,492 - networkscan - DEBUG - Nmap output: 
+2025-05-19 12:13:30,493 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 4.56 seconds
+2025-05-19 12:13:30,523 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 12:13:30,526 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 12:13:30,527 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 12:13:30,527 - networkscan - DEBUG - Parsed results: {
+  "hostname": "srv586371.hstgr.cloud",
+  "ip": "31.170.165.221",
+  "open_ports": [
+    22,
+    25,
+    53,
+    80,
+    81,
+    444,
+    3389,
+    5900,
+    8888
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 22,
+      "state": "open",
+      "service": "ssh",
+      "version": null
+    },
+    {
+      "port": 25,
+      "state": "open",
+      "service": "smtp",
+      "version": null
+    },
+    {
+      "port": 53,
+      "state": "open",
+      "service": "domain",
+      "version": null
+    },
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": null
+    },
+    {
+      "port": 81,
+      "state": "open",
+      "service": "hosts2-ns",
+      "version": null
+    },
+    {
+      "port": 444,
+      "state": "open",
+      "service": "snpp",
+      "version": null
+    },
+    {
+      "port": 3389,
+      "state": "open",
+      "service": "ms-wbt-server",
+      "version": null
+    },
+    {
+      "port": 5900,
+      "state": "open",
+      "service": "vnc",
+      "version": null
+    },
+    {
+      "port": 8888,
+      "state": "open",
+      "service": "sun-answerbook",
+      "version": null
+    }
+  ]
+}
+2025-05-19 12:13:30,529 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 12:13:30,530 - networkscan - DEBUG - Scan results preview: {"hostname": "srv586371.hstgr.cloud", "ip": "31.170.165.221", "open_ports": [22, 25, 53, 80, 81, 444...
+2025-05-19 13:42:38,316 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 13:44:06,683 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 10.10.0.134
+2025-05-19 13:44:06,692 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 13:44:06,734 - networkscan - INFO - Generated scan ID: 9983ef6856a3b509f653e4373e66dc1ce78c5ea8ad2ef572bd4c8392a6e7ffc9
+2025-05-19 13:44:06,735 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 13:44:06,744 - networkscan - INFO - Scan request saved with ID: 7
+2025-05-19 13:44:06,745 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 13:44:06,756 - networkscan - INFO - Starting Nmap scan
+2025-05-19 13:44:06,921 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 13:44:06,937 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 13:44:06,938 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 8.8.8.8
+2025-05-19 13:44:07,658 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 13:44 India Standard Time
+2025-05-19 13:44:10,004 - networkscan - DEBUG - Nmap output: Nmap scan report for dns.google (8.8.8.8)
+2025-05-19 13:44:10,005 - networkscan - DEBUG - Nmap output: Host is up (0.017s latency).
+2025-05-19 13:44:10,005 - networkscan - DEBUG - Nmap output: Not shown: 98 filtered tcp ports (no-response)
+2025-05-19 13:44:10,006 - networkscan - DEBUG - Nmap output: PORT    STATE SERVICE
+2025-05-19 13:44:10,006 - networkscan - DEBUG - Nmap output: 53/tcp  open  domain
+2025-05-19 13:44:10,007 - networkscan - DEBUG - Nmap output: 443/tcp open  https
+2025-05-19 13:44:10,007 - networkscan - DEBUG - Nmap output: 
+2025-05-19 13:44:10,008 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 2.68 seconds
+2025-05-19 13:44:10,049 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 13:44:10,051 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 13:44:10,052 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 13:44:10,055 - networkscan - DEBUG - Parsed results: {
+  "hostname": "dns.google",
+  "ip": "8.8.8.8",
+  "open_ports": [
+    53,
+    443
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 53,
+      "state": "open",
+      "service": "domain",
+      "version": null
+    },
+    {
+      "port": 443,
+      "state": "open",
+      "service": "https",
+      "version": null
+    }
+  ]
+}
+2025-05-19 13:44:10,059 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 13:44:10,060 - networkscan - DEBUG - Scan results preview: {"hostname": "dns.google", "ip": "8.8.8.8", "open_ports": [53, 443], "scan_time": null, "os_info": n...
+2025-05-19 13:49:51,420 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 13:52:39,172 - networkscan - INFO - Starting network scan for IP: 44.228.249.3 from requester: 10.10.0.134
+2025-05-19 13:52:39,173 - networkscan - INFO - IP validation for 44.228.249.3: valid public IP
+2025-05-19 13:52:39,174 - networkscan - INFO - Generated scan ID: ab5713323a7ff4bf49b64028ac6c6cd5a5fc484a9e88a146940c466941d935d7
+2025-05-19 13:52:39,175 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 13:52:39,189 - networkscan - INFO - Scan request saved with ID: 8
+2025-05-19 13:52:39,190 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 13:52:39,196 - networkscan - INFO - Starting Nmap scan
+2025-05-19 13:52:39,271 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 13:52:39,272 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 13:52:39,272 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 44.228.249.3
+2025-05-19 13:52:39,431 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 13:52 India Standard Time
+2025-05-19 13:52:43,383 - networkscan - DEBUG - Nmap output: Nmap scan report for ec2-44-228-249-3.us-west-2.compute.amazonaws.com (44.228.249.3)
+2025-05-19 13:52:43,385 - networkscan - DEBUG - Nmap output: Host is up (0.15s latency).
+2025-05-19 13:52:43,386 - networkscan - DEBUG - Nmap output: Not shown: 97 filtered tcp ports (no-response)
+2025-05-19 13:52:43,388 - networkscan - DEBUG - Nmap output: PORT   STATE SERVICE
+2025-05-19 13:52:43,390 - networkscan - DEBUG - Nmap output: 25/tcp open  smtp
+2025-05-19 13:52:43,391 - networkscan - DEBUG - Nmap output: 53/tcp open  domain
+2025-05-19 13:52:43,392 - networkscan - DEBUG - Nmap output: 80/tcp open  http
+2025-05-19 13:52:43,394 - networkscan - DEBUG - Nmap output: 
+2025-05-19 13:52:43,395 - networkscan - DEBUG - Nmap output: Nmap done: 1 IP address (1 host up) scanned in 4.04 seconds
+2025-05-19 13:52:43,424 - networkscan - INFO - Nmap scan completed successfully
+2025-05-19 13:52:43,425 - networkscan - INFO - Scan completed successfully, saving results
+2025-05-19 13:52:43,426 - networkscan - DEBUG - Parsed results type: <class 'dict'>
+2025-05-19 13:52:43,427 - networkscan - DEBUG - Parsed results: {
+  "hostname": "ec2-44-228-249-3.us-west-2.compute.amazonaws.com",
+  "ip": "44.228.249.3",
+  "open_ports": [
+    25,
+    53,
+    80
+  ],
+  "scan_time": null,
+  "os_info": null,
+  "services": [
+    {
+      "port": 25,
+      "state": "open",
+      "service": "smtp",
+      "version": null
+    },
+    {
+      "port": 53,
+      "state": "open",
+      "service": "domain",
+      "version": null
+    },
+    {
+      "port": 80,
+      "state": "open",
+      "service": "http",
+      "version": null
+    }
+  ]
+}
+2025-05-19 13:52:43,429 - networkscan - DEBUG - Scan results type: <class 'str'>
+2025-05-19 13:52:43,431 - networkscan - DEBUG - Scan results preview: {"hostname": "ec2-44-228-249-3.us-west-2.compute.amazonaws.com", "ip": "44.228.249.3", "open_ports":...
+2025-05-19 15:29:01,318 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 15:58:07,887 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.0.105
+2025-05-19 15:58:07,888 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 15:58:07,889 - networkscan - INFO - Generated scan ID: a7b6304ccd45756a61e3bfe21e16157d5499e212837b88f48f926d7687caa61a
+2025-05-19 15:58:07,889 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 15:58:07,898 - networkscan - INFO - Scan request saved with ID: 9
+2025-05-19 15:58:07,899 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 15:58:07,905 - networkscan - INFO - Starting Nmap scan
+2025-05-19 15:58:07,928 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 15:58:07,929 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 15:58:07,929 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 8.8.8.8
+2025-05-19 15:58:08,478 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 15:58 India Standard Time
+2025-05-19 16:05:15,728 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 16:06:07,431 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.0.105
+2025-05-19 16:06:07,432 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 16:06:07,432 - networkscan - INFO - Generated scan ID: a30c6a57d9e35ba96eb674717a0bb63999915dd55b0b97d70fe7900f5d4f3da4
+2025-05-19 16:06:07,433 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 16:06:07,438 - networkscan - INFO - Scan request saved with ID: 10
+2025-05-19 16:06:07,438 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 16:06:07,443 - networkscan - INFO - Starting Nmap scan
+2025-05-19 16:06:07,463 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 16:06:07,464 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 16:06:07,464 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 31.170.165.221
+2025-05-19 16:06:07,546 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 16:06 India Standard Time
+2025-05-19 16:19:53,798 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 16:20:40,903 - networkscan - INFO - Starting network scan for IP: 31.170.165.221 from requester: 192.168.0.105
+2025-05-19 16:20:40,905 - networkscan - INFO - IP validation for 31.170.165.221: valid public IP
+2025-05-19 16:20:40,905 - networkscan - INFO - Generated scan ID: f69ee806f8aceb7de9c0c05fcc5c63f86a5ec429d9fff0576d1768a6b7c08b41
+2025-05-19 16:20:40,905 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 16:20:40,911 - networkscan - INFO - Scan request saved with ID: 11
+2025-05-19 16:20:40,911 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 16:20:40,918 - networkscan - INFO - Starting Nmap scan
+2025-05-19 16:20:40,936 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 16:20:40,936 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 16:20:40,937 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 31.170.165.221
+2025-05-19 16:20:41,012 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 16:20 India Standard Time
+2025-05-19 17:18:28,498 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 17:20:05,021 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.0.105
+2025-05-19 17:20:05,021 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 17:20:05,022 - networkscan - INFO - Generated scan ID: ff72df00d5679e7ed7a1b37163bba8491d782a50f6266dcf1ac4634a4c2a5ef7
+2025-05-19 17:20:05,022 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 17:20:05,028 - networkscan - INFO - Scan request saved with ID: 12
+2025-05-19 17:20:05,029 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 17:20:05,033 - networkscan - INFO - Starting Nmap scan
+2025-05-19 17:20:05,086 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 17:20:05,087 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 17:20:05,088 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sS -T5 -F --max-retries 1 --host-timeout 30s --version-intensity 0 8.8.8.8
+2025-05-19 17:20:05,171 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 17:20 India Standard Time
+2025-05-19 18:01:27,600 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 18:05:19,174 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 18:05:37,893 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.0.105
+2025-05-19 18:05:37,894 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 18:05:37,894 - networkscan - INFO - Generated scan ID: ef32de8d5db3ee9cdd702f3180cedd72f195b6e99dbe81d12d8c13d0d26f61f8
+2025-05-19 18:05:37,894 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 18:05:37,900 - networkscan - INFO - Scan request saved with ID: 14
+2025-05-19 18:05:37,901 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 18:05:37,906 - networkscan - INFO - Starting Nmap scan
+2025-05-19 18:05:37,945 - networkscan - INFO - Found Nmap at 32-bit path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 18:05:37,946 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
+2025-05-19 18:05:37,946 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
+2025-05-19 18:05:38,016 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 18:05 India Standard Time

@@ -9,9 +9,9 @@ interface ScanTableProps {
 
 const ScanTable: React.FC<ScanTableProps> = ({ scans, onUpdateStatus }) => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [pendingStatus, setPendingStatus] = useState<{ [id: number]: string }>({});
+  const [pendingStatus, setPendingStatus] = useState<{ [id: string]: LeadStatus }>({});
 
-  const handleStatusChange = (scanId: number, status: string) => {
+  const handleStatusChange = (scanId: string, status: LeadStatus) => {
     fetch(`${import.meta.env.VITE_API_BASE_URL}/api/scan-report-summary/${scanId}/lead-status`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -19,7 +19,6 @@ const ScanTable: React.FC<ScanTableProps> = ({ scans, onUpdateStatus }) => {
     })
       .then(res => res.json())
       .then(() => {
-        // Optionally, trigger a refresh or call onUpdateStatus to refetch data
         if (onUpdateStatus) onUpdateStatus(scanId, status);
       });
   };
@@ -134,14 +133,20 @@ const ScanTable: React.FC<ScanTableProps> = ({ scans, onUpdateStatus }) => {
                     <button
                       onClick={() => setActiveDropdown(activeDropdown === scan.id ? null : scan.id)}
                       className="text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200"
+                      title="Change status"
                     >
                       <MoreHorizontal className="h-5 w-5" />
                     </button>
                     {activeDropdown === scan.id && (
                       <div className="absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-gray-800 ring-1 ring-black ring-opacity-5 z-10 p-2">
+                        <label htmlFor={`status-select-${scan.id}`} className="sr-only">
+                          Change status
+                        </label>
                         <select
+                          id={`status-select-${scan.id}`}
+                          title="Select status"
                           value={pendingStatus[scan.id] ?? scan.status}
-                          onChange={e => setPendingStatus({ ...pendingStatus, [scan.id]: e.target.value })}
+                          onChange={e => setPendingStatus({ ...pendingStatus, [scan.id]: e.target.value as LeadStatus })}
                           className="block w-full mb-2 rounded border px-2 py-1"
                         >
                           <option value="ok">Interested</option>
@@ -155,6 +160,7 @@ const ScanTable: React.FC<ScanTableProps> = ({ scans, onUpdateStatus }) => {
                             setActiveDropdown(null);
                           }}
                           className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                          title="Confirm status change"
                         >
                           <Check className="w-4 h-4 mr-1" /> Done
                         </button>

@@ -24,7 +24,9 @@ from config import (
 from db_handler import DatabaseHandler
 import logging
 import json
+from networkscan import scan_network, get_network_scan_results
 
+# Configure logging
 log = logging.getLogger('werkzeug')
 log.setLevel(logging.ERROR)
 
@@ -601,6 +603,55 @@ def handle_disconnect():
                          if session_id == request.sid]
     for scan_id in disconnected_scans:
         active_scans.pop(scan_id, None)
+
+@app.route("/api/network/scan", methods=["POST"])
+def start_network_scan():
+    """Start a network scan for the provided IP address."""
+    try:
+        data = request.get_json()
+        if not data or "ip_address" not in data:
+            return jsonify({"error": "Missing IP address"}), 400
+
+        ip_address = data["ip_address"]
+        requester_ip = request.remote_addr
+
+        # Start the scan
+        success, message, scan_id = scan_network(ip_address, requester_ip)
+
+        if not success:
+            return jsonify({"error": message}), 400
+
+        return jsonify({
+            "message": "Scan started successfully",
+            "scan_id": scan_id,
+            "status": "pending"
+        })
+
+    except Exception as e:
+        print(f"[ERROR] Error starting network scan: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/network/results/<scan_id>", methods=["GET"])
+def get_scan_results(scan_id):
+    """Retrieve the results of a network scan."""
+    try:
+        # Get requester IP from header or fallback to remote_addr
+        requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
+        print(f"[DEBUG] Retrieving scan results for {scan_id} from {requester_ip}")
+        
+        results = get_network_scan_results(scan_id, requester_ip)
+
+        if not results:
+            return jsonify({"error": "Scan not found"}), 404
+
+        if "error" in results:
+            return jsonify({"error": results["error"]}), 403
+
+        return jsonify(results)
+
+    except Exception as e:
+        print(f"[ERROR] Error retrieving scan results: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
 
 # Update the socket binding logic
 if __name__ == "__main__":

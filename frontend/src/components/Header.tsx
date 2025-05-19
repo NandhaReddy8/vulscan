@@ -1,24 +1,17 @@
 import React from 'react';
-import { Menu } from 'lucide-react';
 import virtuesTechLogo from '../components/assets/virtuesTech_Logo.png';
 
 const Header = () => {
   return (
-    <header className="bg-white/90 backdrop-blur-sm py-4 shadow-lg border-b backdrop-blur-sm">
-      <div className="container mx-auto px-4 flex justify-left items-center relative">
-        <div className="logo">
-            <a href="/">
+    <header className="bg-white">
+      <div className="container mx-auto px-6 py-6">
+        <nav className="flex items-center">
             <img 
               src={virtuesTechLogo}
-              alt="VirtuesTech Logo"
-              className="h-16"
+            alt="VirtuesTech" 
+            className="h-12 w-auto"
             />
-            </a>
-        </div>
-        <nav className="hidden md:block"></nav>
-        <button className="md:hidden absolute right-4">
-          <Menu className="h-6 w-6 text-gray-300 hover:text-gray-100 transition-colors" />
-        </button>
+        </nav>
       </div>
     </header>
   );

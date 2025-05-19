@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Loader, StopCircle } from "lucide-react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 interface ScannerProps {
   onScanSubmit: (url: string) => void;
@@ -16,11 +17,12 @@ const Scanner: React.FC<ScannerProps> = ({
   url,
   setUrl,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [protocol, setProtocol] = useState("https://");
   const [error, setError] = useState<string | null>(null);
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, operation: "+", answer: "" });
   const [attempts, setAttempts] = useState(5);
-  const [scannerType, setScannerType] = useState<'application' | 'network'>('application');
 
   // Generate a new CAPTCHA
   const generateCaptcha = () => {
@@ -86,27 +88,26 @@ const Scanner: React.FC<ScannerProps> = ({
       <div className="flex gap-4 mb-6 justify-center">
         <button
           type="button"
-          onClick={() => setScannerType('application')}
+          onClick={() => navigate('/webscanner')}
           className={`px-6 py-3 rounded-lg font-medium transition-all ${
-            scannerType === 'application'
+            location.pathname === '/webscanner'
               ? 'bg-blue-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
         >
           Application Scanner
         </button>
-        <div className="relative group">
           <button
             type="button"
-            disabled
-            className="px-6 py-3 rounded-lg font-medium bg-gray-700 text-gray-400 cursor-not-allowed opacity-75"
+          onClick={() => navigate('/networkscanner')}
+          className={`px-6 py-3 rounded-lg font-medium transition-all ${
+            location.pathname === '/networkscanner'
+              ? 'bg-blue-600 text-white'
+              : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+          }`}
           >
             Network Scanner
           </button>
-          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-            Coming Soon!
-          </div>
-        </div>
         <div className="relative group">
           <button
             type="button"
@@ -131,6 +132,8 @@ const Scanner: React.FC<ScannerProps> = ({
           value={protocol}
           onChange={(e) => setProtocol(e.target.value)}
           className="px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-sm"
+          aria-label="Protocol"
+          title="Select protocol"
         >
           <option value="http://">http://</option>
           <option value="https://">https://</option>
@@ -142,6 +145,8 @@ const Scanner: React.FC<ScannerProps> = ({
           placeholder="Enter site name (e.g., example.com)"
           className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-base"
           required
+          aria-label="Website URL"
+          title="Enter website URL"
         />
           </div>
 
@@ -166,6 +171,9 @@ const Scanner: React.FC<ScannerProps> = ({
             onChange={(e) => setCaptcha({ ...captcha, answer: e.target.value })}
             className="w-20 px-3 py-2 text-center text-sm font-medium rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all"
             required
+            aria-label="CAPTCHA Answer"
+            title="Enter CAPTCHA answer"
+            placeholder="Answer"
           />
         </div>
           </div>
