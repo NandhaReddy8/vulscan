@@ -6,7 +6,7 @@ from datetime import timedelta
 load_dotenv()
 
 # Flask Configuration
-FLASK_HOST = os.getenv("FLASK_HOST", "192.168.1.10")
+FLASK_HOST = os.getenv("FLASK_HOST", "127.0.0.1")
 FLASK_PORT = int(os.getenv("FLASK_PORT", 5000))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 

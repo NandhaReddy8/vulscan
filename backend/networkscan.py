@@ -208,6 +208,7 @@ def run_nmap(ip: str) -> Tuple[bool, str, Optional[Dict[str, Any]]]:
 def scan_network(ip_address: str, requester_ip: str) -> Tuple[bool, str, Optional[str]]:
     """
     Main function to handle the network scanning workflow.
+    Uses only network_scan_results table for storing scan data.
     """
     logger.info(f"Starting network scan for IP: {ip_address} from requester: {requester_ip}")
     
@@ -222,38 +223,21 @@ def scan_network(ip_address: str, requester_ip: str) -> Tuple[bool, str, Optiona
         timestamp = datetime.datetime.now()
         logger.info(f"Generated scan ID: {scan_id}")
 
-        # Save initial scan request and ensure it's committed
-        logger.info("Saving initial scan request to database")
-        try:
-            request_id = save_scan_request(
-                url=None,
-                ip_address=ip_address,
-                timestamp=timestamp,
-                scan_id=scan_id,
-            )
-            if not request_id:
-                error_msg = "Failed to save scan request to database"
-                logger.error(error_msg)
-                return False, error_msg, None
-            logger.info(f"Scan request saved with ID: {request_id}")
-        except Exception as e:
-            error_msg = f"Failed to save scan request: {str(e)}"
-            logger.error(error_msg)
-            return False, error_msg, None
-
-        # Update status to "running"
-        logger.info("Updating scan status to 'running'")
+        # Save initial scan record to network_scan_results
+        logger.info("Saving initial scan record to network_scan_results")
         try:
             save_network_scan_results(
                 scan_id=scan_id,
                 ip_address=ip_address,
+                scan_timestamp=timestamp,
                 scan_status="running",
                 requester_ip=requester_ip,
                 scan_results=None,
                 error_message=None
             )
+            logger.info(f"Initial scan record saved with ID: {scan_id}")
         except Exception as e:
-            error_msg = f"Failed to update scan status: {str(e)}"
+            error_msg = f"Failed to save initial scan record: {str(e)}"
             logger.error(error_msg)
             return False, error_msg, None
 
@@ -268,6 +252,7 @@ def scan_network(ip_address: str, requester_ip: str) -> Tuple[bool, str, Optiona
                 save_network_scan_results(
                     scan_id=scan_id,
                     ip_address=ip_address,
+                    scan_timestamp=timestamp,
                     scan_status="failed",
                     error_message=output,
                     requester_ip=requester_ip,
@@ -310,6 +295,7 @@ def scan_network(ip_address: str, requester_ip: str) -> Tuple[bool, str, Optiona
             save_network_scan_results(
                 scan_id=scan_id,
                 ip_address=ip_address,
+                scan_timestamp=timestamp,
                 scan_status="completed",
                 scan_results=scan_results,  # Pass as JSON string
                 requester_ip=requester_ip,
@@ -325,7 +311,7 @@ def scan_network(ip_address: str, requester_ip: str) -> Tuple[bool, str, Optiona
     except Exception as e:
         error_msg = f"Scan error: {str(e)}"
         logger.error(error_msg)
-        print(f"Error: {error_msg}")  # Use ASCII instead of emoji
+        print(f"Error: {error_msg}")
         
         # If we have a scan_id, update its status to failed
         if 'scan_id' in locals():
@@ -334,6 +320,7 @@ def scan_network(ip_address: str, requester_ip: str) -> Tuple[bool, str, Optiona
                 save_network_scan_results(
                     scan_id=scan_id,
                     ip_address=ip_address,
+                    scan_timestamp=timestamp,
                     scan_status="failed",
                     error_message=str(e),
                     requester_ip=requester_ip,

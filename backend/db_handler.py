@@ -90,13 +90,14 @@ class DatabaseHandler:
             CONSTRAINT valid_role CHECK (role IN ('admin', 'user'))
         );
 
-        -- Create scan_requests table with scan_id column
+        -- Create scan_requests table with scan_id column (for application scanner only)
         CREATE TABLE IF NOT EXISTS scan_requests (
             id SERIAL PRIMARY KEY,
             scan_id TEXT UNIQUE NOT NULL,  -- Add scan_id column for external reference
-            url TEXT,
+            url TEXT NOT NULL,             -- URL is required for application scans
             ip_address TEXT NOT NULL,
-            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            scan_type TEXT NOT NULL DEFAULT 'application'  -- Add scan_type column with default 'application'
         );
 
         -- Create report_requests table
@@ -145,7 +146,7 @@ class DatabaseHandler:
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
-        -- Create network_scan_results table (after scan_requests table exists)
+        -- Create network_scan_results table (independent of scan_requests)
         CREATE TABLE IF NOT EXISTS network_scan_results (
             id SERIAL PRIMARY KEY,
             scan_id TEXT NOT NULL UNIQUE,  -- Add UNIQUE constraint
@@ -154,8 +155,7 @@ class DatabaseHandler:
             scan_status TEXT NOT NULL,     -- 'pending', 'running', 'completed', 'failed'
             scan_results JSONB,            -- Store Nmap results in JSON format
             error_message TEXT,            -- Store any error messages
-            requester_ip TEXT NOT NULL,    -- IP address of the person who requested the scan
-            FOREIGN KEY (scan_id) REFERENCES scan_requests(scan_id) ON DELETE CASCADE
+            requester_ip TEXT NOT NULL     -- IP address of the person who requested the scan
         );
 
         -- Add indexes for faster lookups (after all tables exist)
@@ -232,8 +232,7 @@ class DatabaseHandler:
                                 scan_status TEXT NOT NULL,
                                 scan_results JSONB,
                                 error_message TEXT,
-                                requester_ip TEXT NOT NULL,
-                                FOREIGN KEY (scan_id) REFERENCES scan_requests(scan_id) ON DELETE CASCADE
+                                requester_ip TEXT NOT NULL
                             )
                         """)
                         # Recreate indexes

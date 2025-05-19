@@ -35,6 +35,7 @@ db = DatabaseHandler()
 def check_weekly_scan_limit(target_url):
     """
     Check if URL has exceeded the weekly scan limit (2 scans per 7 days)
+    Only applies to application scans (scan_requests table is application-scanner-only)
     Returns: (bool, str) - (is_limit_exceeded, error_message)
     """
     try:
@@ -51,7 +52,7 @@ def check_weekly_scan_limit(target_url):
                     SELECT timestamp 
                     FROM scan_requests 
                     WHERE url = %s 
-                    AND timestamp > %s 
+                    AND timestamp > %s
                     ORDER BY timestamp DESC
                     """, (target_url, week_ago))
                 
@@ -211,18 +212,20 @@ def scan():
         user_ip = get_client_ip(request)
         timestamp = datetime.now()
 
-        # Save scan request to database instead of CSV
+        # Generate scan_id first
+        scan_id = str(uuid.uuid4())
+        active_scans[scan_id] = session_id
+
+        # Save scan request to database with scan_id
         try:
-            save_scan_request(target_url, user_ip, timestamp)
-            print(f"[+] Scan request saved to database")
+            save_scan_request(target_url, user_ip, timestamp, scan_id=scan_id)
+            print(f"[+] Scan request saved to database with scan_id: {scan_id}")
         except Exception as e:
             print(f"[ERROR] Failed to save scan request: {str(e)}")
+            return jsonify({"error": f"Failed to save scan request: {str(e)}"}), 500
 
         # Add URL to running scans
         running_scans[target_url] = datetime.now()
-
-        scan_id = str(uuid.uuid4())
-        active_scans[scan_id] = session_id
 
         # Run ZAP Scan in a separate thread
         def run_scan():
@@ -651,6 +654,57 @@ def get_scan_results(scan_id):
 
     except Exception as e:
         print(f"[ERROR] Error retrieving scan results: {str(e)}")
+        return jsonify({"error": "Internal server error"}), 500
+
+@app.route("/api/network/stop-scan", methods=["POST"])
+def stop_network_scan():
+    """Stop an ongoing network scan."""
+    try:
+        data = request.get_json()
+        if not data or "ip_address" not in data:
+            return jsonify({"error": "Missing IP address"}), 400
+
+        ip_address = data["ip_address"]
+        requester_ip = request.remote_addr
+
+        # Find the scan_id for this IP address
+        conn = db.get_connection()
+        try:
+            with conn.cursor() as cur:
+                cur.execute("""
+                    SELECT scan_id 
+                    FROM network_scan_results 
+                    WHERE ip_address = %s 
+                    AND requester_ip = %s 
+                    AND scan_status = 'running'
+                    ORDER BY scan_timestamp DESC 
+                    LIMIT 1
+                """, (ip_address, requester_ip))
+                result = cur.fetchone()
+                
+                if not result:
+                    return jsonify({"error": "No running scan found for this IP"}), 404
+                    
+                scan_id = result[0]
+                
+                # Update scan status to 'stopped'
+                cur.execute("""
+                    UPDATE network_scan_results 
+                    SET scan_status = 'stopped', 
+                        error_message = 'Scan stopped by user'
+                    WHERE scan_id = %s
+                """, (scan_id,))
+                conn.commit()
+                
+                return jsonify({
+                    "message": "Scan stopped successfully",
+                    "scan_id": scan_id
+                })
+        finally:
+            db.put_connection(conn)
+
+    except Exception as e:
+        print(f"[ERROR] Error stopping network scan: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
 # Update the socket binding logic

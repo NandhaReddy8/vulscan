@@ -90,8 +90,9 @@ const ErrorDialog: React.FC<ErrorDialogProps> = ({ error, onClose }) => {
   );
 };
 
-const BACKEND_URL = "http://192.168.1.10:5000";
-const SOCKET_URL = "http://192.168.1.10:5000";
+// Get backend URL from environment variables
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+const SOCKET_URL = import.meta.env.VITE_SOCKET_URL || "http://localhost:5000";
 
 const ScannerPage = () => {
   const [isScanning, setIsScanning] = useState(false);

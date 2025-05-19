@@ -24,7 +24,7 @@ initialize_csv(SCAN_REQUESTS_FILE, ["scan_id", "url", "ip_address", "timestamp"]
 initialize_csv(REPORT_REQUESTS_FILE, ["Name", "Email", "Phone", "Target URL", "Timestamp"])
 
 def save_scan_request(url, ip_address, timestamp, scan_id=None):
-    """Save scan request to database"""
+    """Save scan request to database (application scanner only)"""
     conn = db.get_connection()
     try:
         with conn.cursor() as cur:
@@ -62,7 +62,7 @@ def save_scan_request(url, ip_address, timestamp, scan_id=None):
         conn.rollback()
         raise
     finally:
-        db.put_connection(conn) 
+        db.put_connection(conn)
 
 # Function to save a report request (for example, from a marketing frontend)
 def save_report_request(name, email, phone, target_url, timestamp=None):

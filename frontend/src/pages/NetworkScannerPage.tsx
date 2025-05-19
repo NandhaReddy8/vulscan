@@ -11,6 +11,9 @@ function NetworkScannerPage() {
   const [ip, setIp] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
 
+  // Get backend URL from environment variables
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
   useEffect(() => {
     if (videoRef.current) {
       if (!isScanning) {
@@ -25,20 +28,58 @@ function NetworkScannerPage() {
 
   const handleScan = async (ip: string) => {
     setIsScanning(true);
-    // TODO: Implement network scan functionality
-    toast.info("Network scanning functionality coming soon!", {
-      position: "top-right",
-      autoClose: 5000,
-    });
-    setIsScanning(false);
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/network/scan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip_address: ip }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to start network scan");
+      }
+
+      await response.json(); // Just consume the response
+      toast.success("Network scan started successfully!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error("Error starting network scan:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to start network scan", {
+        position: "top-right",
+        autoClose: 5000,
+      });
+      setIsScanning(false);
+    }
   };
 
-  const handleStopScan = () => {
-    setIsScanning(false);
-    toast.info("Scan stopped", {
-      position: "top-right",
-      autoClose: 3000,
-    });
+  const handleStopScan = async () => {
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/network/stop-scan`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ip_address: ip }),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to stop scan");
+      }
+
+      setIsScanning(false);
+      toast.info("Scan stopped", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+    } catch (error) {
+      console.error("Error stopping scan:", error);
+      toast.error(error instanceof Error ? error.message : "Failed to stop scan", {
+        position: "top-right",
+        autoClose: 5000,
+      });
+    }
   };
 
   return (
