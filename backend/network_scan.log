@@ -1575,3 +1575,12 @@ DETAIL:  Key (scan_id)=(8aead586042e51c9a135cbc5f8895c834b293c3245308e6379fb9435
 2025-05-19 18:05:37,946 - networkscan - INFO - Using Nmap executable at: C:\Program Files (x86)\Nmap\nmap.exe
 2025-05-19 18:05:37,946 - networkscan - INFO - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -sV -T4 -F 8.8.8.8
 2025-05-19 18:05:38,016 - networkscan - DEBUG - Nmap output: Starting Nmap 7.96 ( https://nmap.org ) at 2025-05-19 18:05 India Standard Time
+2025-05-19 23:25:55,255 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 23:37:31,021 - engineio.server - INFO - Server initialized for eventlet.
+2025-05-19 23:38:54,806 - networkscan - INFO - Starting network scan for IP: 8.8.8.8 from requester: 192.168.1.19
+2025-05-19 23:38:54,807 - networkscan - INFO - IP validation for 8.8.8.8: valid public IP
+2025-05-19 23:38:54,807 - networkscan - INFO - Generated scan ID: 6c8f8321d3273999901b43138ce87a8d2c549c17c21f472fce6029df572b6104
+2025-05-19 23:38:54,808 - networkscan - INFO - Saving initial scan request to database
+2025-05-19 23:38:54,823 - networkscan - INFO - Scan request saved with ID: 15
+2025-05-19 23:38:54,823 - networkscan - INFO - Updating scan status to 'running'
+2025-05-19 23:38:54,824 - networkscan - ERROR - Failed to update scan status: save_network_scan_results() missing 1 required positional argument: 'scan_timestamp'

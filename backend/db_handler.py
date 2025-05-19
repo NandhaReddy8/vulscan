@@ -171,7 +171,7 @@ class DatabaseHandler:
                 for statement in create_tables_sql.split(';'):
                     if statement.strip():
                         try:
-                        cur.execute(statement)
+                            cur.execute(statement)
                             conn.commit()  # Commit after each statement
                         except Exception as e:
                             print(f"[WARNING] Error executing statement: {str(e)}")
@@ -188,7 +188,7 @@ class DatabaseHandler:
                 """, (hash_password('admin123'),))
                 
             conn.commit()
-                print("[+] Database tables initialized successfully")
+            print("[+] Database tables initialized successfully")
         except Exception as e:
             print(f"[ERROR] Failed to initialize tables: {str(e)}")
             conn.rollback()
