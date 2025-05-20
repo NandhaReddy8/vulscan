@@ -146,55 +146,40 @@ class DatabaseHandler:
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
-        -- Create network_scan_results table (independent of scan_requests)
-        CREATE TABLE IF NOT EXISTS network_scan_results (
+        -- Drop and recreate network_scan_results table to ensure consistent schema
+        DROP TABLE IF EXISTS network_scan_results CASCADE;
+        CREATE TABLE network_scan_results (
             id SERIAL PRIMARY KEY,
-            scan_id TEXT NOT NULL UNIQUE,  -- Add UNIQUE constraint
+            scan_id TEXT NOT NULL UNIQUE,
             ip_address TEXT NOT NULL,
-            scan_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            scan_status TEXT NOT NULL,     -- 'pending', 'running', 'completed', 'failed'
-            scan_results JSONB,            -- Store Nmap results in JSON format
-            error_message TEXT,            -- Store any error messages
-            requester_ip TEXT NOT NULL     -- IP address of the person who requested the scan
+            scan_status TEXT NOT NULL CHECK (scan_status IN ('queued', 'running', 'completed', 'failed', 'stopped')),
+            scan_results JSONB,
+            error_message TEXT,
+            requester_ip TEXT NOT NULL,
+            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
-        -- Add indexes for faster lookups (after all tables exist)
+        -- Add indexes for faster lookups
         CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id);
         CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address);
+        CREATE INDEX IF NOT EXISTS idx_network_scan_status ON network_scan_results(scan_status);
+        CREATE INDEX IF NOT EXISTS idx_network_scan_created ON network_scan_results(created_at);
         CREATE INDEX IF NOT EXISTS idx_scan_requests_scan_id ON scan_requests(scan_id);
         """
         
-        conn = self.get_connection()
         try:
-            with conn.cursor() as cur:
-                # First create all tables
-                for statement in create_tables_sql.split(';'):
-                    if statement.strip():
-                        try:
-                            cur.execute(statement)
-                            conn.commit()  # Commit after each statement
-                        except Exception as e:
-                            print(f"[WARNING] Error executing statement: {str(e)}")
-                            conn.rollback()
-                            raise
-                
-                # Then create default admin user if not exists
-                cur.execute("""
-                    INSERT INTO users (username, email, password_hash, role)
-                    SELECT 'admin', 'admin@virtuestech.com', %s, 'admin'
-                    WHERE NOT EXISTS (
-                        SELECT 1 FROM users WHERE username = 'admin'
-                    )
-                """, (hash_password('admin123'),))
-                
-            conn.commit()
-            print("[+] Database tables initialized successfully")
+            conn = self.get_connection()
+            try:
+                with conn.cursor() as cur:
+                    cur.execute(create_tables_sql)
+                    conn.commit()
+                    print("[+] Database tables initialized successfully")
+            finally:
+                self.put_connection(conn)
         except Exception as e:
             print(f"[ERROR] Failed to initialize tables: {str(e)}")
-            conn.rollback()
             raise
-        finally:
-            self.put_connection(conn)
 
     def ensure_tables_exist(self):
         """Ensure all required tables exist with correct schema"""
@@ -202,7 +187,7 @@ class DatabaseHandler:
             # First create tables if they don't exist
             self.initialize_tables()
             
-            # Then check if network_scan_results needs to be recreated
+            # Then check if network_scan_results needs to be altered
             conn = self.get_connection()
             try:
                 with conn.cursor() as cur:
@@ -219,27 +204,14 @@ class DatabaseHandler:
                     has_unique = cur.fetchone()[0] > 0
                     
                     if not has_unique:
-                        print("[*] Recreating network_scan_results table with unique constraint...")
-                        # Drop existing table
-                        cur.execute("DROP TABLE IF EXISTS network_scan_results CASCADE")
-                        # Recreate table with unique constraint
+                        print("[*] Adding unique constraint to network_scan_results table...")
+                        # Add unique constraint without dropping the table
                         cur.execute("""
-                            CREATE TABLE network_scan_results (
-                                id SERIAL PRIMARY KEY,
-                                scan_id TEXT NOT NULL UNIQUE,
-                                ip_address TEXT NOT NULL,
-                                scan_timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                                scan_status TEXT NOT NULL,
-                                scan_results JSONB,
-                                error_message TEXT,
-                                requester_ip TEXT NOT NULL
-                            )
+                            ALTER TABLE network_scan_results 
+                            ADD CONSTRAINT network_scan_results_scan_id_key UNIQUE (scan_id)
                         """)
-                        # Recreate indexes
-                        cur.execute("CREATE INDEX idx_network_scan_id ON network_scan_results(scan_id)")
-                        cur.execute("CREATE INDEX idx_network_scan_ip ON network_scan_results(ip_address)")
                         conn.commit()
-                        print("[+] network_scan_results table recreated successfully")
+                        print("[+] Added unique constraint to network_scan_results table")
             finally:
                 self.put_connection(conn)
                 
@@ -399,3 +371,160 @@ class DatabaseHandler:
             raise
         finally:
             self.put_connection(conn)
+
+    def get_recent_scans(self, limit=10):
+        """Get recent network scans"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (limit,))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get recent scans: {str(e)}")
+            return []
+
+    def get_scan_by_id(self, scan_id, requester_ip):
+        """Get scan details by ID and ensure requester authorization"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE scan_id = %s AND requester_ip = %s
+                    """, (scan_id, requester_ip))
+                    return cur.fetchone()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scan by ID: {str(e)}")
+            return None
+
+    def get_scans_by_ip(self, ip_address, requester_ip, limit=10):
+        """Get scans for a specific IP address"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE ip_address = %s AND requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (ip_address, requester_ip, limit))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scans by IP: {str(e)}")
+            return []
+
+    def get_scans_by_status(self, status, requester_ip, limit=10):
+        """Get scans by status"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE scan_status = %s AND requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (status, requester_ip, limit))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scans by status: {str(e)}")
+            return []
+
+    def get_scans_by_time_range(self, start_time, end_time, requester_ip, limit=10):
+        """Get scans within a time range"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE created_at BETWEEN %s AND %s AND requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (start_time, end_time, requester_ip, limit))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scans by time range: {str(e)}")
+            return []
+
+    def get_scans_last_24h(self, requester_ip, limit=10):
+        """Get scans from the last 24 hours"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE created_at >= NOW() - INTERVAL '24 hours' AND requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (requester_ip, limit))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scans from last 24h: {str(e)}")
+            return []
+
+    def get_scans_last_7d(self, requester_ip, limit=10):
+        """Get scans from the last 7 days"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE created_at >= NOW() - INTERVAL '7 days' AND requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (requester_ip, limit))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scans from last 7d: {str(e)}")
+            return []
+
+    def get_scans_last_30d(self, requester_ip, limit=10):
+        """Get scans from the last 30 days"""
+        try:
+            conn = self.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE created_at >= NOW() - INTERVAL '30 days' AND requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT %s
+                    """, (requester_ip, limit))
+                    return cur.fetchall()
+            finally:
+                self.put_connection(conn)
+        except Exception as e:
+            print(f"[ERROR] Failed to get scans from last 30d: {str(e)}")
+            return []

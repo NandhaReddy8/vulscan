@@ -4,8 +4,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader, StopCircle, CheckCircle2 } from "lucide-react"
 
+// Get backend URL from environment variables
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+
 interface ScanResult {
-  status: 'pending' | 'running' | 'completed' | 'failed';
+  status: 'queued' | 'pending' | 'running' | 'completed' | 'failed' | 'stopped';
   results?: {
     summary: {
       total_ports: number;
@@ -32,6 +35,7 @@ interface NetworkScannerProps {
   isLoading: boolean;
   ip: string;
   setIp: (ip: string) => void;
+  scanId: string;
 }
 
 const NetworkScanner: React.FC<NetworkScannerProps> = ({
@@ -40,13 +44,13 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
   isLoading,
   ip,
   setIp,
+  scanId,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [error, setError] = useState<string | null>(null);
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, operation: "+", answer: "" });
   const [attempts, setAttempts] = useState(5);
-  const [scanId, setScanId] = useState<string | null>(null);
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
 
@@ -74,35 +78,100 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
 
   // Poll for scan results
   useEffect(() => {
-    if (scanId && !scanResult?.results) {
+    if (scanId && !['completed', 'failed', 'stopped'].includes(scanResult?.status || '')) {
       const interval = setInterval(async () => {
         try {
-          // Get the actual client IP from the initial scan response
-          const response = await fetch(`/api/network/results/${scanId}`);
+          const response = await fetch(`${BACKEND_URL}/api/network/scan/${scanId}`, {
+            headers: {
+              'X-Requester-IP': window.location.hostname
+            }
+          });
           if (!response.ok) {
             const error = await response.json();
             throw new Error(error.error || 'Failed to fetch scan results');
           }
           
           const data = await response.json();
-          setScanResult(data);
+          console.log('Received scan data:', data);
           
-          if (data.status === 'completed' || data.status === 'failed') {
+          // Update scan result with the data directly
+          setScanResult({
+            status: data.scan_status,
+            results: data.scan_results,
+            error: data.error_message
+          });
+          
+          // Stop polling if scan is in a terminal state
+          if (['completed', 'failed', 'stopped'].includes(data.scan_status)) {
+            console.log('Scan reached terminal state:', data.scan_status);
             clearInterval(interval);
             setPollingInterval(null);
+            // Also stop the scan if it's still running
+            if (data.scan_status === 'running') {
+              handleStopScan();
+            }
           }
         } catch (error) {
           console.error('Error polling scan results:', error);
           if (error instanceof Error) {
             setError(error.message);
           }
+          // Stop polling on error
+          clearInterval(interval);
+          setPollingInterval(null);
         }
       }, 2000); // Poll every 2 seconds
       
       setPollingInterval(interval);
-      return () => clearInterval(interval);
+      return () => {
+        clearInterval(interval);
+        setPollingInterval(null);
+      };
     }
-  }, [scanId, scanResult]);
+  }, [scanId, scanResult?.status]);
+
+  const handleStopScan = async () => {
+    if (!scanId) return;
+    
+    try {
+      const response = await fetch(`${BACKEND_URL}/api/network/stop-scan/${scanId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requester-IP': window.location.hostname
+        }
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to stop scan');
+      }
+
+      const data = await response.json();
+      console.log('Stop scan response:', data);
+      
+      // Update scan status to stopped
+      setScanResult(prev => ({
+        ...prev,
+        status: 'stopped',
+        error: 'Scan stopped by user'
+      }));
+
+      // Clear polling interval
+      if (pollingInterval) {
+        clearInterval(pollingInterval);
+        setPollingInterval(null);
+      }
+
+      // Call the parent's onStopScan handler
+      onStopScan();
+    } catch (error) {
+      console.error('Error stopping scan:', error);
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,25 +218,9 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
       return;
     }
 
-    try {
-      const response = await fetch('/api/network/scan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ip_address: ip }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || 'Failed to start scan');
-      }
-
-      const data = await response.json();
-      setScanId(data.scan_id);
-      setScanResult({ status: 'pending' });
-      onScanSubmit(ip);
-    } catch (error) {
-      setError(error instanceof Error ? error.message : 'An error occurred');
-    }
+    // Use the onScanSubmit prop instead of making our own request
+    onScanSubmit(ip);
+    setScanResult({ status: 'queued' });
   };
 
   const handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,22 +233,30 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
   const renderScanResults = () => {
     if (!scanResult) return null;
 
+    // Show loading state for pending/running scans
     if (scanResult.status === 'pending' || scanResult.status === 'running') {
       return (
         <Alert variant="info" className="mb-4">
-          <AlertDescription>Scan in progress...</AlertDescription>
+          <div className="flex items-center gap-2">
+            <Loader className="animate-spin h-4 w-4" />
+            <AlertDescription>Scan in progress... Please wait while we analyze the target.</AlertDescription>
+          </div>
         </Alert>
       );
     }
 
+    // Show error state
     if (scanResult.status === 'failed') {
       return (
         <Alert variant="destructive" className="mb-4">
-          <AlertDescription>Scan failed. Please try again.</AlertDescription>
+          <AlertDescription>
+            {scanResult.error || "Scan failed. Please try again."}
+          </AlertDescription>
         </Alert>
       );
     }
 
+    // Show completed scan results
     if (scanResult.status === 'completed' && scanResult.results) {
       const { summary, ports, host_info } = scanResult.results;
       return (
@@ -209,7 +270,7 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <div className="bg-gray-700/50 p-4 rounded-lg">
                 <h4 className="text-sm font-medium text-gray-300 mb-2">Host Information</h4>
-                <p className="text-white">{host_info.hostname}</p>
+                <p className="text-white">{host_info?.hostname || 'Unknown'}</p>
               </div>
               
               <div className="bg-gray-700/50 p-4 rounded-lg">
@@ -217,17 +278,17 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
                 <div className="grid grid-cols-2 gap-2">
                   <div>
                     <p className="text-sm text-gray-400">Total Ports</p>
-                    <p className="text-white font-medium">{summary.total_ports}</p>
+                    <p className="text-white font-medium">{summary?.total_ports || 0}</p>
                   </div>
                   <div>
                     <p className="text-sm text-gray-400">Open Ports</p>
-                    <p className="text-white font-medium">{summary.open_ports}</p>
+                    <p className="text-white font-medium">{summary?.open_ports || 0}</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {ports.length > 0 ? (
+            {ports && ports.length > 0 ? (
               <div>
                 <h4 className="text-sm font-medium text-gray-300 mb-2">Open Ports</h4>
                 <div className="bg-gray-700/50 rounded-lg overflow-hidden">
@@ -387,7 +448,7 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
             {(isLoading || scanResult?.status === 'running') && (
               <button
                 type="button"
-                onClick={onStopScan}
+                onClick={handleStopScan}
                 className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
               >
                 <StopCircle className="h-4 w-4" />

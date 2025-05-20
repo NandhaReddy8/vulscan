@@ -24,11 +24,19 @@ from config import (
 from db_handler import DatabaseHandler
 import logging
 import json
-from networkscan import scan_network, get_network_scan_results
+from networkscan import start_network_scan, stop_network_scan, get_scan_status
+import asyncio
 
 # Configure logging
-log = logging.getLogger('werkzeug')
-log.setLevel(logging.ERROR)
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.StreamHandler(),
+        logging.FileHandler('network_scan.log', encoding='utf-8')
+    ]
+)
 
 db = DatabaseHandler()
 
@@ -84,18 +92,30 @@ def check_weekly_scan_limit(target_url):
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
 
-# Configure CORS
+# Configure CORS with explicit settings for all routes
 CORS(app, 
      resources={r"/*": {
          "origins": CORS_ORIGINS,
          "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-         "allow_headers": ["Content-Type", "Authorization"],
+         "allow_headers": ["Content-Type", "Authorization", "X-Requester-IP"],
          "supports_credentials": True,
          "expose_headers": ["Content-Type", "Authorization"],
-         "max_age": 3600
+         "max_age": 3600,
+         "send_wildcard": False
      }},
      supports_credentials=True
 )
+
+# Add CORS headers to all responses
+@app.after_request
+def after_request(response):
+    origin = request.headers.get('Origin')
+    if origin in CORS_ORIGINS:
+        response.headers.add('Access-Control-Allow-Origin', origin)
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization,X-Requester-IP')
+        response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+    return response
 
 # Configure JWT
 app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
@@ -607,104 +627,143 @@ def handle_disconnect():
     for scan_id in disconnected_scans:
         active_scans.pop(scan_id, None)
 
-@app.route("/api/network/scan", methods=["POST"])
-def start_network_scan():
-    """Start a network scan for the provided IP address."""
+@app.route("/api/network/start-scan", methods=["POST", "OPTIONS"])
+def start_network_scan_endpoint():
+    """Start a new network scan."""
+    if request.method == "OPTIONS":
+        return app.make_default_options_response()
+
     try:
         data = request.get_json()
         if not data or "ip_address" not in data:
             return jsonify({"error": "Missing IP address"}), 400
 
         ip_address = data["ip_address"]
-        requester_ip = request.remote_addr
+        requester_ip = get_client_ip(request)  # Use the existing get_client_ip function
 
         # Start the scan
-        success, message, scan_id = scan_network(ip_address, requester_ip)
+        try:
+            success, message, scan_id = start_network_scan(ip_address, requester_ip)
+        except Exception as e:
+            logger.error(f"Error in start_network_scan: {str(e)}")
+            return jsonify({"error": "Failed to start scan"}), 500
 
         if not success:
             return jsonify({"error": message}), 400
 
-        return jsonify({
+        response = jsonify({
             "message": "Scan started successfully",
             "scan_id": scan_id,
-            "status": "pending"
+            "status": "queued"
         })
+        return response
 
     except Exception as e:
-        print(f"[ERROR] Error starting network scan: {str(e)}")
+        logger.error(f"Error in start_network_scan_endpoint: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
-@app.route("/api/network/results/<scan_id>", methods=["GET"])
-def get_scan_results(scan_id):
-    """Retrieve the results of a network scan."""
+@app.route("/api/network/scan/<scan_id>", methods=["GET"])
+def get_network_scan_endpoint(scan_id):
+    """Get the status and results of a network scan."""
     try:
         # Get requester IP from header or fallback to remote_addr
         requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
-        print(f"[DEBUG] Retrieving scan results for {scan_id} from {requester_ip}")
+        logger.debug(f"Retrieving scan results for {scan_id} from {requester_ip}")
         
-        results = get_network_scan_results(scan_id, requester_ip)
+        success, results = get_scan_status(scan_id, requester_ip)
+        if not success:
+            return jsonify({"error": results.get("error", "Scan not found")}), 404
 
-        if not results:
-            return jsonify({"error": "Scan not found"}), 404
-
-        if "error" in results:
-            return jsonify({"error": results["error"]}), 403
-
+        # Return just the results object, not the tuple
         return jsonify(results)
 
     except Exception as e:
-        print(f"[ERROR] Error retrieving scan results: {str(e)}")
+        logger.error(f"Error retrieving scan results: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
-@app.route("/api/network/stop-scan", methods=["POST"])
-def stop_network_scan():
+@app.route("/api/network/stop-scan/<scan_id>", methods=["POST"])
+def stop_network_scan_endpoint(scan_id):
     """Stop an ongoing network scan."""
     try:
-        data = request.get_json()
-        if not data or "ip_address" not in data:
-            return jsonify({"error": "Missing IP address"}), 400
+        # Get requester IP from header or fallback to remote_addr
+        requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
+        logger.info(f"Stop scan request for {scan_id} from {requester_ip}")
+        
+        # Verify the scan exists and belongs to this requester
+        success, scan_info = get_scan_status(scan_id, requester_ip)
+        if not success:
+            logger.warning(f"Scan {scan_id} not found")
+            return jsonify({"error": "Scan not found"}), 404
+            
+        if scan_info["requester_ip"] != requester_ip:
+            logger.warning(f"Unauthorized stop attempt for scan {scan_id} from {requester_ip}")
+            return jsonify({"error": "Unauthorized to stop this scan"}), 403
+            
+        if scan_info["scan_status"] not in ["queued", "running"]:
+            logger.info(f"Scan {scan_id} is already in state {scan_info['scan_status']}")
+            return jsonify({
+                "message": f"Scan is already {scan_info['scan_status']}",
+                "scan_id": scan_id,
+                "status": scan_info["scan_status"]
+            }), 200
 
-        ip_address = data["ip_address"]
-        requester_ip = request.remote_addr
+        # Stop the scan
+        if stop_network_scan(scan_id):
+            logger.info(f"Successfully stopped scan {scan_id}")
+            return jsonify({
+                "message": "Scan stopped successfully",
+                "scan_id": scan_id,
+                "status": "stopped"
+            })
+        else:
+            logger.error(f"Failed to stop scan {scan_id}")
+            return jsonify({
+                "error": "Failed to stop scan - scan may have already completed or failed",
+                "scan_id": scan_id,
+                "current_status": scan_info["scan_status"]
+            }), 500
 
-        # Find the scan_id for this IP address
+    except Exception as e:
+        logger.error(f"Error stopping network scan {scan_id}: {str(e)}")
+        return jsonify({
+            "error": "Internal server error while stopping scan",
+            "details": str(e)
+        }), 500
+
+@app.route("/api/network/scans", methods=["GET"])
+def list_network_scans():
+    """List all network scans for the current requester."""
+    try:
+        requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
+        
+        # Get scans from database
         conn = db.get_connection()
         try:
             with conn.cursor() as cur:
                 cur.execute("""
-                    SELECT scan_id 
-                    FROM network_scan_results 
-                    WHERE ip_address = %s 
-                    AND requester_ip = %s 
-                    AND scan_status = 'running'
-                    ORDER BY scan_timestamp DESC 
-                    LIMIT 1
-                """, (ip_address, requester_ip))
-                result = cur.fetchone()
-                
-                if not result:
-                    return jsonify({"error": "No running scan found for this IP"}), 404
-                    
-                scan_id = result[0]
-                
-                # Update scan status to 'stopped'
-                cur.execute("""
-                    UPDATE network_scan_results 
-                    SET scan_status = 'stopped', 
-                        error_message = 'Scan stopped by user'
-                    WHERE scan_id = %s
-                """, (scan_id,))
-                conn.commit()
-                
-                return jsonify({
-                    "message": "Scan stopped successfully",
-                    "scan_id": scan_id
-                })
+                    SELECT scan_id, ip_address, scan_timestamp, scan_status, 
+                           created_at, updated_at
+                    FROM network_scan_results
+                    WHERE requester_ip = %s
+                    ORDER BY scan_timestamp DESC
+                    LIMIT 50
+                """, (requester_ip,))
+                scans = []
+                for row in cur.fetchall():
+                    scans.append({
+                        "scan_id": row[0],
+                        "ip_address": row[1],
+                        "scan_timestamp": row[2].isoformat(),
+                        "scan_status": row[3],
+                        "created_at": row[4].isoformat(),
+                        "updated_at": row[5].isoformat()
+                    })
+                return jsonify({"scans": scans})
         finally:
             db.put_connection(conn)
 
     except Exception as e:
-        print(f"[ERROR] Error stopping network scan: {str(e)}")
+        logger.error(f"Error listing network scans: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
 
 # Update the socket binding logic

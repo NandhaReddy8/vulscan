@@ -10,6 +10,7 @@ function NetworkScannerPage() {
   const [isScanning, setIsScanning] = useState(false);
   const [ip, setIp] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [scanId, setScanId] = useState("");
 
   // Get backend URL from environment variables
   const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
@@ -29,9 +30,12 @@ function NetworkScannerPage() {
   const handleScan = async (ip: string) => {
     setIsScanning(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/network/scan`, {
+      const response = await fetch(`${BACKEND_URL}/api/network/start-scan`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Requester-IP": window.location.hostname
+        },
         body: JSON.stringify({ ip_address: ip }),
       });
 
@@ -40,7 +44,8 @@ function NetworkScannerPage() {
         throw new Error(error.error || "Failed to start network scan");
       }
 
-      await response.json(); // Just consume the response
+      const data = await response.json();
+      setScanId(data.scan_id);
       toast.success("Network scan started successfully!", {
         position: "top-right",
         autoClose: 3000,
@@ -56,11 +61,21 @@ function NetworkScannerPage() {
   };
 
   const handleStopScan = async () => {
+    if (!scanId) {
+      toast.error("No active scan to stop", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
     try {
-      const response = await fetch(`${BACKEND_URL}/api/network/stop-scan`, {
+      const response = await fetch(`${BACKEND_URL}/api/network/stop-scan/${scanId}`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ip_address: ip }),
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Requester-IP": window.location.hostname
+        }
       });
 
       if (!response.ok) {
@@ -69,6 +84,7 @@ function NetworkScannerPage() {
       }
 
       setIsScanning(false);
+      setScanId("");
       toast.info("Scan stopped", {
         position: "top-right",
         autoClose: 3000,
@@ -141,6 +157,7 @@ function NetworkScannerPage() {
             onScanSubmit={handleScan}
             onStopScan={handleStopScan}
             isLoading={isScanning}
+            scanId={scanId}
           />
         </main>
 
