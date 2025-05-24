@@ -19,8 +19,8 @@ JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=30)
 # Read CORS origins from environment variable, split by comma
 # Format in .env: CORS_ORIGINS=http://site1.com,http://site2.com,http://site3.com
 DEFAULT_CORS_ORIGINS = [
-    "http://10.10.0.134:5173",  # Marketing frontend
-    "http://10.10.0.134:5174",  # Main frontend
+    "http://192.168.1.23:5173",  # Marketing frontend
+    "http://192.168.1.23:5174",  # Main frontend
     "http://localhost:5173",      # Local marketing frontend
     "http://localhost:5174",      # Local main frontend
     "http://127.0.0.1:5173",      # Local marketing frontend alternative

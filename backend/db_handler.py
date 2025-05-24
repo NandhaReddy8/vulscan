@@ -146,9 +146,8 @@ class DatabaseHandler:
             last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
 
-        -- Drop and recreate network_scan_results table to ensure consistent schema
-        DROP TABLE IF EXISTS network_scan_results CASCADE;
-        CREATE TABLE network_scan_results (
+        -- Create network_scan_results table if it doesn't exist
+        CREATE TABLE IF NOT EXISTS network_scan_results (
             id SERIAL PRIMARY KEY,
             scan_id TEXT NOT NULL UNIQUE,
             ip_address TEXT NOT NULL,
@@ -160,7 +159,7 @@ class DatabaseHandler:
             updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
         );
 
-        -- Add indexes for faster lookups
+        -- Add indexes for faster lookups (only if they don't exist)
         CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id);
         CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address);
         CREATE INDEX IF NOT EXISTS idx_network_scan_status ON network_scan_results(scan_status);

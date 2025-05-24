@@ -29,7 +29,7 @@ const Features = () => {
                   Web Application Scanner
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Identifies SQL Injection, XSS, OS Command Injection, Directory Traversal, and web server misconfigurations.
+                  Is Your Web Application Safe? Question It. Test It.
                 </p>
                 <Button
                   className="bg-primary hover:bg-primary/90 text-white"
@@ -48,7 +48,7 @@ const Features = () => {
                   Network Vulnerability Scanner
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Discovers outdated services, OS misconfigurations, and insecure network setups.
+                 Is Your Network at Risk? Scan today, Secure Tomorrow.
                 </p>
                 <Button
                   className="bg-primary hover:bg-primary/90 text-white"
@@ -59,24 +59,6 @@ const Features = () => {
               </CardContent>
             </Card>
 
-            {/* Cloud Vulnerability Scanner */}
-            <Card className="relative overflow-hidden opacity-75 animate-fade-in" style={{ animationDelay: "150ms" }}>
-              <CardContent className="p-6 text-center">
-                <div className="absolute top-4 right-4 bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
-                  Coming Soon
-                </div>
-                <CloudCog className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <h3 className="text-xl font-bold text-primary mb-3">
-                  Cloud Vulnerability Scanner
-                </h3>
-                <p className="text-gray-600 mb-6">
-                  Finds misconfigurations, weak access controls, exposed buckets, and sensitive files.
-                </p>
-                <Button disabled className="bg-gray-700 text-gray-300 w-full cursor-not-allowed hover:bg-gray-700">
-                  Coming Soon
-                </Button>
-              </CardContent>
-            </Card>
 
             {/* API Scanner */}
             <Card className="relative overflow-hidden opacity-75 animate-fade-in" style={{ animationDelay: "300ms" }}>
@@ -89,7 +71,7 @@ const Features = () => {
                   API Scanner
                 </h3>
                 <p className="text-gray-600 mb-6">
-                  Detects vulnerabilities including SSRF, SQLi, XSS, Client-Side Prototype Pollution, and Request URL override.
+                  APIs Define Your Business - We help you Secure them. 
                 </p>
                 <Button disabled className="bg-gray-700 text-gray-300 w-full cursor-not-allowed hover:bg-gray-700">
                   Coming Soon

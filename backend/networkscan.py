@@ -78,62 +78,108 @@ def parse_nmap_output(output: str) -> dict:
     # Initialize results structure
     results = {
         "summary": {
-            "total_ports": 0,
-            "open_ports": 0,
+            "total_hosts": 0,
+            "up_hosts": 0,
             "scan_timestamp": datetime.datetime.now().isoformat()
         },
-        "ports": [],
-        "host_info": {
-            "hostname": "Unknown"
-        },
+        "hosts": [],
         "scan_time": "0s"
     }
     
     try:
-        # Extract hostname
-        hostname_match = re.search(r"Nmap scan report for (.*?)\s*\n", output)
-        if hostname_match:
-            results["host_info"]["hostname"] = hostname_match.group(1)
-            
+        current_host = None
+        current_port = None
+        in_script_output = False
+        
         # Extract scan time
         time_match = re.search(r"scanned in ([\d.]+) seconds", output)
         if time_match:
             results["scan_time"] = f"{time_match.group(1)}s"
             
-        # Extract port information
-        port_section = False
         for line in output.split('\n'):
-            if "PORT" in line and "STATE" in line and "SERVICE" in line:
-                port_section = True
+            line = line.strip()
+            if not line:
                 continue
                 
-            if port_section and line.strip():
-                if "Nmap done" in line:
-                    break
+            # New host found
+            host_match = re.search(r"Nmap scan report for (.*?)\s*$", line)
+            if host_match:
+                if current_host:
+                    results["hosts"].append(current_host)
+                current_host = {
+                    "hostname": host_match.group(1),
+                    "ip": None,
+                    "status": "down",
+                    "os_info": {},
+                    "ports": [],
+                    "filtered_ports": 0
+                }
+                results["summary"]["total_hosts"] += 1
+                continue
+                
+            # IP address
+            ip_match = re.search(r"(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})", line)
+            if ip_match and current_host:
+                current_host["ip"] = ip_match.group(1)
+                
+            # Host status
+            if "Host is up" in line and current_host:
+                current_host["status"] = "up"
+                results["summary"]["up_hosts"] += 1
+                # Extract latency if available
+                latency_match = re.search(r"\(([\d.]+)s latency\)", line)
+                if latency_match:
+                    current_host["latency"] = latency_match.group(1)
                     
-                parts = line.split()
-                if len(parts) >= 3:
-                    port_proto = parts[0].split('/')
-                    if len(port_proto) == 2:
-                        port, protocol = port_proto
-                        state = parts[1]
-                        service = parts[2] if len(parts) > 2 else "unknown"
+            # Filtered ports
+            filtered_match = re.search(r"Not shown: (\d+) filtered tcp ports", line)
+            if filtered_match and current_host:
+                current_host["filtered_ports"] = int(filtered_match.group(1))
+                
+            # Port information
+            port_match = re.match(r"^(\d+)/(tcp|udp)\s+(\w+)\s+(.*?)(?:\s+(.*))?$", line)
+            if port_match and current_host:
+                port, protocol, state, service, version = port_match.groups()
+                current_port = {
+                    "port": port,
+                    "protocol": protocol,
+                    "state": state,
+                    "service": service,
+                    "version": version.strip() if version else None,
+                    "scripts": {}
+                }
+                current_host["ports"].append(current_port)
+                in_script_output = True
+                continue
+                
+            # Script output
+            if in_script_output and current_port and line.startswith("|"):
+                script_line = line[1:].strip()  # Remove the leading |
+                if ":" in script_line:
+                    script_name, script_output = script_line.split(":", 1)
+                    script_name = script_name.strip()
+                    script_output = script_output.strip()
+                    
+                    # Handle multi-line script output
+                    if script_name in current_port["scripts"]:
+                        current_port["scripts"][script_name] += "\n" + script_output
+                    else:
+                        current_port["scripts"][script_name] = script_output
                         
-                        results["ports"].append({
-                            "port": port,
-                            "protocol": protocol,
-                            "state": state,
-                            "service": service
-                        })
-                        
-                        if state == "open":
-                            results["summary"]["open_ports"] += 1
-                            
-        results["summary"]["total_ports"] = len(results["ports"])
-        logger.debug(f"Parsed {results['summary']['total_ports']} ports, {results['summary']['open_ports']} open")
+        # Add the last host
+        if current_host:
+            results["hosts"].append(current_host)
+            
+        logger.debug(f"Parsed {results['summary']['total_hosts']} hosts, {results['summary']['up_hosts']} up")
+        
+        # Log the parsed results for debugging
+        logger.debug("Parsed results:")
+        logger.debug(json.dumps(results, indent=2))
         
     except Exception as e:
         logger.error(f"Error parsing Nmap output: {str(e)}")
+        logger.error("Raw output that caused the error:")
+        logger.error(output)
         raise
         
     return results
@@ -144,13 +190,25 @@ def run_nmap_scan(ip: str) -> Tuple[bool, str, Optional[dict]]:
     
     try:
         nmap_path = get_nmap_path()
+        # Modified scan parameters for better results:
+        # -T3: Normal timing (less aggressive than T4)
+        # -sV: Version detection
+        # -sS: TCP SYN scan
+        # -O: OS detection
+        # -Pn: Skip host discovery (treat all hosts as online)
+        # --min-rate 100: Minimum packet rate
+        # --max-retries 2: Fewer retries but still reliable
         cmd = [
             nmap_path,
-            "-sS",  # TCP SYN scan
-            "-T4",  # Timing template
-            "-F",   # Fast scan
-            "--max-retries", "1",
-            "--host-timeout", "30s",
+            "-T3",           # Normal timing
+            "-sV",           # Version detection
+            "-sS",           # TCP SYN scan
+            "-O",            # OS detection
+            "-Pn",           # Skip host discovery
+            "--min-rate", "100",
+            "--max-retries", "2",
+            "--script", "default",
+            "--script-timeout", "30s",
             ip
         ]
         
@@ -162,19 +220,28 @@ def run_nmap_scan(ip: str) -> Tuple[bool, str, Optional[dict]]:
             text=True
         )
         
-        stdout, stderr = process.communicate(timeout=35)
+        stdout, stderr = process.communicate(timeout=180)  # Increased timeout to 3 minutes
         
         if process.returncode != 0:
-            logger.error(f"Nmap scan failed: {stderr}")
+            logger.error(f"Nmap scan failed with return code {process.returncode}: {stderr}")
             return False, stderr, None
+            
+        # Log the raw output for debugging
+        logger.debug("Raw Nmap output:")
+        logger.debug(stdout)
             
         logger.debug("Nmap scan completed successfully")
         results = parse_nmap_output(stdout)
+        
+        # Log the parsed results for debugging
+        logger.debug("Parsed scan results:")
+        logger.debug(json.dumps(results, indent=2))
+        
         return True, stdout, results
         
     except subprocess.TimeoutExpired:
-        logger.error("Nmap scan timed out")
-        return False, "Scan timed out", None
+        logger.error("Nmap scan timed out after 180 seconds")
+        return False, "Scan timed out after 180 seconds", None
     except Exception as e:
         logger.error(f"Error running Nmap scan: {str(e)}")
         return False, str(e), None
@@ -333,6 +400,25 @@ def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
             return [dict(zip(columns, row)) for row in db.cursor.fetchall()]
     except Exception as e:
         logger.error(f"Error getting recent scans: {str(e)}")
+        return []
+
+def get_active_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> List[Dict]:
+    """Get active scans for an IP address from a specific requester."""
+    try:
+        with DatabaseHandler() as db:
+            query = """
+                SELECT * FROM network_scans 
+                WHERE ip_address = %s 
+                AND requester_ip = %s 
+                AND created_at > NOW() - INTERVAL %s MINUTE
+                AND scan_status IN ('queued', 'running')
+                ORDER BY created_at DESC
+            """
+            db.cursor.execute(query, (ip_address, requester_ip, minutes))
+            columns = [desc[0] for desc in db.cursor.description]
+            return [dict(zip(columns, row)) for row in db.cursor.fetchall()]
+    except Exception as e:
+        logger.error(f"Error getting active scans: {str(e)}")
         return []
 
 # Example usage
