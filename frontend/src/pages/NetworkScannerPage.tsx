@@ -1,19 +1,60 @@
 import { useState, useRef, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Header from "../components/Header";
 import NetworkScanner from "../components/NetworkScanner";
 import scannerBg from '../components/assets/gif.webm';
 import virtuesLogo from '../components/assets/virtuesTech_Logo.png';
 
+// Define the scan result type
+interface ScanResult {
+  status: 'queued' | 'pending' | 'running' | 'completed' | 'failed' | 'stopped';
+  results?: {
+    summary: {
+      total_hosts: number;
+      up_hosts: number;
+      scan_timestamp: string;
+    };
+    hosts: Array<{
+      hostname: string;
+      ip: string;
+      status: 'up' | 'down';
+      os_info: {
+        details?: string;
+        cpe?: string;
+        device_type?: string;
+        os_guesses?: Array<{
+          name: string;
+          accuracy: number;
+        }>;
+        aggressive_guesses?: Array<{
+          name: string;
+          accuracy: number;
+        }>;
+        network_distance?: number;
+        service_info?: string;
+      };
+      ports: Array<{
+        port: string;
+        protocol: string;
+        state: string;
+        service: string;
+        version?: string;
+        scripts?: Record<string, string>;
+      }>;
+      latency?: number;
+      filtered_ports: number;
+    }>;
+    scan_time: string;
+  };
+  error?: string;
+}
+
 function NetworkScannerPage() {
   const [isScanning, setIsScanning] = useState(false);
-  const [ip, setIp] = useState("");
   const videoRef = useRef<HTMLVideoElement>(null);
   const [scanId, setScanId] = useState("");
-
-  // Get backend URL from environment variables
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
 
   useEffect(() => {
     if (videoRef.current) {
@@ -27,49 +68,17 @@ function NetworkScannerPage() {
     }
   }, [isScanning]);
 
-  const handleScan = async (ip: string, captchaToken: string) => {
-    setIsScanning(true);
-    setScanId(""); // Clear any existing scan ID
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/network/start-scan`, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "X-Requester-IP": window.location.hostname,
-          "X-Captcha-Token": captchaToken
-        },
-        body: JSON.stringify({ ip_address: ip }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to start network scan");
-      }
-
-      setScanId(data.scan_id);
-      toast.success("Network scan started successfully!", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } catch (error) {
-      console.error("Error starting network scan:", error);
-      setIsScanning(false);
-      setScanId(""); // Clear scan ID on error
-      toast.error(error instanceof Error ? error.message : "Failed to start network scan", {
-        position: "top-right",
-        autoClose: 5000,
-      });
-    }
-  };
-
-  // Add handler for scan completion
-  const handleScanComplete = () => {
+  // Update handler for scan completion
+  const handleScanComplete = (result: ScanResult) => {
+    console.log('Scan completed with result:', result);
+    setScanResult(result);
     setIsScanning(false);
+    // Don't clear scanId here as we need it for the results
   };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-900 text-gray-100 relative overflow-hidden">
+      {/* Background Video */}
       <div 
         className={`fixed inset-0 w-full h-full transition-opacity duration-500 ${
           isScanning ? 'opacity-0' : 'opacity-100'
@@ -97,7 +106,6 @@ function NetworkScannerPage() {
 
       <div className="relative z-10">
         <Header />
-
         <ToastContainer
           position="top-right"
           autoClose={5000}
@@ -122,12 +130,10 @@ function NetworkScannerPage() {
           </section>
 
           <NetworkScanner
-            ip={ip}
-            setIp={setIp}
-            onScanSubmit={handleScan}
             onScanComplete={handleScanComplete}
-            isLoading={isScanning}
             scanId={scanId}
+            isLoading={isScanning}
+            scanResult={scanResult}
           />
         </main>
 

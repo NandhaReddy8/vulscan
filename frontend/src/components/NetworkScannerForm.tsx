@@ -80,6 +80,11 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
     e.preventDefault();
     setError(null);
 
+    // Prevent submission if already loading
+    if (isLoading) {
+      return;
+    }
+
     // Validate input
     const validationError = validateInput(ip);
     if (validationError) {
@@ -171,13 +176,15 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            disabled={isLoading || !captchaToken || !isInputValid}
-            className="px-8 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium shadow-lg hover:shadow-blue-500/20"
+            disabled={isLoading || !captchaToken || !isInputValid || isRateLimited}
+            className={`px-8 py-2.5 bg-blue-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium shadow-lg hover:shadow-blue-500/20 ${
+              isLoading ? 'bg-blue-700' : 'hover:bg-blue-700'
+            }`}
           >
             {isLoading ? (
               <>
                 <Loader className="animate-spin h-4 w-4" />
-                Scanning...
+                Scanning in Progress...
               </>
             ) : (
               <>

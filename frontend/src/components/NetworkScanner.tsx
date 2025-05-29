@@ -12,8 +12,7 @@ import {
   Clock, 
   Activity, 
   AlertCircle,
-  ExternalLink,
-  CheckCircle2
+  ExternalLink
 } from "lucide-react"
 import NetworkScannerForm from './NetworkScannerForm'
 import { Progress } from "@/components/ui/progress"
@@ -65,15 +64,17 @@ interface ScanResult {
 }
 
 interface NetworkScannerProps {
-  onScanComplete: (result: any) => void;
+  onScanComplete: (result: ScanResult) => void;
   scanId: string | null;
   isLoading: boolean;
+  scanResult: ScanResult | null;
 }
 
 const NetworkScanner: React.FC<NetworkScannerProps> = ({
   onScanComplete,
   scanId: externalScanId,
-  isLoading: externalLoading
+  isLoading: externalLoading,
+  scanResult: externalScanResult
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -84,9 +85,72 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
   const [scanProgress, setScanProgress] = useState(0);
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [currentScanId, setCurrentScanId] = useState<string | null>(null);
+  const [scanningMessage, setScanningMessage] = useState<string>("Initializing scan...");
+  
+  // Add scanning messages array
+  const scanningMessages = [
+    "Initializing scan...",
+    "Scanning OS services...",
+    "Detecting open ports...",
+    "Analyzing network services...",
+    "Checking for vulnerabilities...",
+    "Identifying service versions...",
+    "Mapping network topology...",
+    "Analyzing security posture...",
+    "Gathering system information...",
+    "Performing deep scan..."
+  ];
 
   const activeScanId = externalScanId || currentScanId;
+  const activeScanResult = externalScanResult || scanResult;
 
+  // Add dummy progress animation
+  useEffect(() => {
+    let progressInterval: NodeJS.Timeout;
+    let messageInterval: NodeJS.Timeout;
+    
+    // Start animation for any active scan
+    if (activeScanId) {
+      // Start dummy progress animation
+      progressInterval = setInterval(() => {
+        setScanProgress(prev => {
+          if (prev < 98) {
+            return prev + 1;
+          }
+          return prev;
+        });
+      }, 2000);
+
+      // Rotate through scanning messages
+      let messageIndex = 0;
+      setScanningMessage(scanningMessages[0]);
+      messageInterval = setInterval(() => {
+        messageIndex = (messageIndex + 1) % scanningMessages.length;
+        setScanningMessage(scanningMessages[messageIndex]);
+      }, 3000);
+    }
+
+    return () => {
+      if (progressInterval) {
+        clearInterval(progressInterval);
+      }
+      if (messageInterval) {
+        clearInterval(messageInterval);
+      }
+    };
+  }, [activeScanId]);
+
+  // Reset states when starting a new scan
+  const resetScanState = () => {
+    setError(null);
+    setScanResult(null);
+    setScanProgress(0);
+    setIsLoading(true);
+    setCurrentScanId(null);
+    setScanningMessage("Initializing scan...");
+  };
+
+  // Update the polling effect to handle real progress
   useEffect(() => {
     if (activeScanId) {
       const pollScanStatus = async () => {
@@ -102,7 +166,6 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
             setRetryAfter(null);
           }
 
-          console.log('Polling scan status for ID:', activeScanId);
           const response = await fetch(`${BACKEND_URL}/api/network/scan/${activeScanId}`);
           
           if (response.status === 429) {
@@ -116,40 +179,50 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
 
           if (!response.ok) {
             const error = await response.json();
+            // If we have results, just log the error but don't throw
+            if (activeScanResult?.results) {
+              return;
+            }
+            // If we don't have results and it's a 404, it might be a temporary error
+            if (response.status === 404) {
+              return;
+            }
             throw new Error(error.error || 'Failed to fetch scan results');
           }
           
           const data = await response.json();
-          console.log('Received scan data:', data);
           
-          // Update scan result state
-          setScanResult({
+          const newScanResult = {
             status: data.scan_status,
             results: data.scan_results,
             error: data.error_message
-          });
+          };
           
-          // Update progress based on scan status
-          if (data.scan_status === 'pending') {
-            setScanProgress(10);
-          } else if (data.scan_status === 'running') {
-            setScanProgress(50);
+          // Update scan result state
+          setScanResult(newScanResult);
+          
+          // Update loading state based on scan status
+          if (data.scan_status === 'pending' || data.scan_status === 'running') {
+            setIsLoading(true);
           } else if (['completed', 'failed', 'stopped'].includes(data.scan_status)) {
-            setScanProgress(100);
+            setIsLoading(false);
             
-            // Reset progress and notify completion after a delay
-            setTimeout(() => {
-              setScanProgress(0);
-              onScanComplete(data);
-              if (!externalScanId) {
-                setCurrentScanId(null);
-              }
-            }, 1000);
+            // Only notify completion after a delay if the scan actually completed
+            if (data.scan_status === 'completed') {
+              setTimeout(() => {
+                if (!externalScanId) {
+                  setCurrentScanId(null);
+                }
+                onScanComplete(newScanResult);
+              }, 1000);
+            }
           }
         } catch (error) {
-          console.error('Error polling scan results:', error);
-          if (error instanceof Error) {
-            setError(error.message);
+          if (!activeScanResult?.results) {
+            if (error instanceof Error) {
+              setError(error.message);
+              setIsLoading(false);
+            }
           }
         }
       };
@@ -161,17 +234,17 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
       const pollInterval = setInterval(pollScanStatus, 2000);
       return () => clearInterval(pollInterval);
     } else {
-      // Clear scan results when scanId is empty
       setScanResult(null);
       setScanProgress(0);
+      setIsLoading(false);
     }
-  }, [activeScanId, isRateLimited, retryAfter, onScanComplete, externalScanId]);
+  }, [activeScanId, isRateLimited, retryAfter, onScanComplete, externalScanId, activeScanResult?.results]);
 
   const renderScanResults = () => {
-    if (!scanResult) return null;
+    if (!activeScanResult) return null;
 
     // Show loading state for pending/running scans
-    if (scanResult.status === 'pending' || scanResult.status === 'running') {
+    if (activeScanResult.status === 'pending' || activeScanResult.status === 'running') {
       return (
         <Alert variant="info" className="mb-4">
           <div className="flex items-center gap-2">
@@ -183,19 +256,19 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
     }
 
     // Show error state
-    if (scanResult.status === 'failed') {
+    if (activeScanResult.status === 'failed') {
       return (
         <Alert variant="destructive" className="mb-4">
           <AlertDescription>
-            {scanResult.error || "Scan failed. Please try again."}
+            {activeScanResult.error || "Scan failed. Please try again."}
           </AlertDescription>
         </Alert>
       );
     }
 
     // Show completed scan results
-    if (scanResult.status === 'completed' && scanResult.results) {
-      const { summary, hosts, scan_time } = scanResult.results;
+    if (activeScanResult.status === 'completed' && activeScanResult.results) {
+      const { summary, hosts, scan_time } = activeScanResult.results;
       return (
         <div className="space-y-6">
           {/* Executive Summary Card */}
@@ -543,7 +616,7 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
   return (
     <div className="relative">
       {/* Fixed position card for advanced scanning - only show after scan completion */}
-      {scanResult?.status === 'completed' && (
+      {activeScanResult?.status === 'completed' && (
         <div className="fixed right-8 top-1/2 -translate-y-1/2 w-80 hidden lg:block z-20">
           <Card className="bg-gray-800/95 border border-blue-500/20 backdrop-blur-sm shadow-xl">
             <CardContent className="p-6">
@@ -639,13 +712,9 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
 
           <NetworkScannerForm
             onSubmit={async (ip, token) => {
-              setIsLoading(true);
-              setError(null);
-              setScanResult(null);
-              setScanProgress(0);
+              resetScanState();
               
               try {
-                console.log('Starting scan for IP:', ip);
                 const response = await fetch(`${BACKEND_URL}/api/network/start-scan`, {
                   method: 'POST',
                   headers: {
@@ -661,19 +730,18 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
                 }
 
                 const data = await response.json();
-                console.log('Scan started:', data);
                 
                 if (data.scan_id) {
                   setCurrentScanId(data.scan_id);
                   setScanResult({ status: 'queued' });
+                  setIsLoading(true);
+                  setScanProgress(0);
                 } else {
                   throw new Error('No scan ID received from server');
                 }
               } catch (err) {
-                console.error('Error starting scan:', err);
                 setError(err instanceof Error ? err.message : 'Failed to start scan');
                 setScanResult({ status: 'failed', error: err instanceof Error ? err.message : 'Failed to start scan' });
-              } finally {
                 setIsLoading(false);
               }
             }}
@@ -684,18 +752,30 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
           />
 
           {/* Progress Bar */}
-          {(scanResult?.status === 'pending' || scanResult?.status === 'running') && (
-            <div className="mt-6 space-y-2">
-              <div className="flex items-center justify-between text-sm text-gray-400">
-                <span>Scanning in progress...</span>
-                <span>{scanProgress}%</span>
-              </div>
-              <Progress value={scanProgress} className="h-2" />
-            </div>
+          {activeScanId && (
+            <Card className="mt-6 bg-gray-800/50 border-gray-700">
+              <CardContent className="p-6">
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-300 font-medium">Scan Progress</span>
+                    <span className="text-blue-400 font-medium">{scanProgress}%</span>
+                  </div>
+                  <Progress value={scanProgress} className="h-2 bg-gray-700" />
+                  <div className="flex items-center gap-2 text-sm text-gray-400">
+                    <Loader className="h-4 w-4 animate-spin" />
+                    <span>{scanningMessage}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
           )}
 
-          {/* Scan Results */}
-          {renderScanResults()}
+          {/* Scan Results with proper spacing */}
+          {activeScanResult && (
+            <div className="mt-8">
+              {renderScanResults()}
+            </div>
+          )}
         </section>
       </div>
     </div>
