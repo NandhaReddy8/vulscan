@@ -27,24 +27,26 @@ function NetworkScannerPage() {
     }
   }, [isScanning]);
 
-  const handleScan = async (ip: string) => {
+  const handleScan = async (ip: string, captchaToken: string) => {
     setIsScanning(true);
+    setScanId(""); // Clear any existing scan ID
     try {
       const response = await fetch(`${BACKEND_URL}/api/network/start-scan`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
-          "X-Requester-IP": window.location.hostname
+          "X-Requester-IP": window.location.hostname,
+          "X-Captcha-Token": captchaToken
         },
         body: JSON.stringify({ ip_address: ip }),
       });
 
+      const data = await response.json();
+
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to start network scan");
+        throw new Error(data.error || "Failed to start network scan");
       }
 
-      const data = await response.json();
       setScanId(data.scan_id);
       toast.success("Network scan started successfully!", {
         position: "top-right",
@@ -52,50 +54,18 @@ function NetworkScannerPage() {
       });
     } catch (error) {
       console.error("Error starting network scan:", error);
+      setIsScanning(false);
+      setScanId(""); // Clear scan ID on error
       toast.error(error instanceof Error ? error.message : "Failed to start network scan", {
         position: "top-right",
         autoClose: 5000,
       });
-      setIsScanning(false);
     }
   };
 
-  const handleStopScan = async () => {
-    if (!scanId) {
-      toast.error("No active scan to stop", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-      return;
-    }
-
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/network/stop-scan/${scanId}`, {
-        method: "POST",
-        headers: { 
-          "Content-Type": "application/json",
-          "X-Requester-IP": window.location.hostname
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to stop scan");
-      }
-
-      setIsScanning(false);
-      setScanId("");
-      toast.info("Scan stopped", {
-        position: "top-right",
-        autoClose: 3000,
-      });
-    } catch (error) {
-      console.error("Error stopping scan:", error);
-      toast.error(error instanceof Error ? error.message : "Failed to stop scan", {
-        position: "top-right",
-        autoClose: 5000,
-      });
-    }
+  // Add handler for scan completion
+  const handleScanComplete = () => {
+    setIsScanning(false);
   };
 
   return (
@@ -155,7 +125,7 @@ function NetworkScannerPage() {
             ip={ip}
             setIp={setIp}
             onScanSubmit={handleScan}
-            onStopScan={handleStopScan}
+            onScanComplete={handleScanComplete}
             isLoading={isScanning}
             scanId={scanId}
           />

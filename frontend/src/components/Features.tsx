@@ -20,19 +20,19 @@ const Features = () => {
               Our proprietary scanners are engineered to detect critical vulnerabilities with precision.
             </p>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-7xl mx-auto">
             {/* Web Application Scanner */}
-            <Card className="relative overflow-hidden transition-transform hover:scale-105 animate-fade-in">
-              <CardContent className="p-6 text-center">
-                <Scan className="w-12 h-12 mx-auto mb-4 text-primary" />
-                <h3 className="text-xl font-bold text-primary mb-3">
+            <Card className="relative overflow-hidden transition-transform hover:scale-105 animate-fade-in h-full">
+              <CardContent className="p-6 text-center flex flex-col justify-between h-full">
+                <Scan className="w-10 h-10 mx-auto mb-3 text-primary" />
+                <h3 className="text-lg font-bold text-primary mb-2">
                   Web Application Scanner
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-4 text-sm">
                   Is Your Web Application Safe? Question It. Test It.
                 </p>
                 <Button
-                  className="bg-primary hover:bg-primary/90 text-white"
+                  className="bg-primary hover:bg-primary/90 text-white text-sm"
                   onClick={() => navigate('/webscanner')}
                 >
                   Scan Now
@@ -41,17 +41,17 @@ const Features = () => {
             </Card>
 
             {/* Network Vulnerability Scanner */}
-            <Card className="relative overflow-hidden transition-transform hover:scale-105 animate-fade-in" style={{ animationDelay: "150ms" }}>
-              <CardContent className="p-6 text-center">
-                <Network className="w-12 h-12 mx-auto mb-4 text-primary" />
-                <h3 className="text-xl font-bold text-primary mb-3">
+            <Card className="relative overflow-hidden transition-transform hover:scale-105 animate-fade-in h-full" style={{ animationDelay: "150ms" }}>
+              <CardContent className="p-6 text-center flex flex-col justify-between h-full">
+                <Network className="w-10 h-10 mx-auto mb-3 text-primary" />
+                <h3 className="text-lg font-bold text-primary mb-2">
                   Network Vulnerability Scanner
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-4 text-sm">
                  Is Your Network at Risk? Scan today, Secure Tomorrow.
                 </p>
                 <Button
-                  className="bg-primary hover:bg-primary/90 text-white"
+                  className="bg-primary hover:bg-primary/90 text-white text-sm"
                   onClick={() => navigate('/networkscanner')}
                 >
                   Scan Now
@@ -59,21 +59,39 @@ const Features = () => {
               </CardContent>
             </Card>
 
-
             {/* API Scanner */}
-            <Card className="relative overflow-hidden opacity-75 animate-fade-in" style={{ animationDelay: "300ms" }}>
-              <CardContent className="p-6 text-center">
+            <Card className="relative overflow-hidden opacity-75 animate-fade-in h-full" style={{ animationDelay: "300ms" }}>
+              <CardContent className="p-6 text-center flex flex-col justify-between h-full">
                 <div className="absolute top-4 right-4 bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
                   Coming Soon
                 </div>
-                <Code className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-                <h3 className="text-xl font-bold text-primary mb-3">
+                <Code className="w-10 h-10 mx-auto mb-3 text-gray-400" />
+                <h3 className="text-lg font-bold text-primary mb-2">
                   API Scanner
                 </h3>
-                <p className="text-gray-600 mb-6">
+                <p className="text-gray-600 mb-4 text-sm">
                   APIs Define Your Business - We help you Secure them. 
                 </p>
-                <Button disabled className="bg-gray-700 text-gray-300 w-full cursor-not-allowed hover:bg-gray-700">
+                <Button disabled className="bg-gray-700 text-gray-300 w-full cursor-not-allowed hover:bg-gray-700 text-sm">
+                  Coming Soon
+                </Button>
+              </CardContent>
+            </Card>
+
+            {/* Cloud Scanner */}
+            <Card className="relative overflow-hidden opacity-75 animate-fade-in h-full" style={{ animationDelay: "450ms" }}>
+              <CardContent className="p-6 text-center flex flex-col justify-between h-full">
+                <div className="absolute top-4 right-4 bg-gray-700 text-gray-300 text-xs px-2 py-1 rounded">
+                  Coming Soon
+                </div>
+                <CloudCog className="w-10 h-10 mx-auto mb-3 text-gray-400" />
+                <h3 className="text-lg font-bold text-primary mb-2">
+                  Cloud Scanner
+                </h3>
+                <p className="text-gray-600 mb-4 text-sm">
+                  Secure Your Cloud Infrastructure - Scan, Detect, Protect.
+                </p>
+                <Button disabled className="bg-gray-700 text-gray-300 w-full cursor-not-allowed hover:bg-gray-700 text-sm">
                   Coming Soon
                 </Button>
               </CardContent>

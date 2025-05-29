@@ -9,20 +9,17 @@ import hashlib
 import uuid
 import asyncio
 import threading
+import socket
+import re
+import requests
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Optional, Tuple, Any, List
-from database import (
-    create_scan_record,
-    update_scan_status,
-    get_scan_by_id,
-    get_active_scans,
-    get_recent_scans
-)
+from database import (create_scan_record,update_scan_status,get_scan_by_id,get_active_scans,get_recent_scans)
 import logging
-import re
 import time
 from datetime import timedelta
 from psycopg2.extras import DictCursor
+from config import CAPTCHA_VERIFY_URL
 
 # Configure logging
 logging.basicConfig(
@@ -37,7 +34,7 @@ logger = logging.getLogger(__name__)
 
 # Global thread pool for running scans
 scan_executor = ThreadPoolExecutor(max_workers=5)  # Limit concurrent scans
-active_scans: Dict[str, Dict] = {}  # Track active scans for cancellation
+active_scans: Dict[str, Dict] = {}  # Track active scans
 scan_results_cache: Dict[str, Dict] = {}  # Cache scan results to prevent duplicate saves
 scan_lock = threading.Lock()  # Lock for thread-safe operations
 request_cache = {}  # Cache to track recent requests
@@ -87,9 +84,17 @@ def parse_nmap_output(output: str) -> dict:
     }
     
     try:
+        # Initialize all state variables
         current_host = None
         current_port = None
         in_script_output = False
+        in_os_detection = False
+        in_aggressive = False  # Initialize in_aggressive here
+        os_guesses = []
+        aggressive_guesses = []
+        device_type = None
+        network_distance = None
+        service_info = None
         
         # Extract scan time
         time_match = re.search(r"scanned in ([\d.]+) seconds", output)
@@ -105,7 +110,25 @@ def parse_nmap_output(output: str) -> dict:
             host_match = re.search(r"Nmap scan report for (.*?)\s*$", line)
             if host_match:
                 if current_host:
+                    # Add OS detection results to the current host
+                    if os_guesses or aggressive_guesses or device_type or network_distance or service_info:
+                        current_host["os_info"] = {
+                            "os_guesses": os_guesses,
+                            "aggressive_guesses": aggressive_guesses,
+                            "device_type": device_type,
+                            "network_distance": network_distance,
+                            "service_info": service_info
+                        }
                     results["hosts"].append(current_host)
+                
+                # Reset OS detection variables for new host
+                os_guesses = []
+                aggressive_guesses = []
+                device_type = None
+                network_distance = None
+                service_info = None
+                in_os_detection = False
+                
                 current_host = {
                     "hostname": host_match.group(1),
                     "ip": None,
@@ -131,6 +154,64 @@ def parse_nmap_output(output: str) -> dict:
                 if latency_match:
                     current_host["latency"] = latency_match.group(1)
                     
+            # Device type
+            if "Device type:" in line:
+                device_type = line.replace("Device type:", "").strip()
+                in_os_detection = True
+                continue
+                
+            # OS guesses
+            if in_os_detection and "Running:" in line:
+                guesses_text = line.replace("Running:", "").strip()
+                for guess in guesses_text.split("|"):
+                    guess = guess.strip()
+                    if "(" in guess:
+                        name, accuracy = guess.rsplit("(", 1)
+                        accuracy = int(accuracy.replace("%)", ""))
+                        os_guesses.append({
+                            "name": name.strip(),
+                            "accuracy": accuracy
+                        })
+                continue
+                
+            # Aggressive OS guesses
+            if in_os_detection and "Aggressive OS guesses:" in line:
+                in_aggressive = True
+                continue
+                
+            if in_os_detection and in_aggressive and line.startswith(" "):
+                if "No exact OS matches" in line:
+                    in_aggressive = False
+                    continue
+                    
+                guess_match = re.match(r"\s*([^(]+)\s*\((\d+)%\)", line)
+                if guess_match:
+                    name, accuracy = guess_match.groups()
+                    aggressive_guesses.append({
+                        "name": name.strip(),
+                        "accuracy": int(accuracy)
+                    })
+                continue
+                
+            # Network distance
+            if "Network Distance:" in line:
+                distance_match = re.search(r"Network Distance: (\d+) hops?", line)
+                if distance_match:
+                    network_distance = int(distance_match.group(1))
+                continue
+                
+            # Service info
+            if "Service Info:" in line:
+                service_info = line.replace("Service Info:", "").strip()
+                continue
+                
+            # OS CPE
+            if "OS CPE:" in line:
+                cpe = line.replace("OS CPE:", "").strip()
+                if current_host and "os_info" in current_host:
+                    current_host["os_info"]["cpe"] = cpe
+                continue
+                
             # Filtered ports
             filtered_match = re.search(r"Not shown: (\d+) filtered tcp ports", line)
             if filtered_match and current_host:
@@ -168,6 +249,15 @@ def parse_nmap_output(output: str) -> dict:
                         
         # Add the last host
         if current_host:
+            # Add OS detection results to the last host
+            if os_guesses or aggressive_guesses or device_type or network_distance or service_info:
+                current_host["os_info"] = {
+                    "os_guesses": os_guesses,
+                    "aggressive_guesses": aggressive_guesses,
+                    "device_type": device_type,
+                    "network_distance": network_distance,
+                    "service_info": service_info
+                }
             results["hosts"].append(current_host)
             
         logger.debug(f"Parsed {results['summary']['total_hosts']} hosts, {results['summary']['up_hosts']} up")
@@ -251,82 +341,165 @@ def run_scan_task(scan_id: str, ip: str, requester_ip: str):
     logger.info(f"Starting scan task for scan_id: {scan_id}, ip: {ip}")
     
     try:
-        # Add to active scans
+        # Add to active scans with initial state
         with scan_lock:
             active_scans[scan_id] = {
-                "ip": ip,
-                "start_time": datetime.datetime.now(),
-                "status": "running"
+                'status': 'queued',
+                'start_time': datetime.datetime.now(),
+                'ip': ip,
+                'requester_ip': requester_ip
             }
             
         # Update status to running
-        if not update_scan_status(scan_id, "running"):
-            logger.error(f"Failed to update scan status to running for {scan_id}")
-            return
-            
-        # Run the scan
+        update_scan_status(scan_id, "running")
+        
+        # Run the Nmap scan
         success, output, results = run_nmap_scan(ip)
         
         if not success:
-            logger.error(f"Scan failed for {scan_id}: {output}")
+            logger.error(f"Scan failed for {ip}: {output}")
             update_scan_status(scan_id, "failed", error=output)
             return
             
-        # Save results and update status to completed in one transaction
-        if not update_scan_status(scan_id, "completed", results=results):
-            logger.error(f"Failed to save scan results for {scan_id}")
-            update_scan_status(scan_id, "failed", error="Failed to save scan results")
-            return
+        # Save results
+        if results:
+            update_scan_status(scan_id, "completed", results=results)
+        else:
+            update_scan_status(scan_id, "failed", error="No results returned from scan")
             
-        logger.info(f"Scan {scan_id} completed and results saved successfully")
-        
     except Exception as e:
-        logger.error(f"Error in scan task for {scan_id}: {str(e)}")
+        logger.error(f"Error in scan task: {str(e)}")
         update_scan_status(scan_id, "failed", error=str(e))
-        
     finally:
-        # Only cleanup after results are saved
+        # Cleanup
         with scan_lock:
             if scan_id in active_scans:
                 del active_scans[scan_id]
-                logger.info(f"Cleaned up scan resources for scan_id: {scan_id}")
 
-def start_network_scan(ip: str, requester_ip: str) -> Tuple[bool, str, Optional[str]]:
+def is_private_ip(ip_str: str) -> bool:
+    """Check if an IP address is private."""
+    try:
+        ip = ipaddress.ip_address(ip_str)
+        return ip.is_private
+    except ValueError:
+        return False
+
+def is_valid_domain(domain: str) -> bool:
+    """Validate domain name format."""
+    # Basic domain name validation regex
+    domain_regex = r'^([a-zA-Z0-9]([a-zA-Z0-9\-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$'
+    return bool(re.match(domain_regex, domain))
+
+def resolve_domain(domain: str) -> Tuple[bool, str, Optional[str]]:
+    """Resolve domain name to IP address."""
+    try:
+        # Remove any protocol prefix if present
+        domain = domain.replace('http://', '').replace('https://', '').strip()
+        
+        # Validate domain format
+        if not is_valid_domain(domain):
+            return False, "Invalid domain name format. Please enter a valid domain (e.g., example.com)", None
+            
+        # Try to resolve the domain
+        ip = socket.gethostbyname(domain)
+        
+        # Check if resolved IP is private
+        if is_private_ip(ip):
+            return False, "Domain resolves to a private IP address. Only public IPs are allowed.", None
+            
+        return True, ip, None
+    except socket.gaierror as e:
+        return False, f"Failed to resolve domain: {str(e)}", None
+    except Exception as e:
+        return False, f"Error resolving domain: {str(e)}", None
+
+def validate_target(target: str) -> Tuple[bool, str, Optional[str]]:
+    """Validate target (IP or domain) and return resolved IP if valid."""
+    # Remove any protocol prefix if present
+    target = target.replace('http://', '').replace('https://', '').strip()
+    
+    # Check if it's an IP address
+    try:
+        ip = ipaddress.ip_address(target)
+        if ip.is_private:
+            return False, "Private IP addresses are not allowed. Please use a public IP address.", None
+        return True, target, None
+    except ValueError:
+        # Not an IP address, try as domain
+        return resolve_domain(target)
+
+def verify_captcha_token(token: str) -> Tuple[bool, str]:
+    """Verify a CAPTCHA token with the local verification endpoint."""
+    try:
+        # Split the token into challenge and nonce
+        challenge, nonce = token.split(':')
+        
+        # Verify with local endpoint
+        response = requests.post(
+            CAPTCHA_VERIFY_URL,
+            json={"challenge": challenge, "nonce": nonce},
+            headers={"X-Internal-Verify": "true"},
+            timeout=5
+        )
+        
+        if not response.ok:
+            return False, "Invalid CAPTCHA token"
+            
+        data = response.json()
+        if data.get('error'):
+            return False, data['error']
+            
+        return data.get('success', False), "CAPTCHA verification failed"
+        
+    except Exception as e:
+        logger.error(f"Error verifying CAPTCHA token: {str(e)}")
+        return False, "CAPTCHA verification error"
+
+def start_network_scan(target: str, requester_ip: str, captcha_token: str) -> Tuple[bool, str, Optional[str]]:
     """Start a new network scan with proper request deduplication."""
-    logger.debug(f"Starting network scan for IP: {ip} from {requester_ip}")
+    logger.debug(f"Starting network scan for target: {target} from {requester_ip}")
+    
+    # CAPTCHA verification is already done in the endpoint
+    # Just validate target (IP or domain)
+    is_valid, message, resolved_ip = validate_target(target)
+    if not is_valid:
+        return False, message, None
+        
+    # Use resolved IP for the scan
+    ip_address = resolved_ip if resolved_ip else target
     
     # Check for duplicate requests
     with request_lock:
-        cache_key = f"{ip}:{requester_ip}"
+        cache_key = f"{ip_address}:{requester_ip}"
         current_time = time.time()
         
         if cache_key in request_cache:
             last_request_time = request_cache[cache_key]
             if current_time - last_request_time < 5:  # 5 second cooldown
-                logger.warning(f"Duplicate scan request for {ip} from {requester_ip}")
+                logger.warning(f"Duplicate scan request for {ip_address} from {requester_ip}")
                 return False, "Please wait before starting another scan", None
                 
         request_cache[cache_key] = current_time
         
     try:
         # Check for existing active scans
-        active = get_active_scans(ip, requester_ip)
+        active = get_active_scans(ip_address, requester_ip)
         if active:
-            logger.warning(f"Found active scan for {ip} from {requester_ip}")
-            return False, "A scan is already in progress for this IP", None
+            logger.warning(f"Found active scan for {ip_address} from {requester_ip}")
+            return False, "A scan is already in progress for this target", None
             
         # Generate new scan ID
         scan_id = str(uuid.uuid4())
         logger.debug(f"Generated new scan ID: {scan_id}")
         
         # Create initial scan record
-        if not create_scan_record(scan_id, ip, requester_ip):
+        if not create_scan_record(scan_id, ip_address, requester_ip):
             return False, "Failed to create scan record", None
             
         # Start scan task in background
         thread = threading.Thread(
             target=run_scan_task,
-            args=(scan_id, ip, requester_ip),
+            args=(scan_id, ip_address, requester_ip),
             daemon=True
         )
         thread.start()
@@ -336,34 +509,6 @@ def start_network_scan(ip: str, requester_ip: str) -> Tuple[bool, str, Optional[
     except Exception as e:
         logger.error(f"Error starting network scan: {str(e)}")
         return False, str(e), None
-
-def stop_network_scan(scan_id: str, requester_ip: str) -> Tuple[bool, str]:
-    """Stop an active network scan."""
-    logger.info(f"Attempting to stop scan {scan_id} from {requester_ip}")
-    
-    try:
-        # Get scan details
-        scan = get_scan_by_id(scan_id, requester_ip)
-        if not scan:
-            return False, "Scan not found"
-            
-        if scan['scan_status'] not in ['queued', 'running']:
-            return False, f"Scan is already {scan['scan_status']}"
-            
-        # Update status to stopped
-        if not update_scan_status(scan_id, "stopped", error="Scan stopped by user"):
-            return False, "Failed to update scan status"
-            
-        # Remove from active scans
-        with scan_lock:
-            if scan_id in active_scans:
-                del active_scans[scan_id]
-                
-        return True, "Scan stopped successfully"
-        
-    except Exception as e:
-        logger.error(f"Error stopping scan: {str(e)}")
-        return False, str(e)
 
 def get_scan_status(scan_id: str, requester_ip: str) -> Tuple[bool, dict]:
     """Get current status of a scan."""
@@ -426,7 +571,7 @@ if __name__ == "__main__":
     async def test_scan():
         test_ip = "8.8.8.8"
         print("\n=== Testing Network Scanner ===\n")
-        success, message, scan_id = await start_network_scan(test_ip, "127.0.0.1")
+        success, message, scan_id = await start_network_scan(test_ip, "127.0.0.1", "valid_captcha_token")
         print(f"\nScan started: {message}")
         print(f"Scan ID: {scan_id}")
         

@@ -1,9 +1,11 @@
-import React, { useState } from "react";
-import { Loader, StopCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Loader, StopCircle, CheckCircle2 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
+import CapCaptcha from './CapCaptcha';
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ScannerProps {
-  onScanSubmit: (url: string) => void;
+  onScanSubmit: (url: string, captchaToken: string) => void;
   onStopScan: () => void;
   isLoading: boolean;
   url: string;
@@ -21,69 +23,69 @@ const Scanner: React.FC<ScannerProps> = ({
   const location = useLocation();
   const [protocol, setProtocol] = useState("https://");
   const [error, setError] = useState<string | null>(null);
-  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, operation: "+", answer: "" });
-  const [attempts, setAttempts] = useState(5);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  const [showCaptcha, setShowCaptcha] = useState(false);
+  const [isInputValid, setIsInputValid] = useState(false);
 
-  // Generate a new CAPTCHA
-  const generateCaptcha = () => {
-    let num1 = Math.floor(Math.random() * 20) + 1;
-    let num2 = Math.floor(Math.random() * 20) + 1;
-    const operation = Math.random() > 0.5 ? "+" : "-";
+  // Validate input whenever it changes
+  useEffect(() => {
+    const validationError = validateInput(url);
+    // Only set isInputValid to true if there's no error AND the input is not empty
+    setIsInputValid(!validationError && url.trim().length > 0);
+    setError(validationError);
+  }, [url]);
 
-    // Ensure subtraction results in a positive answer
-    if (operation === "-" && num1 < num2) {
-      [num1, num2] = [num2, num1];
+  const validateInput = (input: string): string | null => {
+    // Return error for empty input
+    if (!input.trim()) {
+      return "Please enter a website URL";
     }
-
-    setCaptcha({ num1, num2, operation, answer: "" });
+    
+    // Remove any protocol prefix if present
+    input = input.replace(/^https?:\/\//, '').trim();
+    
+    // Check if it's a valid domain name
+    const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
+    if (!domainRegex.test(input)) {
+      return "Please enter a valid domain name (e.g., example.com)";
+    }
+    
+    return null;
   };
 
-  // Initialize CAPTCHA on component mount
-  React.useEffect(() => {
-    generateCaptcha();
-  }, []);
+  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    // Remove any protocol prefix if present
+    const cleanUrl = input.replace(/^https?:\/\//, '');
+    setUrl(cleanUrl);
+    setShowCaptcha(false); // Hide CAPTCHA when input changes
+    setCaptchaToken(null); // Clear CAPTCHA token
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
 
-    // Validate CAPTCHA
-    const correctAnswer =
-      captcha.operation === "+"
-        ? captcha.num1 + captcha.num2
-        : captcha.num1 - captcha.num2;
-
-    if (Number(captcha.answer) !== correctAnswer) {
-      setError("Incorrect CAPTCHA answer. Please try again.");
-      setAttempts((prev) => prev - 1);
-
-      // Block after 0 attempts
-      if (attempts - 1 <= 0) {
-        setError("Too many failed attempts. Please try again later.");
-        return;
-      }
-
-      generateCaptcha(); // Generate a new problem even if the answer is wrong
+    // Validate input
+    const validationError = validateInput(url);
+    if (validationError) {
+      setError(validationError);
       return;
     }
 
-    // If CAPTCHA is correct, reset attempts and generate a new problem
-    setAttempts(5);
-    generateCaptcha();
+    // Check if we have a valid CAPTCHA token
+    if (!captchaToken) {
+      setError("Please complete the proof-of-work verification");
+      return;
+    }
 
     // Proceed with the scan
     const fullUrl = `${protocol}${url}`;
-    onScanSubmit(fullUrl);
-  };
-
-  const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    const validInput = input.replace(/[^a-zA-Z0-9.?=/-]/g, "");
-    setUrl(validInput);
+    onScanSubmit(fullUrl, captchaToken);
   };
 
   return (
-    <section className="max-w-3xl mx-auto mb-16 mt-16" data-aos="fade-up">
+    <section className="text-center" data-aos="fade-up">
       {/* Scanner Type Selection */}
       <div className="flex gap-4 mb-6 justify-center">
         <button
@@ -97,17 +99,17 @@ const Scanner: React.FC<ScannerProps> = ({
         >
           Application Scanner
         </button>
-          <button
-            type="button"
+        <button
+          type="button"
           onClick={() => navigate('/networkscanner')}
           className={`px-6 py-3 rounded-lg font-medium transition-all ${
             location.pathname === '/networkscanner'
               ? 'bg-blue-600 text-white'
               : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
           }`}
-          >
-            Network Scanner
-          </button>
+        >
+          Network Scanner
+        </button>
         <div className="relative group">
           <button
             type="button"
@@ -124,92 +126,103 @@ const Scanner: React.FC<ScannerProps> = ({
 
       <form
         onSubmit={handleSubmit}
-        className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mt-8"
+        className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mt-8 max-w-3xl mx-auto"
       >
         <div className="flex flex-col gap-4">
-          <div className="flex gap-2">
-        <select
-          value={protocol}
-          onChange={(e) => setProtocol(e.target.value)}
-          className="px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-sm"
-          aria-label="Protocol"
-          title="Select protocol"
-        >
-          <option value="http://">http://</option>
-          <option value="https://">https://</option>
-        </select>
-        <input
-          type="text"
-          value={url}
-          onChange={handleUrlChange}
-          placeholder="Enter site name (e.g., example.com)"
-          className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-base"
-          required
-          aria-label="Website URL"
-          title="Enter website URL"
-        />
+          {/* Step 1: Input */}
+          <div className="space-y-2">
+            <label htmlFor="url-input" className="text-sm font-medium text-gray-300">
+              Step 1: Enter Target URL
+            </label>
+            <div className="flex gap-2">
+              <select
+                value={protocol}
+                onChange={(e) => setProtocol(e.target.value)}
+                className="px-3 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-sm"
+                aria-label="Protocol"
+                title="Select protocol"
+              >
+                <option value="http://">http://</option>
+                <option value="https://">https://</option>
+              </select>
+              <input
+                id="url-input"
+                type="text"
+                value={url}
+                onChange={handleUrlChange}
+                placeholder="Enter site name (e.g., example.com)"
+                className="flex-1 px-4 py-2 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-base"
+                required
+                disabled={isLoading}
+                aria-label="Website URL"
+                title="Enter website URL"
+              />
+            </div>
+            {isInputValid && !showCaptcha && (
+              <button
+                type="button"
+                onClick={() => setShowCaptcha(true)}
+                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm"
+              >
+                <CheckCircle2 className="h-4 w-4" />
+                Verify CAPTCHA
+              </button>
+            )}
           </div>
 
-          <div className="flex items-center justify-between bg-gray-700 p-2 rounded-lg border border-gray-600 shadow-md">
-        <p className="text-sm font-medium text-gray-300">
-          Solve the CAPTCHA to proceed
-        </p>
-        <div className="flex items-center justify-center gap-2 bg-gray-800 px-4 py-2 rounded-lg shadow-md border border-gray-600">
-          <span className="text-lg font-bold text-gray-100">
-            {captcha.num1}
-          </span>
-          <span className="text-lg font-bold text-blue-400">
-            {captcha.operation}
-          </span>
-          <span className="text-lg font-bold text-gray-100">
-            {captcha.num2}
-          </span>
-          <span className="text-lg font-bold text-gray-100">=</span>
-          <input
-            type="number"
-            value={captcha.answer}
-            onChange={(e) => setCaptcha({ ...captcha, answer: e.target.value })}
-            className="w-20 px-3 py-2 text-center text-sm font-medium rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all"
-            required
-            aria-label="CAPTCHA Answer"
-            title="Enter CAPTCHA answer"
-            placeholder="Answer"
-          />
-        </div>
-          </div>
-
-          {error && <div className="text-red-400 text-xs mt-2">{error}</div>}
-
-          <p className="text-gray-300 text-sm mb-4">
-        Attempts remaining: <strong>{attempts}</strong>
-          </p>
-
-          <div className="flex justify-center gap-4">
-        <button
-          type="submit"
-          disabled={isLoading || attempts <= 0}
-          className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
-        >
-          {isLoading ? (
-            <>
-          <Loader className="animate-spin h-4 w-4" />
-          Scanning...
-            </>
-          ) : (
-            "Start Scan"
+          {/* Step 2: CAPTCHA */}
+          {showCaptcha && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-gray-300">
+                Step 2: Complete Verification
+              </label>
+              <CapCaptcha
+                onVerified={(token) => {
+                  setCaptchaToken(token);
+                  setError(null);
+                }}
+                onError={(error) => {
+                  setError(error);
+                  setCaptchaToken(null);
+                }}
+              />
+            </div>
           )}
-        </button>
 
-        {isLoading && (
-          <button
-            type="button"
-            onClick={onStopScan}
-            className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
-          >
-            <StopCircle className="h-4 w-4" />
-            Stop Scan
-          </button>
-        )}
+          {/* Error Display */}
+          {error && (
+            <Alert variant="destructive" className="mt-2">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+
+          {/* Submit Button */}
+          <div className="flex justify-center mt-6">
+            {isLoading ? (
+              <button
+                type="button"
+                onClick={onStopScan}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
+              >
+                <StopCircle className="h-4 w-4" />
+                Stop Scan
+              </button>
+            ) : (
+              <button
+                type="submit"
+                disabled={isLoading || !captchaToken || !isInputValid}
+                className="px-8 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium shadow-lg hover:shadow-blue-500/20"
+              >
+                {isLoading ? (
+                  <>
+                    <Loader className="animate-spin h-4 w-4" />
+                    Scanning...
+                  </>
+                ) : (
+                  "Start Scan"
+                )}
+              </button>
+            )}
           </div>
         </div>
       </form>

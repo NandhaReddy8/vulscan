@@ -237,7 +237,7 @@ const ScannerPage = () => {
     };
   }, []);
 
-  const handleScan = async (url: string) => {
+  const handleScan = async (url: string, captchaToken: string) => {
     setIsScanning(true);
     setShowResults(false);
     setScanError(null);
@@ -256,7 +256,10 @@ const ScannerPage = () => {
     try {
       const response = await fetch(`${BACKEND_URL}/api/scan`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "X-Captcha-Token": captchaToken
+        },
         body: JSON.stringify({
           url,
           session_id: socket.id,

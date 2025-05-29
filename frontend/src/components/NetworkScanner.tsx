@@ -4,7 +4,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { 
   Loader, 
-  StopCircle, 
   Shield, 
   Server, 
   Network, 
@@ -13,8 +12,10 @@ import {
   Clock, 
   Activity, 
   AlertCircle,
-  ExternalLink
+  ExternalLink,
+  CheckCircle2
 } from "lucide-react"
+import NetworkScannerForm from './NetworkScannerForm'
 import { Progress } from "@/components/ui/progress"
 
 // Get backend URL from environment variables
@@ -35,6 +36,17 @@ interface ScanResult {
       os_info: {
         details?: string;
         cpe?: string;
+        device_type?: string;
+        os_guesses?: Array<{
+          name: string;
+          accuracy: number;
+        }>;
+        aggressive_guesses?: Array<{
+          name: string;
+          accuracy: number;
+        }>;
+        network_distance?: number;
+        service_info?: string;
       };
       ports: Array<{
         port: string;
@@ -53,67 +65,55 @@ interface ScanResult {
 }
 
 interface NetworkScannerProps {
-  onScanSubmit: (ip: string) => void;
-  onStopScan: () => void;
-  ip: string;
-  setIp: (ip: string) => void;
-  scanId: string;
+  onScanComplete: (result: any) => void;
+  scanId: string | null;
+  isLoading: boolean;
 }
 
 const NetworkScanner: React.FC<NetworkScannerProps> = ({
-  onScanSubmit,
-  onStopScan,
-  ip,
-  setIp,
-  scanId,
+  onScanComplete,
+  scanId: externalScanId,
+  isLoading: externalLoading
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, operation: "+", answer: "" });
-  const [attempts, setAttempts] = useState(5);
-  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
-  const [pollingInterval, setPollingInterval] = useState<NodeJS.Timeout | null>(null);
+  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [retryAfter, setRetryAfter] = useState<number | null>(null);
   const [scanProgress, setScanProgress] = useState(0);
-  const [isScanning, setIsScanning] = useState(false);
+  const [scanResult, setScanResult] = useState<ScanResult | null>(null);
+  const [currentScanId, setCurrentScanId] = useState<string | null>(null);
 
-  // Generate a new CAPTCHA
-  const generateCaptcha = () => {
-    let num1 = Math.floor(Math.random() * 20) + 1;
-    let num2 = Math.floor(Math.random() * 20) + 1;
-    const operation = Math.random() > 0.5 ? "+" : "-";
-
-    if (operation === "-" && num1 < num2) {
-      [num1, num2] = [num2, num1];
-    }
-
-    setCaptcha({ num1, num2, operation, answer: "" });
-  };
+  const activeScanId = externalScanId || currentScanId;
 
   useEffect(() => {
-    generateCaptcha();
-    return () => {
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-      }
-    };
-  }, []);
-
-  // Update polling effect to handle progress
-  useEffect(() => {
-    if (scanId && !['completed', 'failed', 'stopped'].includes(scanResult?.status || '')) {
-      setIsScanning(true);
-      // Start progress animation
-      const progressInterval = setInterval(() => {
-        setScanProgress(prev => {
-          if (prev >= 90) return prev; // Cap at 90% until complete
-          return prev + 1;
-        });
-      }, 1000);
-
-      const interval = setInterval(async () => {
+    if (activeScanId) {
+      const pollScanStatus = async () => {
         try {
-          const response = await fetch(`${BACKEND_URL}/api/network/scan/${scanId}`);
+          // If rate limited, check if we can retry
+          if (isRateLimited && retryAfter) {
+            const now = Date.now();
+            if (now < retryAfter) {
+              return; // Still rate limited, wait
+            }
+            // Reset rate limit state
+            setIsRateLimited(false);
+            setRetryAfter(null);
+          }
+
+          console.log('Polling scan status for ID:', activeScanId);
+          const response = await fetch(`${BACKEND_URL}/api/network/scan/${activeScanId}`);
+          
+          if (response.status === 429) {
+            // Handle rate limiting
+            const retryAfterHeader = response.headers.get('Retry-After');
+            const retryAfterSeconds = retryAfterHeader ? parseInt(retryAfterHeader, 10) : 5;
+            setIsRateLimited(true);
+            setRetryAfter(Date.now() + (retryAfterSeconds * 1000));
+            return;
+          }
+
           if (!response.ok) {
             const error = await response.json();
             throw new Error(error.error || 'Failed to fetch scan results');
@@ -122,147 +122,50 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
           const data = await response.json();
           console.log('Received scan data:', data);
           
+          // Update scan result state
           setScanResult({
             status: data.scan_status,
             results: data.scan_results,
             error: data.error_message
           });
           
-          if (['completed', 'failed', 'stopped'].includes(data.scan_status)) {
-            console.log('Scan reached terminal state:', data.scan_status);
-            clearInterval(interval);
-            clearInterval(progressInterval);
-            setPollingInterval(null);
-            setIsScanning(false);
-            setScanProgress(100); // Set to 100% when complete
-            // Reset progress after a delay
-            setTimeout(() => setScanProgress(0), 1000);
-            if (data.scan_status === 'running') {
-              handleStopScan();
-            }
+          // Update progress based on scan status
+          if (data.scan_status === 'pending') {
+            setScanProgress(10);
+          } else if (data.scan_status === 'running') {
+            setScanProgress(50);
+          } else if (['completed', 'failed', 'stopped'].includes(data.scan_status)) {
+            setScanProgress(100);
+            
+            // Reset progress and notify completion after a delay
+            setTimeout(() => {
+              setScanProgress(0);
+              onScanComplete(data);
+              if (!externalScanId) {
+                setCurrentScanId(null);
+              }
+            }, 1000);
           }
         } catch (error) {
           console.error('Error polling scan results:', error);
           if (error instanceof Error) {
             setError(error.message);
           }
-          clearInterval(interval);
-          clearInterval(progressInterval);
-          setPollingInterval(null);
-          setIsScanning(false);
-          setScanProgress(0);
         }
-      }, 2000);
-      
-      setPollingInterval(interval);
-      return () => {
-        clearInterval(interval);
-        clearInterval(progressInterval);
-        setPollingInterval(null);
-        setIsScanning(false);
-        setScanProgress(0);
       };
+
+      // Initial poll
+      pollScanStatus();
+
+      // Set up polling interval
+      const pollInterval = setInterval(pollScanStatus, 2000);
+      return () => clearInterval(pollInterval);
+    } else {
+      // Clear scan results when scanId is empty
+      setScanResult(null);
+      setScanProgress(0);
     }
-  }, [scanId, scanResult?.status]);
-
-  const handleStopScan = async () => {
-    if (!scanId) return;
-    
-    try {
-      const response = await fetch(`${BACKEND_URL}/api/network/stop-scan/${scanId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || 'Failed to stop scan');
-      }
-
-      const data = await response.json();
-      console.log('Stop scan response:', data);
-      
-      // Update scan status to stopped
-      setScanResult(prev => ({
-        ...prev,
-        status: 'stopped',
-        error: 'Scan stopped by user'
-      }));
-
-      // Clear polling interval
-      if (pollingInterval) {
-        clearInterval(pollingInterval);
-        setPollingInterval(null);
-      }
-
-      // Call the parent's onStopScan handler
-      onStopScan();
-    } catch (error) {
-      console.error('Error stopping scan:', error);
-      if (error instanceof Error) {
-        setError(error.message);
-      }
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setScanResult(null);
-
-    const correctAnswer =
-      captcha.operation === "+"
-        ? captcha.num1 + captcha.num2
-        : captcha.num1 - captcha.num2;
-
-    if (Number(captcha.answer) !== correctAnswer) {
-      setError("Incorrect CAPTCHA answer. Please try again.");
-      setAttempts((prev) => prev - 1);
-
-      if (attempts - 1 <= 0) {
-        setError("Too many failed attempts. Please try again later.");
-        return;
-      }
-
-      generateCaptcha();
-      return;
-    }
-
-    setAttempts(5);
-    generateCaptcha();
-
-    // Validate IP address format
-    const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
-    if (!ipRegex.test(ip)) {
-      setError("Please enter a valid IP address (e.g., 192.168.1.1)");
-      return;
-    }
-
-    // Validate each octet
-    const octets = ip.split('.');
-    const isValid = octets.every(octet => {
-      const num = parseInt(octet);
-      return num >= 0 && num <= 255;
-    });
-
-    if (!isValid) {
-      setError("Each number in the IP address must be between 0 and 255");
-      return;
-    }
-
-    // Use the onScanSubmit prop instead of making our own request
-    onScanSubmit(ip);
-    setScanResult({ status: 'queued' });
-  };
-
-  const handleIpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    // Only allow numbers and dots
-    const validInput = input.replace(/[^\d.]/g, "");
-    setIp(validInput);
-  };
+  }, [activeScanId, isRateLimited, retryAfter, onScanComplete, externalScanId]);
 
   const renderScanResults = () => {
     if (!scanResult) return null;
@@ -385,24 +288,91 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
           {hosts.map((host, hostIndex) => (
             <div key={hostIndex} className="space-y-4">
               {/* Operating System Information */}
-              {host.os_info && Object.keys(host.os_info).length > 0 && (
+              {host.os_info && (
                 <Card className="bg-gray-800/50 border-gray-700">
                   <CardContent className="p-6">
                     <div className="flex items-center gap-2 mb-4">
                       <Server className="h-5 w-5 text-blue-400 flex-shrink-0" />
                       <h3 className="text-lg font-semibold text-white">Operating System Analysis</h3>
                     </div>
-                    <div className="bg-gray-700/50 p-4 rounded-lg">
-                      {host.os_info.details && (
-                        <div className="mb-2 break-words">
-                          <p className="text-sm text-gray-400">OS Details</p>
-                          <p className="text-white whitespace-pre-wrap">{host.os_info.details}</p>
+                    
+                    <div className="space-y-4">
+                      {/* Device Type */}
+                      {host.os_info.device_type && (
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">Device Type</h4>
+                          <p className="text-white">{host.os_info.device_type}</p>
                         </div>
                       )}
+
+                      {/* OS Guesses */}
+                      {host.os_info.os_guesses && host.os_info.os_guesses.length > 0 && (
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">OS Detection Results</h4>
+                          <div className="space-y-2">
+                            {host.os_info.os_guesses.map((guess, idx) => (
+                              <div key={idx} className="flex items-center justify-between">
+                                <span className="text-white">{guess.name}</span>
+                                <span className="text-blue-400 font-medium">{guess.accuracy}%</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Aggressive OS Guesses */}
+                      {host.os_info.aggressive_guesses && host.os_info.aggressive_guesses.length > 0 && (
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">Aggressive OS Guesses</h4>
+                          <div className="space-y-2">
+                            {host.os_info.aggressive_guesses.map((guess, idx) => (
+                              <div key={idx} className="flex items-center justify-between">
+                                <span className="text-white">{guess.name}</span>
+                                <span className="text-blue-400 font-medium">{guess.accuracy}%</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* OS CPE */}
                       {host.os_info.cpe && (
-                        <div className="break-words">
-                          <p className="text-sm text-gray-400">OS CPE</p>
-                          <p className="text-white font-mono text-sm whitespace-pre-wrap">{host.os_info.cpe}</p>
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">OS CPE</h4>
+                          <div className="space-y-1">
+                            {host.os_info.cpe.split(' ').map((cpe, idx) => (
+                              <p key={idx} className="text-white font-mono text-sm break-words">
+                                {cpe}
+                              </p>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Network Distance */}
+                      {host.os_info.network_distance !== undefined && (
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">Network Information</h4>
+                          <div className="space-y-2">
+                            <div className="flex items-center justify-between">
+                              <span className="text-white">Network Distance</span>
+                              <span className="text-blue-400 font-medium">{host.os_info.network_distance} hops</span>
+                            </div>
+                            {host.os_info.service_info && (
+                              <div className="mt-2">
+                                <p className="text-sm text-gray-300">Service Information</p>
+                                <p className="text-white mt-1">{host.os_info.service_info}</p>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* OS Details */}
+                      {host.os_info.details && (
+                        <div className="bg-gray-700/50 p-4 rounded-lg">
+                          <h4 className="text-sm font-medium text-gray-300 mb-2">Additional Details</h4>
+                          <p className="text-white whitespace-pre-wrap">{host.os_info.details}</p>
                         </div>
                       )}
                     </div>
@@ -572,197 +542,162 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
 
   return (
     <div className="relative">
-      {/* Fixed position card for advanced scanning */}
-      <div className="fixed right-8 top-1/2 -translate-y-1/2 w-80 hidden lg:block">
-        <Card className="bg-gray-800/95 border border-blue-500/20 backdrop-blur-sm shadow-xl">
-          <CardContent className="p-6">
-            <div className="flex items-center gap-2 mb-4">
-              <Shield className="h-5 w-5 text-blue-400" />
-              <h3 className="text-lg font-semibold text-white">Need Advanced Network Security?</h3>
-            </div>
-            
-            <div className="space-y-4">
-              <p className="text-sm text-gray-300">
-                Our enterprise-grade network scanning services provide:
-              </p>
-              
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li className="flex items-start gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
-                  <span>Deep vulnerability assessment</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
-                  <span>Advanced threat detection</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
-                  <span>Custom security solutions</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
-                  <span>Expert security consultation</span>
-                </li>
-              </ul>
-
-              <div className="pt-2">
-                <a
-                  href="https://virtuestech.com/contact/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center justify-center w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium group"
-                >
-                  Contact Our Security Team
-                  <ExternalLink className="h-4 w-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
-                </a>
+      {/* Fixed position card for advanced scanning - only show after scan completion */}
+      {scanResult?.status === 'completed' && (
+        <div className="fixed right-8 top-1/2 -translate-y-1/2 w-80 hidden lg:block z-20">
+          <Card className="bg-gray-800/95 border border-blue-500/20 backdrop-blur-sm shadow-xl">
+            <CardContent className="p-6">
+              <div className="flex items-center gap-2 mb-4">
+                <Shield className="h-5 w-5 text-blue-400" />
+                <h3 className="text-lg font-semibold text-white">Need Advanced Network Security?</h3>
               </div>
+              
+              <div className="space-y-4">
+                <p className="text-sm text-gray-300">
+                  Our enterprise-grade network scanning services provide:
+                </p>
+                
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
+                    <span>Deep vulnerability assessment</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
+                    <span>Advanced threat detection</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
+                    <span>Custom security solutions</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <div className="h-1.5 w-1.5 rounded-full bg-blue-400 mt-1.5 flex-shrink-0" />
+                    <span>Expert security consultation</span>
+                  </li>
+                </ul>
 
-              <p className="text-xs text-gray-400 text-center mt-4">
-                Powered by VirtuesTech Security Solutions
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+                <div className="pt-2">
+                  <a
+                    href="https://virtuestech.com/contact/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center justify-center w-full px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm font-medium group"
+                  >
+                    Contact Our Security Team
+                    <ExternalLink className="h-4 w-4 ml-2 group-hover:translate-x-0.5 transition-transform" />
+                  </a>
+                </div>
 
-      {/* Main content with adjusted max width */}
-      <section className="max-w-3xl mx-auto mb-16 mt-16 lg:mr-96" data-aos="fade-up">
-        {/* Scanner Type Selection */}
-        <div className="flex gap-4 mb-6 justify-center">
-          <button
-            type="button"
-            onClick={() => navigate('/webscanner')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              location.pathname === '/webscanner'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-          >
-            Application Scanner
-          </button>
-          <button
-            type="button"
-            onClick={() => navigate('/networkscanner')}
-            className={`px-6 py-3 rounded-lg font-medium transition-all ${
-              location.pathname === '/networkscanner'
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-            }`}
-          >
-            Network Scanner
-          </button>
-          <div className="relative group">
+                <p className="text-xs text-gray-400 text-center mt-4">
+                  Powered by VirtuesTech Security Solutions
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
+
+      <div className="container mx-auto px-4">
+        <section className="max-w-3xl mx-auto mb-16 mt-16" data-aos="fade-up">
+          {/* Scanner Type Selection */}
+          <div className="flex gap-4 mb-6 justify-center">
             <button
               type="button"
-              disabled
-              className="px-6 py-3 rounded-lg font-medium bg-gray-700 text-gray-400 cursor-not-allowed opacity-75"
+              onClick={() => navigate('/webscanner')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                location.pathname === '/webscanner'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
             >
-              API Scanner
+              Web-App Scanner
             </button>
-            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
-              Coming Soon!
-            </div>
-          </div>
-        </div>
-
-        <form
-          onSubmit={handleSubmit}
-          className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mt-8"
-        >
-          <div className="flex flex-col gap-4">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={ip}
-                onChange={handleIpChange}
-                placeholder="Enter IP address (e.g., 192.168.1.1)"
-                className="flex-1 px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all text-base"
-                required
-                disabled={isScanning} // Only disable during active scanning
-                aria-label="IP Address"
-              />
-            </div>
-
-            <div className="flex items-center justify-between bg-gray-700 p-2 rounded-lg border border-gray-600 shadow-md">
-              <p className="text-sm font-medium text-gray-300">
-                Solve the CAPTCHA to proceed
-              </p>
-              <div className="flex items-center justify-center gap-2 bg-gray-800 px-4 py-2 rounded-lg shadow-md border border-gray-600">
-                <span className="text-lg font-bold text-gray-100">
-                  {captcha.num1}
-                </span>
-                <span className="text-lg font-bold text-blue-400">
-                  {captcha.operation}
-                </span>
-                <span className="text-lg font-bold text-gray-100">
-                  {captcha.num2}
-                </span>
-                <span className="text-lg font-bold text-gray-100">=</span>
-                <input
-                  type="number"
-                  value={captcha.answer}
-                  onChange={(e) => setCaptcha({ ...captcha, answer: e.target.value })}
-                  className="w-20 px-3 py-2 text-center text-sm font-medium rounded-lg bg-gray-700 border border-gray-600 text-gray-100 placeholder-gray-400 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all"
-                  required
-                  disabled={isScanning} // Only disable during active scanning
-                  aria-label="CAPTCHA Answer"
-                  placeholder="Answer"
-                />
-              </div>
-            </div>
-
-            {error && (
-              <Alert variant="destructive" className="mb-4">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            {isScanning && (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between text-sm text-gray-400">
-                  <span>Scanning in progress...</span>
-                  <span>{scanProgress}%</span>
-                </div>
-                <Progress value={scanProgress} className="h-2" />
-              </div>
-            )}
-
-            <p className="text-gray-300 text-sm mb-4">
-              Attempts remaining: <strong>{attempts}</strong>
-            </p>
-
-            <div className="flex justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => navigate('/networkscanner')}
+              className={`px-6 py-3 rounded-lg font-medium transition-all ${
+                location.pathname === '/networkscanner'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+              }`}
+            >
+              Network Scanner
+            </button>
+            <div className="relative group">
               <button
-                type="submit"
-                disabled={isScanning || attempts <= 0}
-                className="px-3 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                type="button"
+                disabled
+                className="px-6 py-3 rounded-lg font-medium bg-gray-700 text-gray-400 cursor-not-allowed opacity-75"
               >
-                {isScanning ? (
-                  <>
-                    <Loader className="animate-spin h-4 w-4" />
-                    Scanning...
-                  </>
-                ) : (
-                  "Start Network Scan"
-                )}
+                API Scanner
               </button>
-
-              {isScanning && (
-                <button
-                  type="button"
-                  onClick={handleStopScan}
-                  className="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors flex items-center gap-2 text-sm"
-                >
-                  <StopCircle className="h-4 w-4" />
-                  Stop Scan
-                </button>
-              )}
+              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                Coming Soon!
+              </div>
             </div>
           </div>
-        </form>
 
-        {renderScanResults()}
-      </section>
+          <NetworkScannerForm
+            onSubmit={async (ip, token) => {
+              setIsLoading(true);
+              setError(null);
+              setScanResult(null);
+              setScanProgress(0);
+              
+              try {
+                console.log('Starting scan for IP:', ip);
+                const response = await fetch(`${BACKEND_URL}/api/network/start-scan`, {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'X-Captcha-Token': token,
+                  },
+                  body: JSON.stringify({ ip }),
+                });
+
+                if (!response.ok) {
+                  const errorData = await response.json();
+                  throw new Error(errorData.error || 'Failed to start scan');
+                }
+
+                const data = await response.json();
+                console.log('Scan started:', data);
+                
+                if (data.scan_id) {
+                  setCurrentScanId(data.scan_id);
+                  setScanResult({ status: 'queued' });
+                } else {
+                  throw new Error('No scan ID received from server');
+                }
+              } catch (err) {
+                console.error('Error starting scan:', err);
+                setError(err instanceof Error ? err.message : 'Failed to start scan');
+                setScanResult({ status: 'failed', error: err instanceof Error ? err.message : 'Failed to start scan' });
+              } finally {
+                setIsLoading(false);
+              }
+            }}
+            isLoading={isLoading || externalLoading}
+            isRateLimited={isRateLimited}
+            retryAfter={retryAfter}
+            error={error}
+          />
+
+          {/* Progress Bar */}
+          {(scanResult?.status === 'pending' || scanResult?.status === 'running') && (
+            <div className="mt-6 space-y-2">
+              <div className="flex items-center justify-between text-sm text-gray-400">
+                <span>Scanning in progress...</span>
+                <span>{scanProgress}%</span>
+              </div>
+              <Progress value={scanProgress} className="h-2" />
+            </div>
+          )}
+
+          {/* Scan Results */}
+          {renderScanResults()}
+        </section>
+      </div>
     </div>
   );
 };

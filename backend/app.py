@@ -13,4 +13,32 @@ def reload_modules():
             importlib.reload(sys.modules['backend.networkscan'])
         return jsonify({"status": "success", "message": "Modules reloaded successfully"})
     except Exception as e:
-        return jsonify({"status": "error", "message": str(e)}), 500 
+        return jsonify({"status": "error", "message": str(e)}), 500
+
+@app.route('/api/network/start-scan', methods=['POST'])
+def start_scan():
+    try:
+        data = request.get_json()
+        if not data or 'ip_address' not in data:
+            return jsonify({'error': 'Missing IP address'}), 400
+            
+        ip_address = data['ip_address']
+        requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
+        captcha_token = request.headers.get('X-Captcha-Token')
+        
+        if not captcha_token:
+            return jsonify({'error': 'Missing CAPTCHA token'}), 400
+            
+        success, message, scan_id = start_network_scan(ip_address, requester_ip, captcha_token)
+        
+        if not success:
+            return jsonify({'error': message}), 400
+            
+        return jsonify({
+            'message': message,
+            'scan_id': scan_id
+        })
+        
+    except Exception as e:
+        logger.error(f"Error in start_scan: {str(e)}")
+        return jsonify({'error': str(e)}), 500 

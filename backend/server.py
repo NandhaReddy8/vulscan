@@ -13,19 +13,24 @@ import time
 import threading
 import csv
 import uuid
+import hashlib
+import secrets
 from database import save_scan_request, save_report_request, get_scan_requests
 from zap_scan import scan_target, zap, sanitize_url
 from datetime import datetime, timedelta
 from config import (
     FLASK_DEBUG, FLASK_HOST, FLASK_PORT,
     JWT_SECRET_KEY, JWT_ACCESS_TOKEN_EXPIRES, JWT_REFRESH_TOKEN_EXPIRES,
-    CORS_ORIGINS, RATELIMIT_DEFAULT, RATELIMIT_STORAGE_URL, RATELIMIT_STRATEGY
+    SCANNER_CORS_ORIGINS, MARKETING_CORS_ORIGINS, is_ip_allowed,
+    RATELIMIT_DEFAULT, RATELIMIT_STORAGE_URL, RATELIMIT_STRATEGY,
+    CAPTCHA_VERIFY_URL, CAPTCHA_DIFFICULTY, CAPTCHA_EXPIRY, CAPTCHA_LENGTH
 )
 from db_handler import DatabaseHandler
 import logging
 import json
-from networkscan import start_network_scan, stop_network_scan, get_scan_status
+from networkscan import start_network_scan, get_scan_status
 import asyncio
+import requests
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -39,6 +44,22 @@ logging.basicConfig(
 )
 
 db = DatabaseHandler()
+
+# Store active challenges with their expiry times
+active_challenges = {}
+
+def generate_challenge():
+    """Generate a random challenge string."""
+    return secrets.token_hex(CAPTCHA_LENGTH // 2)
+
+def verify_proof_of_work(challenge: str, nonce: str, difficulty: int = CAPTCHA_DIFFICULTY) -> bool:
+    """Verify if the proof of work is valid."""
+    # Combine challenge and nonce
+    data = f"{challenge}{nonce}".encode()
+    # Calculate SHA-256 hash
+    hash_result = hashlib.sha256(data).hexdigest()
+    # Check if hash starts with required number of zeros
+    return hash_result.startswith('0' * difficulty)
 
 def check_weekly_scan_limit(target_url):
     """
@@ -92,19 +113,40 @@ def check_weekly_scan_limit(target_url):
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
 
-# Configure CORS with explicit settings for all routes
-CORS(app, 
-     resources={r"/*": {
-         "origins": CORS_ORIGINS,
-         "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-         "allow_headers": ["Content-Type", "Authorization", "X-Requester-IP"],
-         "supports_credentials": True,
-         "expose_headers": ["Content-Type", "Authorization"],
-         "max_age": 3600,
-         "send_wildcard": False
-     }},
-     supports_credentials=True
-)
+# Define CORS policies for different routes
+scanner_cors = {
+    "origins": "*",  # Allow all origins for scanner routes
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization", "X-Requester-IP", "X-Captcha-Token", "X-Internal-Verify"],
+    "supports_credentials": True,
+    "expose_headers": ["Content-Type", "Authorization"],
+    "max_age": 3600
+}
+
+marketing_cors = {
+    "origins": MARKETING_CORS_ORIGINS,  # Restrict to specific origins for marketing routes
+    "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization", "X-Requester-IP", "X-Captcha-Token", "X-Internal-Verify"],
+    "supports_credentials": True,
+    "expose_headers": ["Content-Type", "Authorization"],
+    "max_age": 3600,
+    "send_wildcard": False
+}
+
+# Apply CORS to specific routes
+CORS(app, resources={
+    # Scanner routes - allow all origins
+    r"/api/scan": scanner_cors,
+    r"/api/stop-scan": scanner_cors,
+    r"/api/network/*": scanner_cors,
+    r"/api/cap/*": scanner_cors,  # Add Cap routes
+    r"/socket.io/*": scanner_cors,
+    
+    # Marketing routes - restricted origins
+    r"/api/auth/*": marketing_cors,
+    r"/api/scan-report-summary": marketing_cors,
+    r"/api/report-request": marketing_cors
+})
 
 # Configure JWT
 app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
@@ -145,10 +187,10 @@ limiter = Limiter(
 # Configure Socket.IO with explicit settings
 socketio = SocketIO(
     app, 
-    cors_allowed_origins=CORS_ORIGINS,
+    cors_allowed_origins="*",  # Allow all origins for scanner routes
     async_mode='eventlet',
-    ping_timeout=60,  # Increase ping timeout
-    ping_interval=25,  # Adjust ping interval
+    ping_timeout=60,
+    ping_interval=25,
     logger=True,
     engineio_logger=True,
     always_connect=True,
@@ -208,6 +250,41 @@ def scan():
 
         if not session_id:
             return jsonify({"error": "No session_id provided"}), 400
+
+        # Get CAPTCHA token from header
+        captcha_token = request.headers.get('X-Captcha-Token')
+        if not captcha_token:
+            return jsonify({"error": "Missing CAPTCHA token"}), 400
+
+        # Verify CAPTCHA token
+        try:
+            # Split the token into challenge and nonce
+            challenge, nonce = captcha_token.split(':')
+            
+            # Verify with local endpoint
+            verify_response = requests.post(
+                CAPTCHA_VERIFY_URL,
+                json={"challenge": challenge, "nonce": nonce},
+                headers={"X-Internal-Verify": "true"},
+                timeout=5
+            )
+            
+            if not verify_response.ok:
+                return jsonify({"error": "Invalid CAPTCHA token"}), 400
+                
+            verify_data = verify_response.json()
+            if verify_data.get('error'):
+                return jsonify({"error": verify_data['error']}), 400
+                
+            if not verify_data.get('success', False):
+                return jsonify({"error": "CAPTCHA verification failed"}), 400
+                
+            # Now that verification is complete, remove the challenge
+            if challenge in active_challenges:
+                del active_challenges[challenge]
+        except Exception as e:
+            logger.error(f"Error verifying CAPTCHA token: {str(e)}")
+            return jsonify({"error": "CAPTCHA verification error"}), 400
 
         # Check weekly scan limit
         print(f"[*] Checking scan limit...")
@@ -411,7 +488,7 @@ def stop_scan():
 def login():
     if request.method == "OPTIONS":
         response = app.make_default_options_response()
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
         response.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.headers["Access-Control-Allow-Credentials"] = "true"
@@ -510,7 +587,7 @@ def logout():
 def verify_token():
     if request.method == "OPTIONS":
         response = app.make_default_options_response()
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.headers["Access-Control-Allow-Credentials"] = "true"
@@ -521,7 +598,7 @@ def verify_token():
         
         if not identity:
             response = jsonify({"valid": False, "error": "No valid token"})
-            response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+            response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
             response.headers["Access-Control-Allow-Credentials"] = "true"
             return response, 401
             
@@ -531,7 +608,7 @@ def verify_token():
             "valid": True,
             "user": current_user
         })
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
         response.headers["Access-Control-Allow-Credentials"] = "true"
         return response
         
@@ -539,7 +616,7 @@ def verify_token():
         if FLASK_DEBUG:
             print(f"[ERROR] Token verification failed: {str(e)}")
         response = jsonify({"valid": False, "error": "Token verification failed"})
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", CORS_ORIGINS[0])
+        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
         response.headers["Access-Control-Allow-Credentials"] = "true"
         return response, 401
 
@@ -600,10 +677,11 @@ def update_lead_status(row_id):
 # Socket.IO connection event handlers
 @socketio.on('connect')
 def handle_connect():
-    # Only log in development mode
-    if FLASK_DEBUG:
-        print("[INFO] New client connected")
-    emit('server_update', {'message': 'Connected to server successfully'})
+    # Check if the connection is for marketing routes
+    if request.headers.get('Origin') not in MARKETING_CORS_ORIGINS:
+        # For scanner routes, allow all origins
+        return True
+    return False
 
 @socketio.on('disconnect')
 def handle_disconnect():
@@ -623,23 +701,83 @@ def start_network_scan_endpoint():
         return app.make_default_options_response()
 
     try:
+        logger.info("=== Starting network scan request ===")
         data = request.get_json()
-        if not data or "ip_address" not in data:
+        logger.info(f"Request data: {data}")
+        
+        # Accept both 'ip' and 'ip_address' fields
+        ip_address = data.get("ip_address") or data.get("ip")
+        if not ip_address:
+            logger.error("Missing IP address in request data")
             return jsonify({"error": "Missing IP address"}), 400
 
-        ip_address = data["ip_address"]
-        requester_ip = get_client_ip(request)  # Use the existing get_client_ip function
+        # Get CAPTCHA token from header
+        captcha_token = request.headers.get('X-Captcha-Token')
+        logger.info(f"CAPTCHA token from header: {captcha_token}")
+        
+        if not captcha_token:
+            logger.error("Missing CAPTCHA token in headers")
+            return jsonify({"error": "Missing CAPTCHA token"}), 400
+
+        requester_ip = get_client_ip(request)
+        logger.info(f"IP Address: {ip_address}, Requester IP: {requester_ip}")
+
+        # Verify CAPTCHA token first
+        try:
+            # Split the token into challenge and nonce
+            challenge, nonce = captcha_token.split(':')
+            logger.info(f"Split token - Challenge: {challenge}, Nonce: {nonce}")
+            
+            # Verify with local endpoint
+            logger.info("Attempting CAPTCHA verification...")
+            verify_response = requests.post(
+                CAPTCHA_VERIFY_URL,
+                json={"challenge": challenge, "nonce": nonce},
+                headers={"X-Internal-Verify": "true"},
+                timeout=5
+            )
+            
+            logger.info(f"CAPTCHA verification response status: {verify_response.status_code}")
+            logger.info(f"CAPTCHA verification response: {verify_response.text}")
+            
+            if not verify_response.ok:
+                logger.error(f"CAPTCHA verification failed with status {verify_response.status_code}")
+                return jsonify({"error": "Invalid CAPTCHA token"}), 400
+                
+            verify_data = verify_response.json()
+            if verify_data.get('error'):
+                logger.error(f"CAPTCHA verification error: {verify_data['error']}")
+                return jsonify({"error": verify_data['error']}), 400
+                
+            if not verify_data.get('success', False):
+                logger.error("CAPTCHA verification returned success=False")
+                return jsonify({"error": "CAPTCHA verification failed"}), 400
+                
+            # Now that verification is complete and scan is starting, remove the challenge
+            if challenge in active_challenges:
+                logger.info("Removing used challenge from active challenges")
+                del active_challenges[challenge]
+            else:
+                logger.warning(f"Challenge {challenge} not found in active challenges")
+                
+        except Exception as e:
+            logger.error(f"Error during CAPTCHA verification: {str(e)}")
+            return jsonify({"error": "CAPTCHA verification error"}), 400
 
         # Start the scan
         try:
-            success, message, scan_id = start_network_scan(ip_address, requester_ip)
+            logger.info("Attempting to start network scan...")
+            success, message, scan_id = start_network_scan(ip_address, requester_ip, captcha_token)
+            logger.info(f"Network scan start result - Success: {success}, Message: {message}, Scan ID: {scan_id}")
         except Exception as e:
             logger.error(f"Error in start_network_scan: {str(e)}")
             return jsonify({"error": "Failed to start scan"}), 500
 
         if not success:
+            logger.error(f"Scan start failed: {message}")
             return jsonify({"error": message}), 400
 
+        logger.info(f"Scan started successfully with ID: {scan_id}")
         response = jsonify({
             "message": "Scan started successfully",
             "scan_id": scan_id,
@@ -754,6 +892,60 @@ def list_network_scans():
     except Exception as e:
         logger.error(f"Error listing network scans: {str(e)}")
         return jsonify({"error": "Internal server error"}), 500
+
+# Add IP range check middleware for marketing routes
+@app.before_request
+def check_ip_range():
+    if request.path.startswith('/api/auth/') or \
+       request.path == '/api/scan-report-summary' or \
+       request.path == '/api/report-request':
+        client_ip = get_client_ip(request)
+        if not is_ip_allowed(client_ip):
+            return jsonify({"error": "Access denied from this IP address"}), 403
+
+@app.route('/api/cap/challenge', methods=['GET'])
+def get_challenge():
+    """Generate and return a new challenge."""
+    # Clean up expired challenges
+    current_time = time.time()
+    expired = [k for k, v in active_challenges.items() if current_time > v]
+    for k in expired:
+        del active_challenges[k]
+    
+    # Generate new challenge
+    challenge = generate_challenge()
+    active_challenges[challenge] = current_time + CAPTCHA_EXPIRY
+    
+    return jsonify({
+        'challenge': challenge,
+        'difficulty': CAPTCHA_DIFFICULTY,
+        'expires_in': CAPTCHA_EXPIRY
+    })
+
+@app.route('/api/cap/verify', methods=['POST'])
+def verify_challenge():
+    """Verify a submitted proof of work."""
+    data = request.get_json()
+    if not data or 'challenge' not in data or 'nonce' not in data:
+        return jsonify({'error': 'Missing challenge or nonce'}), 400
+    
+    challenge = data['challenge']
+    nonce = data['nonce']
+    
+    # Check if challenge exists and hasn't expired
+    if challenge not in active_challenges:
+        return jsonify({'error': 'Invalid or expired challenge'}), 400
+    
+    if time.time() > active_challenges[challenge]:
+        del active_challenges[challenge]
+        return jsonify({'error': 'Challenge expired'}), 400
+    
+    # Verify proof of work
+    if verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
+        # Don't remove the challenge here - it will be removed after successful scan start
+        return jsonify({'success': True})
+    
+    return jsonify({'error': 'Invalid proof of work'}), 400
 
 # Update the socket binding logic
 if __name__ == "__main__":
