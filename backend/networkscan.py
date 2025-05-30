@@ -413,20 +413,44 @@ def resolve_domain(domain: str) -> Tuple[bool, str, Optional[str]]:
     except Exception as e:
         return False, f"Error resolving domain: {str(e)}", None
 
-def validate_target(target: str) -> Tuple[bool, str, Optional[str]]:
-    """Validate target (IP or domain) and return resolved IP if valid."""
-    # Remove any protocol prefix if present
-    target = target.replace('http://', '').replace('https://', '').strip()
+def clean_target_url(target: str) -> str:
+    """Clean target URL by removing protocols, slashes, and other URL-related characters."""
+    # First replace common protocol patterns
+    target = target.replace('http://', '')
+    target = target.replace('https://', '')
+    target = target.replace('http:', '')
+    target = target.replace('https:', '')
     
-    # Check if it's an IP address
-    try:
-        ip = ipaddress.ip_address(target)
-        if ip.is_private:
-            return False, "Private IP addresses are not allowed. Please use a public IP address.", None
-        return True, target, None
-    except ValueError:
-        # Not an IP address, try as domain
-        return resolve_domain(target)
+    # Remove any leading/trailing slashes and whitespace
+    target = target.strip('/ \t\n\r')
+    
+    # Remove any path components after domain
+    if '/' in target:
+        target = target.split('/')[0]
+        
+    # Remove any query parameters
+    if '?' in target:
+        target = target.split('?')[0]
+        
+    # Remove any port numbers
+    if ':' in target:
+        target = target.split(':')[0]
+        
+    return target.strip()
+
+def validate_target(target: str) -> Tuple[bool, str, Optional[str]]:
+    """Validate target (IP or domain) and clean any URL-related characters."""
+    if not target:
+        return False, "Target cannot be empty", None
+        
+    # Clean the target URL
+    clean_target = clean_target_url(target)
+    
+    # Basic validation - ensure we have something after cleaning
+    if not clean_target:
+        return False, "Invalid target after cleaning", None
+        
+    return True, clean_target, None
 
 def verify_captcha_token(token: str) -> Tuple[bool, str]:
     """Verify a CAPTCHA token with the local verification endpoint."""
@@ -459,33 +483,32 @@ def start_network_scan(target: str, requester_ip: str, captcha_token: str) -> Tu
     """Start a new network scan with proper request deduplication."""
     logger.debug(f"Starting network scan for target: {target} from {requester_ip}")
     
-    # CAPTCHA verification is already done in the endpoint
-    # Just validate target (IP or domain)
-    is_valid, message, resolved_ip = validate_target(target)
+    # Just validate and strip protocol
+    is_valid, message, clean_target = validate_target(target)
     if not is_valid:
         return False, message, None
         
-    # Use resolved IP for the scan
-    ip_address = resolved_ip if resolved_ip else target
+    # Use the cleaned target directly
+    target_address = clean_target if clean_target else target
     
     # Check for duplicate requests
     with request_lock:
-        cache_key = f"{ip_address}:{requester_ip}"
+        cache_key = f"{target_address}:{requester_ip}"
         current_time = time.time()
         
         if cache_key in request_cache:
             last_request_time = request_cache[cache_key]
             if current_time - last_request_time < 5:  # 5 second cooldown
-                logger.warning(f"Duplicate scan request for {ip_address} from {requester_ip}")
+                logger.warning(f"Duplicate scan request for {target_address} from {requester_ip}")
                 return False, "Please wait before starting another scan", None
                 
         request_cache[cache_key] = current_time
         
     try:
         # Check for existing active scans
-        active = get_active_scans(ip_address, requester_ip)
+        active = get_active_scans(target_address, requester_ip)
         if active:
-            logger.warning(f"Found active scan for {ip_address} from {requester_ip}")
+            logger.warning(f"Found active scan for {target_address} from {requester_ip}")
             return False, "A scan is already in progress for this target", None
             
         # Generate new scan ID
@@ -493,13 +516,13 @@ def start_network_scan(target: str, requester_ip: str, captcha_token: str) -> Tu
         logger.debug(f"Generated new scan ID: {scan_id}")
         
         # Create initial scan record
-        if not create_scan_record(scan_id, ip_address, requester_ip):
+        if not create_scan_record(scan_id, target_address, requester_ip):
             return False, "Failed to create scan record", None
             
         # Start scan task in background
         thread = threading.Thread(
             target=run_scan_task,
-            args=(scan_id, ip_address, requester_ip),
+            args=(scan_id, target_address, requester_ip),
             daemon=True
         )
         thread.start()
