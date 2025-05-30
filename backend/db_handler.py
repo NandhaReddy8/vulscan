@@ -76,103 +76,125 @@ class DatabaseHandler:
 
     def initialize_tables(self):
         """Create necessary tables if they don't exist"""
-        create_tables_sql = """
-        -- Create users table for authentication
-        CREATE TABLE IF NOT EXISTS users (
-            id SERIAL PRIMARY KEY,
-            username VARCHAR(50) UNIQUE NOT NULL,
-            email VARCHAR(255) UNIQUE NOT NULL,
-            password_hash VARCHAR(255) NOT NULL,
-            role VARCHAR(20) NOT NULL DEFAULT 'user',
-            is_active BOOLEAN DEFAULT true,
-            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-            last_login TIMESTAMP,
-            CONSTRAINT valid_role CHECK (role IN ('admin', 'user'))
-        );
-
-        -- Create scan_requests table with scan_id column (for application scanner only)
-        CREATE TABLE IF NOT EXISTS scan_requests (
-            id SERIAL PRIMARY KEY,
-            scan_id TEXT UNIQUE NOT NULL,  -- Add scan_id column for external reference
-            url TEXT NOT NULL,             -- URL is required for application scans
-            ip_address TEXT NOT NULL,
-            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            scan_type TEXT NOT NULL DEFAULT 'application'  -- Add scan_type column with default 'application'
-        );
-
-        -- Create report_requests table
-        CREATE TABLE IF NOT EXISTS report_requests (
-            id SERIAL PRIMARY KEY,
-            name TEXT NOT NULL,
-            email TEXT NOT NULL,
-            phone TEXT,
-            target_url TEXT NOT NULL,
-            timestamp TIMESTAMP NOT NULL
-        );
-
-        -- Create zap_results table
-        CREATE TABLE IF NOT EXISTS zap_results (
-            id SERIAL PRIMARY KEY,
-            scan_id TEXT NOT NULL,
-            target_url TEXT NOT NULL,
-            results JSONB NOT NULL,
-            timestamp TIMESTAMP NOT NULL
-        );
-
-        -- Create zap_reports table
-        CREATE TABLE IF NOT EXISTS zap_reports (
-            id SERIAL PRIMARY KEY,
-            scan_id TEXT NOT NULL,
-            target_url TEXT NOT NULL,
-            report_type TEXT NOT NULL,
-            content TEXT NOT NULL,
-            timestamp TIMESTAMP NOT NULL
-        );
-
-        -- Create marketing summary table
-        CREATE TABLE IF NOT EXISTS scan_report_summary (
-            id SERIAL PRIMARY KEY,
-            scanned_on TIMESTAMP,
-            ip_address VARCHAR(45),
-            target_url TEXT UNIQUE,
-            vuln_high INT DEFAULT 0,
-            vuln_medium INT DEFAULT 0,
-            vuln_low INT DEFAULT 0,
-            vuln_info INT DEFAULT 0,
-            user_email TEXT,
-            user_name TEXT,
-            user_phone TEXT,
-            lead_status TEXT DEFAULT 'not_connected',
-            last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-
-        -- Create network_scan_results table if it doesn't exist
-        CREATE TABLE IF NOT EXISTS network_scan_results (
-            id SERIAL PRIMARY KEY,
-            scan_id TEXT NOT NULL UNIQUE,
-            ip_address TEXT NOT NULL,
-            scan_status TEXT NOT NULL CHECK (scan_status IN ('queued', 'running', 'completed', 'failed', 'stopped')),
-            scan_results JSONB,
-            error_message TEXT,
-            requester_ip TEXT NOT NULL,
-            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
-        );
-
-        -- Add indexes for faster lookups (only if they don't exist)
-        CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id);
-        CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address);
-        CREATE INDEX IF NOT EXISTS idx_network_scan_status ON network_scan_results(scan_status);
-        CREATE INDEX IF NOT EXISTS idx_network_scan_created ON network_scan_results(created_at);
-        CREATE INDEX IF NOT EXISTS idx_scan_requests_scan_id ON scan_requests(scan_id);
-        """
-        
         try:
             conn = self.get_connection()
             try:
                 with conn.cursor() as cur:
-                    cur.execute(create_tables_sql)
+                    # Create users table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS users (
+                            id SERIAL PRIMARY KEY,
+                            username VARCHAR(50) UNIQUE NOT NULL,
+                            email VARCHAR(255) UNIQUE NOT NULL,
+                            password_hash VARCHAR(255) NOT NULL,
+                            role VARCHAR(20) NOT NULL DEFAULT 'user',
+                            is_active BOOLEAN DEFAULT true,
+                            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+                            last_login TIMESTAMP,
+                            CONSTRAINT valid_role CHECK (role IN ('admin', 'user'))
+                        )
+                    """)
                     conn.commit()
+
+                    # Create scan_requests table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS scan_requests (
+                            id SERIAL PRIMARY KEY,
+                            scan_id TEXT UNIQUE NOT NULL,
+                            url TEXT NOT NULL,
+                            ip_address TEXT NOT NULL,
+                            timestamp TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            scan_type TEXT NOT NULL DEFAULT 'application'
+                        )
+                    """)
+                    conn.commit()
+
+                    # Create report_requests table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS report_requests (
+                            id SERIAL PRIMARY KEY,
+                            name TEXT NOT NULL,
+                            email TEXT NOT NULL,
+                            phone TEXT,
+                            target_url TEXT NOT NULL,
+                            timestamp TIMESTAMP NOT NULL
+                        )
+                    """)
+                    conn.commit()
+
+                    # Create zap_results table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS zap_results (
+                            id SERIAL PRIMARY KEY,
+                            scan_id TEXT NOT NULL,
+                            target_url TEXT NOT NULL,
+                            results JSONB NOT NULL,
+                            timestamp TIMESTAMP NOT NULL
+                        )
+                    """)
+                    conn.commit()
+
+                    # Create zap_reports table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS zap_reports (
+                            id SERIAL PRIMARY KEY,
+                            scan_id TEXT NOT NULL,
+                            target_url TEXT NOT NULL,
+                            report_type TEXT NOT NULL,
+                            content TEXT NOT NULL,
+                            timestamp TIMESTAMP NOT NULL
+                        )
+                    """)
+                    conn.commit()
+
+                    # Create scan_report_summary table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS scan_report_summary (
+                            id SERIAL PRIMARY KEY,
+                            scanned_on TIMESTAMP,
+                            ip_address VARCHAR(45),
+                            target_url TEXT UNIQUE,
+                            vuln_high INT DEFAULT 0,
+                            vuln_medium INT DEFAULT 0,
+                            vuln_low INT DEFAULT 0,
+                            vuln_info INT DEFAULT 0,
+                            user_email TEXT,
+                            user_name TEXT,
+                            user_phone TEXT,
+                            lead_status TEXT DEFAULT 'not_connected',
+                            last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """)
+                    conn.commit()
+
+                    # Create network_scan_results table
+                    cur.execute("""
+                        CREATE TABLE IF NOT EXISTS network_scan_results (
+                            id SERIAL PRIMARY KEY,
+                            scan_id TEXT NOT NULL UNIQUE,
+                            ip_address TEXT NOT NULL,
+                            scan_status TEXT NOT NULL CHECK (scan_status IN ('queued', 'running', 'completed', 'failed', 'stopped')),
+                            scan_results JSONB,
+                            error_message TEXT,
+                            requester_ip TEXT NOT NULL,
+                            created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                            updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+                        )
+                    """)
+                    conn.commit()
+
+                    # Create indexes separately
+                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id)")
+                    conn.commit()
+                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address)")
+                    conn.commit()
+                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_status ON network_scan_results(scan_status)")
+                    conn.commit()
+                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_created ON network_scan_results(created_at)")
+                    conn.commit()
+                    cur.execute("CREATE INDEX IF NOT EXISTS idx_scan_requests_scan_id ON scan_requests(scan_id)")
+                    conn.commit()
+
                     print("[+] Database tables initialized successfully")
             finally:
                 self.put_connection(conn)
