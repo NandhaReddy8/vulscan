@@ -195,9 +195,7 @@ def initialize_tables():
         logger.error(f"Error initializing database tables: {str(e)}")
         return False
 
-# Initialize tables on module import
-initialize_tables()
-
+# Create database handler instance (tables will be initialized in DatabaseHandler.__init__)
 db = DatabaseHandler()
 
 # Define CSV file paths
@@ -307,22 +305,6 @@ def save_network_scan_results(scan_id, ip_address, scan_timestamp, scan_status, 
     """Save (or update) a network scan result into the network_scan_results table."""
     conn = db.get_connection()
     try:
-        # Validate required fields
-        if not scan_id:
-            raise ValueError("scan_id is required")
-        if not ip_address and scan_status not in ["stopped"]:  # Allow null ip_address only for stopped scans
-            raise ValueError("ip_address is required")
-        if not scan_timestamp:
-            scan_timestamp = datetime.datetime.now()
-        if not scan_status:
-            raise ValueError("scan_status is required")
-        if not requester_ip and scan_status not in ["stopped"]:  # Allow null requester_ip only for stopped scans
-            raise ValueError("requester_ip is required")
-
-        # Log the attempt to save
-        print(f"[INFO] Attempting to save scan results for scan_id: {scan_id}")
-        print(f"[INFO] Status: {scan_status}, IP: {ip_address}, Results present: {scan_results is not None}")
-
         with conn.cursor() as cur:
             # First check if record exists
             cur.execute("SELECT id FROM network_scan_results WHERE scan_id = %s", (scan_id,))
@@ -333,7 +315,6 @@ def save_network_scan_results(scan_id, ip_address, scan_timestamp, scan_status, 
                 cur.execute("""
                     UPDATE network_scan_results 
                     SET ip_address = COALESCE(%s, ip_address),
-                        scan_timestamp = %s,
                         scan_status = %s,
                         scan_results = COALESCE(%s, scan_results),
                         error_message = COALESCE(%s, error_message),
@@ -341,15 +322,15 @@ def save_network_scan_results(scan_id, ip_address, scan_timestamp, scan_status, 
                         updated_at = CURRENT_TIMESTAMP
                     WHERE scan_id = %s
                     RETURNING id
-                """, (ip_address, scan_timestamp, scan_status, scan_results, error_message, requester_ip, scan_id))
+                """, (ip_address, scan_status, scan_results, error_message, requester_ip, scan_id))
             else:
                 # Insert new record
                 cur.execute("""
                     INSERT INTO network_scan_results 
-                    (scan_id, ip_address, scan_timestamp, scan_status, scan_results, error_message, requester_ip)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
+                    (scan_id, ip_address, scan_status, scan_results, error_message, requester_ip)
+                    VALUES (%s, %s, %s, %s, %s, %s)
                     RETURNING id
-                """, (scan_id, ip_address, scan_timestamp, scan_status, scan_results, error_message, requester_ip))
+                """, (scan_id, ip_address, scan_status, scan_results, error_message, requester_ip))
 
             result = cur.fetchone()
             conn.commit()
@@ -375,13 +356,22 @@ def get_network_scan_results(scan_id):
     try:
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT scan_id, ip_address, scan_timestamp, scan_status, scan_results, error_message, requester_ip
+                SELECT scan_id, ip_address, scan_status, scan_results, error_message, requester_ip, created_at, updated_at
                 FROM network_scan_results
                 WHERE scan_id = %s
             """, (scan_id,))
             row = cur.fetchone()
             if row:
-                 return {"scan_id": row[0], "ip_address": row[1], "scan_timestamp": row[2], "scan_status": row[3], "scan_results": row[4], "error_message": row[5], "requester_ip": row[6]}
+                return {
+                    "scan_id": row[0],
+                    "ip_address": row[1],
+                    "scan_status": row[2],
+                    "scan_results": row[3],
+                    "error_message": row[4],
+                    "requester_ip": row[5],
+                    "created_at": row[6],
+                    "updated_at": row[7]
+                }
             return None
     except Exception as e:
          print(f"[ERROR] Failed to get network scan results: {str(e)}")
