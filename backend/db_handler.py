@@ -183,17 +183,68 @@ class DatabaseHandler:
                     """)
                     conn.commit()
 
-                    # Create indexes separately
-                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id)")
-                    conn.commit()
-                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address)")
-                    conn.commit()
-                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_status ON network_scan_results(scan_status)")
-                    conn.commit()
-                    cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_created ON network_scan_results(created_at)")
-                    conn.commit()
-                    cur.execute("CREATE INDEX IF NOT EXISTS idx_scan_requests_scan_id ON scan_requests(scan_id)")
-                    conn.commit()
+                    # Create indexes only if tables and columns exist
+                    # Check and create network_scan_results indexes
+                    cur.execute("""
+                        SELECT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'network_scan_results' 
+                            AND column_name = 'scan_id'
+                        )
+                    """)
+                    if cur.fetchone()[0]:
+                        cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_id ON network_scan_results(scan_id)")
+                        conn.commit()
+
+                    cur.execute("""
+                        SELECT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'network_scan_results' 
+                            AND column_name = 'ip_address'
+                        )
+                    """)
+                    if cur.fetchone()[0]:
+                        cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_ip ON network_scan_results(ip_address)")
+                        conn.commit()
+
+                    cur.execute("""
+                        SELECT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'network_scan_results' 
+                            AND column_name = 'scan_status'
+                        )
+                    """)
+                    if cur.fetchone()[0]:
+                        cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_status ON network_scan_results(scan_status)")
+                        conn.commit()
+
+                    cur.execute("""
+                        SELECT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'network_scan_results' 
+                            AND column_name = 'created_at'
+                        )
+                    """)
+                    if cur.fetchone()[0]:
+                        cur.execute("CREATE INDEX IF NOT EXISTS idx_network_scan_created ON network_scan_results(created_at)")
+                        conn.commit()
+
+                    # Check and create scan_requests index
+                    cur.execute("""
+                        SELECT EXISTS (
+                            SELECT 1 
+                            FROM information_schema.columns 
+                            WHERE table_name = 'scan_requests' 
+                            AND column_name = 'scan_id'
+                        )
+                    """)
+                    if cur.fetchone()[0]:
+                        cur.execute("CREATE INDEX IF NOT EXISTS idx_scan_requests_scan_id ON scan_requests(scan_id)")
+                        conn.commit()
 
                     print("[+] Database tables initialized successfully")
             finally:
