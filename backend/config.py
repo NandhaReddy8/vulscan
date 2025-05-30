@@ -34,6 +34,10 @@ DEFAULT_MARKETING_CORS_ORIGINS = [
     "http://localhost:5174",      # Local main frontend
     "http://127.0.0.1:5173",      # Local marketing frontend alternative
     "http://127.0.0.1:5174",      # Local main frontend alternative
+    "http://localhost:3000",      # Common development port
+    "http://127.0.0.1:3000",      # Common development port alternative
+    "http://localhost:8080",      # Common development port
+    "http://127.0.0.1:8080"       # Common development port alternative
 ]
 
 # Get marketing CORS origins from environment variable, fallback to defaults if not set

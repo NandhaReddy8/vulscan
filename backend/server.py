@@ -128,9 +128,10 @@ marketing_cors = {
     "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     "allow_headers": ["Content-Type", "Authorization", "X-Requester-IP", "X-Captcha-Token", "X-Internal-Verify"],
     "supports_credentials": True,
-    "expose_headers": ["Content-Type", "Authorization"],
+    "expose_headers": ["Content-Type", "Authorization", "Set-Cookie"],
     "max_age": 3600,
-    "send_wildcard": False
+    "send_wildcard": False,
+    "vary_header": True
 }
 
 # Apply CORS to specific routes
@@ -146,7 +147,7 @@ CORS(app, resources={
     r"/api/auth/*": marketing_cors,
     r"/api/scan-report-summary": marketing_cors,
     r"/api/report-request": marketing_cors
-})
+}, supports_credentials=True)  # Enable credentials support globally
 
 # Configure JWT
 app.config["JWT_SECRET_KEY"] = JWT_SECRET_KEY
@@ -537,7 +538,9 @@ def login():
             httponly=True,
             secure=not FLASK_DEBUG,
             samesite="Lax",
-            max_age=JWT_ACCESS_TOKEN_EXPIRES
+            max_age=JWT_ACCESS_TOKEN_EXPIRES,
+            domain=None,  # Let browser handle domain
+            path="/"  # Set path to root
         )
         response.set_cookie(
             "refresh_token_cookie",
@@ -545,7 +548,9 @@ def login():
             httponly=True,
             secure=not FLASK_DEBUG,
             samesite="Lax",
-            max_age=JWT_REFRESH_TOKEN_EXPIRES
+            max_age=JWT_REFRESH_TOKEN_EXPIRES,
+            domain=None,  # Let browser handle domain
+            path="/"  # Set path to root
         )
         
         return response
@@ -587,19 +592,29 @@ def logout():
 def verify_token():
     if request.method == "OPTIONS":
         response = app.make_default_options_response()
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
+        origin = request.headers.get("Origin")
+        if origin in MARKETING_CORS_ORIGINS:
+            response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
         response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Vary"] = "Origin"
         return response
         
     try:
+        if FLASK_DEBUG:
+            print("[DEBUG] /api/auth/verify: Request headers =", dict(request.headers))
+            print("[DEBUG] /api/auth/verify: Request cookies =", dict(request.cookies))
+            
         identity = get_jwt_identity()
         
         if not identity:
             response = jsonify({"valid": False, "error": "No valid token"})
-            response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
+            origin = request.headers.get("Origin")
+            if origin in MARKETING_CORS_ORIGINS:
+                response.headers["Access-Control-Allow-Origin"] = origin
             response.headers["Access-Control-Allow-Credentials"] = "true"
+            response.headers["Vary"] = "Origin"
             return response, 401
             
         current_user = json.loads(identity)
@@ -608,16 +623,22 @@ def verify_token():
             "valid": True,
             "user": current_user
         })
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
+        origin = request.headers.get("Origin")
+        if origin in MARKETING_CORS_ORIGINS:
+            response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Vary"] = "Origin"
         return response
         
     except Exception as e:
         if FLASK_DEBUG:
             print(f"[ERROR] Token verification failed: {str(e)}")
         response = jsonify({"valid": False, "error": "Token verification failed"})
-        response.headers["Access-Control-Allow-Origin"] = request.headers.get("Origin", SCANNER_CORS_ORIGINS[0])
+        origin = request.headers.get("Origin")
+        if origin in MARKETING_CORS_ORIGINS:
+            response.headers["Access-Control-Allow-Origin"] = origin
         response.headers["Access-Control-Allow-Credentials"] = "true"
+        response.headers["Vary"] = "Origin"
         return response, 401
 
 @app.route("/api/scan-report-summary", methods=["GET"])
