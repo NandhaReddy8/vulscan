@@ -9,6 +9,9 @@ def generate_secure_key(length=64):
 
 def update_env_file(env_path, new_key):
     """Update the JWT_SECRET_KEY in .env file."""
+    # Convert env_path to string for regex operations
+    env_path_str = str(env_path)
+    
     # Read the current .env file
     with open(env_path, 'r') as f:
         content = f.read()
@@ -25,10 +28,10 @@ def update_env_file(env_path, new_key):
         # Add new key
         new_content = content.rstrip() + f'\nJWT_SECRET_KEY={new_key}\n'
     
-    # Create backup of current .env
-    backup_path = env_path + '.backup'
-    if os.path.exists(env_path):
-        os.rename(env_path, backup_path)
+    # Create backup of current .env using Path for proper path handling
+    backup_path = env_path.with_suffix('.env.backup')
+    if env_path.exists():
+        env_path.rename(backup_path)
         print(f"Created backup at: {backup_path}")
     
     # Write new content
