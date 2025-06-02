@@ -698,10 +698,18 @@ def update_lead_status(row_id):
 # Socket.IO connection event handlers
 @socketio.on('connect')
 def handle_connect():
-    # Check if the connection is for marketing routes
-    if request.headers.get('Origin') not in MARKETING_CORS_ORIGINS:
-        # For scanner routes, allow all origins
+    # Get the origin from headers
+    origin = request.headers.get('Origin')
+    
+    # For marketing routes, only allow specific origins
+    if origin in MARKETING_CORS_ORIGINS:
         return True
+        
+    # For scanner routes, allow all origins
+    if not origin or origin not in MARKETING_CORS_ORIGINS:
+        return True
+        
+    # Reject all other connections
     return False
 
 @socketio.on('disconnect')
