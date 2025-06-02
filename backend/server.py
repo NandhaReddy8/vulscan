@@ -49,13 +49,26 @@ db = DatabaseHandler()
 # Store active challenges with their expiry times
 active_challenges = {}
 
+# Increase CAPTCHA expiry time to 5 minutes (300 seconds) for testing
+CAPTCHA_EXPIRY = 300  # Override the config value temporarily
+
 def store_challenge(challenge: str, expiry: int):
     """Store challenge in memory with expiry"""
-    active_challenges[challenge] = time.time() + expiry
+    current_time = time.time()
+    expiry_time = current_time + expiry
+    active_challenges[challenge] = expiry_time
+    logger.info(f"Stored challenge {challenge} - Created: {current_time}, Expires: {expiry_time}, TTL: {expiry} seconds")
 
 def check_challenge(challenge: str) -> bool:
     """Check if challenge exists and is not expired"""
-    return challenge in active_challenges and active_challenges[challenge] > time.time()
+    current_time = time.time()
+    if challenge in active_challenges:
+        expiry_time = active_challenges[challenge]
+        is_valid = expiry_time > current_time
+        logger.info(f"Checking challenge {challenge} - Current: {current_time}, Expires: {expiry_time}, Valid: {is_valid}")
+        return is_valid
+    logger.info(f"Challenge {challenge} not found in active challenges")
+    return False
 
 def remove_challenge(challenge: str):
     """Remove challenge from memory"""
@@ -89,11 +102,24 @@ def is_internal_verify():
 
 def verify_captcha_internal(challenge: str, nonce: str) -> tuple[bool, str]:
     """Internal CAPTCHA verification function"""
+    current_time = time.time()
+    logger.info(f"Verifying CAPTCHA at {current_time}")
+    logger.info(f"Challenge: {challenge}, Nonce: {nonce}")
+    logger.info(f"Active challenges: {[(ch, exp) for ch, exp in active_challenges.items()]}")
+    
     if not check_challenge(challenge):
+        if challenge in active_challenges:
+            expiry_time = active_challenges[challenge]
+            logger.error(f"Challenge {challenge} expired. Current time: {current_time}, Expiry time: {expiry_time}")
+        else:
+            logger.error(f"Challenge {challenge} not found in active challenges")
         return False, "Invalid or expired challenge"
     
     if verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
+        logger.info("CAPTCHA verification successful")
         return True, ""
+    
+    logger.error(f"Invalid proof of work for challenge {challenge}")
     return False, "Invalid proof of work"
 
 def generate_challenge():
@@ -323,6 +349,7 @@ def scan():
             # Split the token into challenge and nonce
             challenge, nonce = captcha_token.split(':')
             logger.info(f"Split token - Challenge: {challenge}, Nonce: {nonce}")
+            logger.info(f"Current active challenges: {list(active_challenges.keys())}")
             
             # Use internal verification
             is_valid, error_msg = verify_captcha_internal(challenge, nonce)
@@ -332,7 +359,8 @@ def scan():
                 
             # Remove challenge after successful verification
             remove_challenge(challenge)
-            logger.info("CAPTCHA verification successful")
+            logger.info(f"CAPTCHA verification successful, removed challenge {challenge}")
+            logger.info(f"Remaining active challenges: {list(active_challenges.keys())}")
             
         except Exception as e:
             logger.error(f"Error verifying CAPTCHA token: {str(e)}", exc_info=True)
@@ -956,10 +984,14 @@ def get_challenge():
     try:
         # Generate new challenge
         challenge = generate_challenge()
-        expiry = int(time.time() + CAPTCHA_EXPIRY)
+        current_time = time.time()
+        expiry_time = current_time + CAPTCHA_EXPIRY
         
         # Store in memory
         store_challenge(challenge, CAPTCHA_EXPIRY)
+        logger.info(f"Generated new challenge: {challenge}")
+        logger.info(f"Challenge created at: {current_time}, expires at: {expiry_time}")
+        logger.info(f"Current active challenges: {[(ch, exp) for ch, exp in active_challenges.items()]}")
         
         return jsonify({
             'challenge': challenge,
