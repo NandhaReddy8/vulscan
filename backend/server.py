@@ -57,7 +57,14 @@ def store_challenge(challenge: str, expiry: int):
     current_time = time.time()
     expiry_time = current_time + expiry
     active_challenges[challenge] = expiry_time
-    logger.info(f"Stored challenge {challenge} - Created: {current_time}, Expires: {expiry_time}, TTL: {expiry} seconds")
+    logger.info(f"=== Challenge Storage ===")
+    logger.info(f"Storing challenge: {challenge}")
+    logger.info(f"Current time: {current_time}")
+    logger.info(f"Expiry time: {expiry_time}")
+    logger.info(f"TTL: {expiry} seconds")
+    logger.info(f"Active challenges before storage: {[(ch, exp) for ch, exp in active_challenges.items()]}")
+    logger.info(f"Active challenges after storage: {[(ch, exp) for ch, exp in active_challenges.items()]}")
+    logger.info(f"Memory address of active_challenges: {id(active_challenges)}")
 
 def check_challenge(challenge: str) -> bool:
     """Check if challenge exists and is not expired"""
@@ -186,6 +193,13 @@ def check_weekly_scan_limit(target_url):
 
 # Initialize Flask App with WebSockets
 app = Flask(__name__)
+
+# Add server initialization logging
+logger.info("=== Server Initialization ===")
+logger.info(f"Server process ID: {os.getpid()}")
+logger.info(f"Server start time: {time.time()}")
+logger.info(f"Memory address of active_challenges: {id(active_challenges)}")
+logger.info(f"Initial active challenges: {[(ch, exp) for ch, exp in active_challenges.items()]}")
 
 # Define CORS policies for different routes
 scanner_cors = {
@@ -989,9 +1003,13 @@ def get_challenge():
         
         # Store in memory
         store_challenge(challenge, CAPTCHA_EXPIRY)
+        logger.info(f"=== Challenge Generation ===")
         logger.info(f"Generated new challenge: {challenge}")
-        logger.info(f"Challenge created at: {current_time}, expires at: {expiry_time}")
-        logger.info(f"Current active challenges: {[(ch, exp) for ch, exp in active_challenges.items()]}")
+        logger.info(f"Challenge created at: {current_time}")
+        logger.info(f"Challenge expires at: {expiry_time}")
+        logger.info(f"Challenge TTL: {CAPTCHA_EXPIRY} seconds")
+        logger.info(f"Active challenges before storage: {[(ch, exp) for ch, exp in active_challenges.items()]}")
+        logger.info(f"Active challenges after storage: {[(ch, exp) for ch, exp in active_challenges.items()]}")
         
         return jsonify({
             'challenge': challenge,
