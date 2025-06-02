@@ -89,3 +89,471 @@
 2025-06-02 13:29:52,381 - engineio.server - INFO - FiKVpVjion0uMwCKAAAB: Sending packet PING data None
 2025-06-02 13:29:57,334 - engineio.server - INFO - FiKVpVjion0uMwCKAAAB: Received packet PONG data 
 2025-06-02 13:30:22,335 - engineio.server - INFO - FiKVpVjion0uMwCKAAAB: Sending packet PING data None
+2025-06-02 15:57:21,041 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-02 15:58:33,028 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Sending packet OPEN data {'sid': 'ZYeenqUSPJxLmMX4AAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 15:58:33,028 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Received request to upgrade to websocket
+2025-06-02 15:58:33,033 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Upgrade to websocket successful
+2025-06-02 15:58:33,040 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Received packet MESSAGE data 0
+2025-06-02 15:58:33,043 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Sending packet MESSAGE data 0{"sid":"dBzpnZzV-wD0piBEAAAB"}
+2025-06-02 15:58:41,416 - __main__ - ERROR - Error generating challenge: Error 11001 connecting to localhost:6379. No address found.
+Traceback (most recent call last):
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\retry.py", line 87, in call_with_retry
+    return do()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 761, in _connect
+    for res in socket.getaddrinfo(
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\eventlet\support\greendns.py", line 578, in getaddrinfo
+    raise socket.gaierror(socket.EAI_NONAME, 'No address found')
+socket.gaierror: [Errno 11001] No address found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\backend\server.py", line 971, in get_challenge
+    store_challenge(challenge, CAPTCHA_EXPIRY)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\backend\server.py", line 63, in store_challenge
+    redis_client.setex(f"challenge:{challenge}", expiry, "1")
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\commands\core.py", line 2330, in setex
+    return self.execute_command("SETEX", name, time, value)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\client.py", line 622, in execute_command
+    return self._execute_command(*args, **options)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\client.py", line 628, in _execute_command
+    conn = self.connection or pool.get_connection()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\utils.py", line 188, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 1522, in get_connection
+    connection.connect()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to localhost:6379. No address found.
+2025-06-02 15:58:48,997 - __main__ - ERROR - Error generating challenge: Error 11001 connecting to localhost:6379. No address found.
+Traceback (most recent call last):
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\retry.py", line 87, in call_with_retry
+    return do()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 761, in _connect
+    for res in socket.getaddrinfo(
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\eventlet\support\greendns.py", line 578, in getaddrinfo
+    raise socket.gaierror(socket.EAI_NONAME, 'No address found')
+socket.gaierror: [Errno 11001] No address found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\backend\server.py", line 971, in get_challenge
+    store_challenge(challenge, CAPTCHA_EXPIRY)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\backend\server.py", line 63, in store_challenge
+    redis_client.setex(f"challenge:{challenge}", expiry, "1")
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\commands\core.py", line 2330, in setex
+    return self.execute_command("SETEX", name, time, value)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\client.py", line 622, in execute_command
+    return self._execute_command(*args, **options)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\client.py", line 628, in _execute_command
+    conn = self.connection or pool.get_connection()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\utils.py", line 188, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 1522, in get_connection
+    connection.connect()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to localhost:6379. No address found.
+2025-06-02 15:58:58,048 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Sending packet PING data None
+2025-06-02 15:58:58,052 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Received packet PONG data 
+2025-06-02 15:59:23,050 - engineio.server - INFO - ZYeenqUSPJxLmMX4AAAA: Sending packet PING data None
+2025-06-02 15:59:51,611 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-02 15:59:51,724 - engineio.server - INFO - vikRt80KYi_WrEBMAAAA: Sending packet OPEN data {'sid': 'vikRt80KYi_WrEBMAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 15:59:51,725 - engineio.server - INFO - vikRt80KYi_WrEBMAAAA: Received request to upgrade to websocket
+2025-06-02 15:59:51,726 - engineio.server - INFO - vikRt80KYi_WrEBMAAAA: Upgrade to websocket successful
+2025-06-02 15:59:51,729 - engineio.server - INFO - vikRt80KYi_WrEBMAAAA: Received packet MESSAGE data 0
+2025-06-02 15:59:51,731 - engineio.server - INFO - vikRt80KYi_WrEBMAAAA: Sending packet MESSAGE data 0{"sid":"9-euMM75B5UJ4SgPAAAB"}
+2025-06-02 16:00:01,489 - engineio.server - INFO - JMOTLU06M_byVO9LAAAC: Sending packet OPEN data {'sid': 'JMOTLU06M_byVO9LAAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 16:00:01,491 - engineio.server - INFO - JMOTLU06M_byVO9LAAAC: Received request to upgrade to websocket
+2025-06-02 16:00:01,492 - engineio.server - INFO - JMOTLU06M_byVO9LAAAC: Upgrade to websocket successful
+2025-06-02 16:00:01,515 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet OPEN data {'sid': 'LBA32H3vvdT3DtckAAAD', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 16:00:01,516 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received request to upgrade to websocket
+2025-06-02 16:00:01,517 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Upgrade to websocket successful
+2025-06-02 16:00:01,578 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet MESSAGE data 0
+2025-06-02 16:00:01,580 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet MESSAGE data 0{"sid":"u-_gTbeYM7BxdzqBAAAE"}
+2025-06-02 16:00:15,796 - __main__ - ERROR - Error generating challenge: Error 11001 connecting to localhost:6379. No address found.
+Traceback (most recent call last):
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 385, in connect_check_health
+    sock = self.retry.call_with_retry(
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\retry.py", line 87, in call_with_retry
+    return do()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 386, in <lambda>
+    lambda: self._connect(), lambda error: self.disconnect(error)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 761, in _connect
+    for res in socket.getaddrinfo(
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\eventlet\support\greendns.py", line 578, in getaddrinfo
+    raise socket.gaierror(socket.EAI_NONAME, 'No address found')
+socket.gaierror: [Errno 11001] No address found
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\backend\server.py", line 971, in get_challenge
+    store_challenge(challenge, CAPTCHA_EXPIRY)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\backend\server.py", line 63, in store_challenge
+    redis_client.setex(f"challenge:{challenge}", expiry, "1")
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\commands\core.py", line 2330, in setex
+    return self.execute_command("SETEX", name, time, value)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\client.py", line 622, in execute_command
+    return self._execute_command(*args, **options)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\client.py", line 628, in _execute_command
+    conn = self.connection or pool.get_connection()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\utils.py", line 188, in wrapper
+    return func(*args, **kwargs)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 1522, in get_connection
+    connection.connect()
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 379, in connect
+    self.connect_check_health(check_health=True)
+  File "C:\Users\nandh\OneDrive\Desktop\,\VirtuesTech\vulscan\vulscan\venv\lib\site-packages\redis\connection.py", line 391, in connect_check_health
+    raise ConnectionError(self._error_message(e))
+redis.exceptions.ConnectionError: Error 11001 connecting to localhost:6379. No address found.
+2025-06-02 16:00:26,539 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:00:26,544 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:00:51,544 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:00:51,547 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:01:16,556 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:01:16,560 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:01:41,565 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:01:41,570 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:02:06,577 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:02:06,581 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:02:31,590 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:02:31,594 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:02:56,600 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:02:56,603 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:03:21,614 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:03:21,618 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:03:46,621 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:03:46,625 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:04:11,635 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:04:11,638 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:04:36,651 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:04:36,654 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:05:01,674 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:05:01,677 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Received packet PONG data 
+2025-06-02 16:05:26,695 - engineio.server - INFO - LBA32H3vvdT3DtckAAAD: Sending packet PING data None
+2025-06-02 16:05:51,000 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-02 16:05:55,750 - engineio.server - INFO - o02lgncY_YAscp1zAAAA: Sending packet OPEN data {'sid': 'o02lgncY_YAscp1zAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 16:05:55,751 - engineio.server - INFO - o02lgncY_YAscp1zAAAA: Received request to upgrade to websocket
+2025-06-02 16:05:55,752 - engineio.server - INFO - o02lgncY_YAscp1zAAAA: Upgrade to websocket successful
+2025-06-02 16:05:55,756 - engineio.server - INFO - o02lgncY_YAscp1zAAAA: Received packet MESSAGE data 0
+2025-06-02 16:05:55,758 - engineio.server - INFO - o02lgncY_YAscp1zAAAA: Sending packet MESSAGE data 0{"sid":"FbtD6Mm6aXpD5mnOAAAB"}
+2025-06-02 16:06:05,756 - engineio.server - INFO - S-e4V7jw0_DZM5xiAAAC: Sending packet OPEN data {'sid': 'S-e4V7jw0_DZM5xiAAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 16:06:05,758 - engineio.server - INFO - S-e4V7jw0_DZM5xiAAAC: Received request to upgrade to websocket
+2025-06-02 16:06:05,759 - engineio.server - INFO - S-e4V7jw0_DZM5xiAAAC: Upgrade to websocket successful
+2025-06-02 16:06:05,772 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet OPEN data {'sid': 'SZLGgmwvvRbvwZgnAAAD', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-02 16:06:05,773 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Received request to upgrade to websocket
+2025-06-02 16:06:05,774 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Upgrade to websocket successful
+2025-06-02 16:06:05,863 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Received packet MESSAGE data 0
+2025-06-02 16:06:05,864 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 0{"sid":"GnqUunkwbE0xRWFvAAAE"}
+2025-06-02 16:06:30,768 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet PING data None
+2025-06-02 16:06:30,771 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Received packet PONG data 
+2025-06-02 16:06:44,550 - __main__ - INFO - === Starting CAPTCHA verification ===
+2025-06-02 16:06:44,551 - __main__ - INFO - Request headers: {'Content-Type': 'application/json', 'Content-Length': '64', 'Host': '127.0.0.1:5000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36 Edg/136.0.0.0', 'Sec-Ch-Ua': '"Chromium";v="136", "Microsoft Edge";v="136", "Not.A/Brand";v="99"', 'X-Internal-Verify': 'true', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://localhost:5174', 'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5174/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8,it-IT;q=0.7,it;q=0.6'}
+2025-06-02 16:06:44,555 - __main__ - INFO - Request data: b'{"challenge":"82a2207d653e3d775d701a09333e9a6f","nonce":"47579"}'
+2025-06-02 16:06:44,556 - __main__ - INFO - Verifying challenge: 82a2207d653e3d775d701a09333e9a6f, nonce: 47579
+2025-06-02 16:06:46,950 - __main__ - INFO - === Starting scan request ===
+2025-06-02 16:06:46,957 - __main__ - INFO - Request headers: {'Content-Type': 'application/json', 'Content-Length': '72', 'Host': '127.0.0.1:5000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36 Edg/136.0.0.0', 'X-Captcha-Token': '82a2207d653e3d775d701a09333e9a6f:47579', 'Sec-Ch-Ua': '"Chromium";v="136", "Microsoft Edge";v="136", "Not.A/Brand";v="99"', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://localhost:5174', 'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5174/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8,it-IT;q=0.7,it;q=0.6'}
+2025-06-02 16:06:46,959 - __main__ - INFO - Request data: b'{"url":"http://testphp.vulnweb.com","session_id":"GnqUunkwbE0xRWFvAAAE"}'
+2025-06-02 16:06:46,961 - __main__ - INFO - Received scan request for URL: http://testphp.vulnweb.com, session_id: GnqUunkwbE0xRWFvAAAE
+2025-06-02 16:06:46,961 - __main__ - INFO - CAPTCHA token from header: 82a2207d653e3d775d701a09333e9a6f:47579
+2025-06-02 16:06:46,962 - __main__ - INFO - Split token - Challenge: 82a2207d653e3d775d701a09333e9a6f, Nonce: 47579
+2025-06-02 16:06:46,964 - __main__ - INFO - CAPTCHA verification successful
+2025-06-02 16:06:46,995 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:48,181 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://testphp.vulnweb.com/ HTTP/1.1" 200 4958
+2025-06-02 16:06:48,196 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:48,573 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/newContext/?contextName=context_3acf8b2a-379b-42e9-a84c-ab136c17e5b2 HTTP/1.1" 200 17
+2025-06-02 16:06:48,578 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:48,603 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/includeInContext/?contextName=context_3acf8b2a-379b-42e9-a84c-ab136c17e5b2&regex=.%2Ahttp%3A%2F%2Ftestphp.vulnweb.com.%2A HTTP/1.1" 200 15
+2025-06-02 16:06:48,608 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:48,618 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/scan/?url=http%3A%2F%2Ftestphp.vulnweb.com&contextName=context_3acf8b2a-379b-42e9-a84c-ab136c17e5b2 HTTP/1.1" 200 12
+2025-06-02 16:06:48,624 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:48,634 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 14
+2025-06-02 16:06:48,641 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:48,650 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 14
+2025-06-02 16:06:48,652 - socketio.server - INFO - emitting event "scan_progress" to GnqUunkwbE0xRWFvAAAE [/]
+2025-06-02 16:06:48,653 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"3acf8b2a-379b-42e9-a84c-ab136c17e5b2","message":"Discovering site structure...","progress":0,"phase":"Spider Scan"}]
+2025-06-02 16:06:50,831 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:50,968 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 15
+2025-06-02 16:06:51,164 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:51,235 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 15
+2025-06-02 16:06:51,238 - socketio.server - INFO - emitting event "scan_progress" to GnqUunkwbE0xRWFvAAAE [/]
+2025-06-02 16:06:51,242 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"3acf8b2a-379b-42e9-a84c-ab136c17e5b2","message":"Discovering site structure...","progress":46,"phase":"Spider Scan"}]
+2025-06-02 16:06:53,261 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:53,276 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 16
+2025-06-02 16:06:53,288 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:53,300 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/enableAllScanners/ HTTP/1.1" 200 15
+2025-06-02 16:06:53,308 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:53,316 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 23
+2025-06-02 16:06:53,323 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:53,332 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 23
+2025-06-02 16:06:53,334 - socketio.server - INFO - emitting event "scan_progress" to GnqUunkwbE0xRWFvAAAE [/]
+2025-06-02 16:06:53,340 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"3acf8b2a-379b-42e9-a84c-ab136c17e5b2","message":"Analyzing responses...","progress":50,"phase":"Passive Scan"}]
+2025-06-02 16:06:55,355 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:55,363 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-02 16:06:55,370 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:55,379 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-02 16:06:55,381 - socketio.server - INFO - emitting event "scan_progress" to GnqUunkwbE0xRWFvAAAE [/]
+2025-06-02 16:06:55,383 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"3acf8b2a-379b-42e9-a84c-ab136c17e5b2","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-02 16:06:55,775 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet PING data None
+2025-06-02 16:06:55,779 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Received packet PONG data 
+2025-06-02 16:06:57,382 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:57,393 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-02 16:06:57,400 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:57,411 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-02 16:06:57,413 - socketio.server - INFO - emitting event "scan_progress" to GnqUunkwbE0xRWFvAAAE [/]
+2025-06-02 16:06:57,416 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"3acf8b2a-379b-42e9-a84c-ab136c17e5b2","message":"Analyzing responses...","progress":92,"phase":"Passive Scan"}]
+2025-06-02 16:06:59,430 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:59,436 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-02 16:06:59,440 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:06:59,780 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/core/view/alerts/ HTTP/1.1" 200 827535
+2025-06-02 16:06:59,950 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:07:00,219 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET /JSON/reports/action/generate/?apikey=3ek27hdj10tooh0defcrknlm8o&title=Vulnerability+Scan+Report+-+http%3A%2F%2Ftestphp.vulnweb.com&template=risk-confidence-html&sites=http%3A%2F%2Ftestphp.vulnweb.com HTTP/1.1" 200 79
+2025-06-02 16:07:00,329 - socketio.server - INFO - emitting event "scan_completed" to GnqUunkwbE0xRWFvAAAE [/]
+2025-06-02 16:07:00,333 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Sending packet MESSAGE data 2["scan_completed",{"scan_id":"3acf8b2a-379b-42e9-a84c-ab136c17e5b2","message":"Scan Completed!","result":{"summary":{"Low":3,"Medium":3,"Informational":4},"vulnerabilities_by_type":[{"risk":"Medium","alert_type":"Missing Anti-clickjacking Header (1)","alert_tags":"CWE-1021, OWASP 2021 A15","parameter":"x-frame-options","evidence":"","description":"The response does not protect against 'ClickJacking' attacks. It should include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options.","solution":"Modern Web browsers support the Content-Security-Policy and X-Frame-Options HTTP headers. Ensure one of them is set on all web pages returned by your site/app.\nIf you expect the page to be framed only by pages on your server (e.g. it's part of a FRAMESET) then you'll want to use SAMEORIGIN, otherwise if you never expect the page to be framed, you should use DENY. Alternatively consider implementing Content Security Policy's \"frame-ancestors\" directive.","count":43,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/Mod_Rewrite_Shop/","http://testphp.vulnweb.com/AJAX/index.php","...and 40 more"]},{"risk":"Informational","alert_type":"Charset Mismatch (Header Versus Meta Content-Type Charset) (1)","alert_tags":"CWE-436, OWASP 2021 A15","parameter":"","evidence":"","description":"This check identifies responses where the HTTP Content-Type header declares a charset different from the charset defined by the body of the HTML or XML. When there's a charset mismatch between the HTTP header and content body Web browsers can be forced into an undesirable content-sniffing mode to determine the content's correct character set.\n\nAn attacker could manipulate content on the page to be interpreted in an encoding of their choice. For example, if an attacker can control content at the beginning of the page, they could inject script using UTF-7 encoded text and manipulate some browsers into interpreting that text.","solution":"Force UTF-8 for all text content in both the HTTP header and meta tags in HTML or encoding declarations in XML.","count":30,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/artists.php","http://testphp.vulnweb.com","...and 27 more"]},{"risk":"Medium","alert_type":"Content Security Policy (CSP) Header Not Set (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"","evidence":"","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.","count":47,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/sitemap.xml","http://testphp.vulnweb.com/robots.txt","...and 44 more"]},{"risk":"Medium","alert_type":"Absence of Anti-CSRF Tokens (1)","alert_tags":"CWE-352, OWASP 2021 A09","parameter":"","evidence":"<form action=\"search.php?test=query\" method=\"post\">","description":"No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.","solution":"Phase: Architecture and Design\nUse a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid.\nFor example, use anti-CSRF packages such as the OWASP CSRFGuard.\n\nPhase: Implementation\nEnsure that your application is free of cross-site scripting issues, because most CSRF defenses can be bypassed using attacker-controlled script.\n\nPhase: Architecture and Design\nGenerate a unique nonce for each form, place the nonce into the form, and verify the nonce upon receipt of the form. Be sure that the nonce is not predictable (CWE-330).\nNote that this can be bypassed using XSS.\n\nIdentify especially dangerous operations. When the user performs a dangerous operation, send a separate confirmation request to ensure that the user intended to perform that operation.\nNote that this can be bypassed using XSS.\n\nUse the ESAPI Session Management control.\nThis control includes a component for CSRF.\n\nDo not use the GET method for any request that triggers a state change.\n\nPhase: Implementation\nCheck the HTTP Referer header to see if the request originated from an expected page. This could break legitimate functionality, because users or proxies may have disabled sending the Referer for privacy reasons.","count":28,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/login.php","http://testphp.vulnweb.com/disclaimer.php","...and 25 more"]},{"risk":"Low","alert_type":"Server Leaks Version Information via \"Server\" HTTP Response Header Field (1)","alert_tags":"CWE-497, OWASP 2021 A13","parameter":"","evidence":"nginx/1.19.0","description":"The web/application server is leaking version information via the \"Server\" HTTP response header. Access to such information may facilitate attackers identifying other vulnerabilities your web/application server is subject to.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to suppress the \"Server\" header or provide generic details.","count":72,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/style.css","http://testphp.vulnweb.com/sitemap.xml","...and 69 more"]},{"risk":"Low","alert_type":"X-Content-Type-Options Header Missing (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"x-content-type-options","evidence":"","description":"The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.","solution":"Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.\nIf possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.","count":67,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/style.css","http://testphp.vulnweb.com/images/logo.gif","...and 64 more"]},{"risk":"Low","alert_type":"Server Leaks Information via \"X-Powered-By\" HTTP Response Header Field(s) (1)","alert_tags":"CWE-497, OWASP 2021 A13","parameter":"","evidence":"X-Powered-By: PHP/5.6.40-38+ubuntu20.04.1+deb.sury.org+1","description":"The web/application server is leaking information via one or more \"X-Powered-By\" HTTP response headers. Access to such information may facilitate attackers identifying other frameworks/components your web application is reliant upon and the vulnerabilities such components may be subject to.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to suppress \"X-Powered-By\" headers.","count":60,"affected_urls":["http://testphp.vulnweb.com/","http://testphp.vulnweb.com/userinfo.php","http://testphp.vulnweb.com/hpp/","...and 57 more"]},{"risk":"Informational","alert_type":"Modern Web Application (1)","alert_tags":"CWE--1","parameter":"","evidence":"<a href='#' onClick=\"window.open('./comment.php?pid=1','comment','width=500,height=400')\">comment on this picture</a>","description":"The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.","solution":"This is an informational alert and so no changes are required.","count":9,"affected_urls":["http://testphp.vulnweb.com/AJAX/index.php","http://testphp.vulnweb.com/artists.php","http://testphp.vulnweb.com/artists.php?artist=3","...and 6 more"]},{"risk":"Informational","alert_type":"User Controllable HTML Element Attribute (Potential XSS) (1)","alert_tags":"CWE-20, OWASP 2021 A20","parameter":"goButton","evidence":"","description":"This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.","solution":"Validate all input and sanitize output it before writing to any HTML attributes.","count":2,"affected_urls":["http://testphp.vulnweb.com/search.php?test=query","http://testphp.vulnweb.com/guestbook.php"]},{"risk":"Informational","alert_type":"Authentication Request Identified (1)","alert_tags":"CWE--1","parameter":"uemail","evidence":"upass","description":"The given request has been identified as an authentication request. The 'Other Info' field contains a set of key=value lines which identify any relevant fields. If the request is in a context which has an Authentication Method set to \"Auto-Detect\" then this rule will change the authentication to match the request identified.","solution":"This is an informational alert rather than a vulnerability and so there is nothing to fix.","count":1,"affected_urls":["http://testphp.vulnweb.com/secured/newuser.php"]}]},"report_url":"/reports/3acf8b2a-379b-42e9-a84c-ab136c17e5b2_http_testphp.vulnweb.com.html"}]
+2025-06-02 16:07:00,380 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-02 16:07:00,414 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_3acf8b2a-379b-42e9-a84c-ab136c17e5b2 HTTP/1.1" 200 15
+2025-06-02 16:07:03,925 - engineio.server - INFO - SZLGgmwvvRbvwZgnAAAD: Received packet MESSAGE data 1
+2025-06-02 16:07:13,658 - __main__ - INFO - === Starting CAPTCHA verification ===
+2025-06-02 16:07:13,659 - __main__ - INFO - Request headers: {'Content-Type': 'application/json', 'Content-Length': '63', 'Host': '127.0.0.1:5000', 'Connection': 'keep-alive', 'Sec-Ch-Ua-Platform': '"Android"', 'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Mobile Safari/537.36 Edg/136.0.0.0', 'Sec-Ch-Ua': '"Chromium";v="136", "Microsoft Edge";v="136", "Not.A/Brand";v="99"', 'X-Internal-Verify': 'true', 'Sec-Ch-Ua-Mobile': '?1', 'Accept': '*/*', 'Origin': 'http://localhost:5174', 'Sec-Fetch-Site': 'cross-site', 'Sec-Fetch-Mode': 'cors', 'Sec-Fetch-Dest': 'empty', 'Referer': 'http://localhost:5174/', 'Accept-Encoding': 'gzip, deflate, br, zstd', 'Accept-Language': 'en-US,en;q=0.9,en-IN;q=0.8,it-IT;q=0.7,it;q=0.6'}
+2025-06-02 16:07:13,660 - __main__ - INFO - Request data: b'{"challenge":"07d75b8a42dcaf85d27f4cb8e0e1dc17","nonce":"5933"}'
+2025-06-02 16:07:13,660 - __main__ - INFO - Verifying challenge: 07d75b8a42dcaf85d27f4cb8e0e1dc17, nonce: 5933
+2025-06-02 16:07:15,217 - __main__ - INFO - === Starting network scan request ===
+2025-06-02 16:07:15,219 - __main__ - INFO - Request data: {'ip': '8.8.8.8'}
+2025-06-02 16:07:15,220 - __main__ - INFO - CAPTCHA token from header: 07d75b8a42dcaf85d27f4cb8e0e1dc17:5933
+2025-06-02 16:07:15,221 - __main__ - INFO - IP Address: 8.8.8.8, Requester IP: 127.0.0.1
+2025-06-02 16:07:15,223 - __main__ - INFO - Split token - Challenge: 07d75b8a42dcaf85d27f4cb8e0e1dc17, Nonce: 5933
+2025-06-02 16:07:15,223 - __main__ - INFO - Attempting CAPTCHA verification...
+2025-06-02 16:07:15,225 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:5000
+2025-06-02 16:07:15,233 - __main__ - INFO - === Starting CAPTCHA verification ===
+2025-06-02 16:07:15,234 - __main__ - INFO - Request headers: {'Content-Type': 'application/json', 'Content-Length': '66', 'Host': '127.0.0.1:5000', 'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate, br', 'Accept': '*/*', 'Connection': 'keep-alive', 'X-Internal-Verify': 'true'}
+2025-06-02 16:07:15,235 - __main__ - INFO - Request data: b'{"challenge": "07d75b8a42dcaf85d27f4cb8e0e1dc17", "nonce": "5933"}'
+2025-06-02 16:07:15,236 - __main__ - INFO - Verifying challenge: 07d75b8a42dcaf85d27f4cb8e0e1dc17, nonce: 5933
+2025-06-02 16:07:15,238 - urllib3.connectionpool - DEBUG - http://127.0.0.1:5000 "POST /api/cap/verify HTTP/1.1" 200 22
+2025-06-02 16:07:15,239 - __main__ - INFO - CAPTCHA verification response status: 200
+2025-06-02 16:07:15,240 - __main__ - INFO - CAPTCHA verification response: {
+  "success": true
+}
+
+2025-06-02 16:07:15,241 - __main__ - INFO - Removing used challenge from active challenges
+2025-06-02 16:07:15,241 - __main__ - INFO - Attempting to start network scan...
+2025-06-02 16:07:15,242 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-02 16:07:15,243 - networkscan - ERROR - Error getting active scans: name 'DatabaseHandler' is not defined
+2025-06-02 16:07:15,243 - networkscan - DEBUG - Generated new scan ID: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:07:15,244 - database - INFO - Creating new scan record for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:07:15,336 - database - INFO - Successfully created scan record for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:07:15,337 - networkscan - INFO - Starting scan task for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4, ip: 8.8.8.8
+2025-06-02 16:07:15,337 - database - INFO - Updating scan status for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4 to running
+2025-06-02 16:07:15,339 - __main__ - INFO - Network scan start result - Success: True, Message: Scan started successfully, Scan ID: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:07:15,340 - __main__ - INFO - Scan started successfully with ID: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:07:15,353 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:07:15,452 - database - INFO - Successfully updated scan status for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:07:15,453 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-02 16:07:15,454 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-02 16:07:15,454 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-02 16:08:47,415 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,417 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,419 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,421 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,423 - networkscan - DEBUG - Raw Nmap output:
+2025-06-02 16:08:47,423 - networkscan - DEBUG - Starting Nmap 7.97 ( https://nmap.org ) at 2025-06-02 16:07 +0530
+Nmap scan report for dns.google (8.8.8.8)
+Host is up (0.024s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT    STATE SERVICE    VERSION
+53/tcp  open  tcpwrapped
+443/tcp open  ssl/https?
+| ssl-cert: Subject: commonName=dns.google
+| Subject Alternative Name: DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64
+| Not valid before: 2025-05-12T08:44:48
+|_Not valid after:  2025-08-04T08:44:47
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+Device type: general purpose
+Running (JUST GUESSING): Apple macOS 12.X|13.X (85%)
+OS CPE: cpe:/o:apple:mac_os_x:12 cpe:/o:apple:mac_os_x:13
+Aggressive OS guesses: Apple macOS 12 (Monterey) - 13 (Ventura) (Darwin 21.2.0 - 22.0.0) (85%)
+No exact OS matches for host (test conditions non-ideal).
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 91.61 seconds
+
+2025-06-02 16:08:47,423 - networkscan - DEBUG - Nmap scan completed successfully
+2025-06-02 16:08:47,424 - networkscan - DEBUG - Parsing Nmap output
+2025-06-02 16:08:47,425 - networkscan - DEBUG - Parsed 1 hosts, 1 up
+2025-06-02 16:08:47,426 - networkscan - DEBUG - Parsed results:
+2025-06-02 16:08:47,426 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-02T16:08:47.424482"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {
+        "os_guesses": [],
+        "aggressive_guesses": [],
+        "device_type": "general purpose",
+        "network_distance": null,
+        "service_info": null
+      },
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.024"
+    }
+  ],
+  "scan_time": "91.61s"
+}
+2025-06-02 16:08:47,427 - networkscan - DEBUG - Parsed scan results:
+2025-06-02 16:08:47,427 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-02T16:08:47.424482"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {
+        "os_guesses": [],
+        "aggressive_guesses": [],
+        "device_type": "general purpose",
+        "network_distance": null,
+        "service_info": null
+      },
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.024"
+    }
+  ],
+  "scan_time": "91.61s"
+}
+2025-06-02 16:08:47,428 - database - INFO - Updating scan status for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4 to completed
+2025-06-02 16:08:47,431 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,445 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,576 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,579 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,654 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,702 - database - INFO - Successfully updated scan status for scan_id: aa57998d-c5c0-4668-8574-76191208bbf4
+2025-06-02 16:08:47,705 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,729 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,736 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,788 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,797 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,806 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,845 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,869 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,875 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,911 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,956 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,961 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:47,964 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,000 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,013 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,031 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,090 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,113 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,114 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,132 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,136 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,152 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,195 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,220 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,239 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,256 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,258 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,268 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,375 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,447 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,530 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,628 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,721 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,812 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:48,978 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,082 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,177 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,363 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,483 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,580 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,671 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,770 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,888 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:49,997 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,101 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,178 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,281 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,379 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,475 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,563 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,794 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:50,923 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,030 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,125 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,202 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,304 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,427 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,527 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,628 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,752 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
+2025-06-02 16:08:51,868 - __main__ - DEBUG - Retrieving scan results for aa57998d-c5c0-4668-8574-76191208bbf4 from 127.0.0.1
