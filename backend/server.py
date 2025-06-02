@@ -31,7 +31,6 @@ import json
 from networkscan import start_network_scan, get_scan_status
 import asyncio
 import requests
-import redis
 from functools import wraps
 
 # Configure logging
@@ -50,54 +49,17 @@ db = DatabaseHandler()
 # Store active challenges with their expiry times
 active_challenges = {}
 
-# Initialize Redis connection with fallback
-try:
-    redis_client = redis.Redis(
-        host=os.getenv('REDIS_HOST', 'localhost'),
-        port=int(os.getenv('REDIS_PORT', 6379)),
-        db=0,
-        decode_responses=True
-    )
-    # Test connection
-    redis_client.ping()
-    USE_REDIS = True
-    print("[INFO] Successfully connected to Redis")
-except Exception as e:
-    print(f"[WARNING] Redis connection failed: {str(e)}. Falling back to in-memory storage.")
-    USE_REDIS = False
-
 def store_challenge(challenge: str, expiry: int):
-    """Store challenge in Redis or memory with expiry"""
-    if USE_REDIS:
-        try:
-            redis_client.setex(f"challenge:{challenge}", expiry, "1")
-        except Exception as e:
-            print(f"[WARNING] Redis store failed: {str(e)}. Falling back to memory.")
-            active_challenges[challenge] = time.time() + expiry
-    else:
-        active_challenges[challenge] = time.time() + expiry
+    """Store challenge in memory with expiry"""
+    active_challenges[challenge] = time.time() + expiry
 
 def check_challenge(challenge: str) -> bool:
-    """Check if challenge exists in Redis or memory"""
-    if USE_REDIS:
-        try:
-            return bool(redis_client.exists(f"challenge:{challenge}"))
-        except Exception as e:
-            print(f"[WARNING] Redis check failed: {str(e)}. Falling back to memory.")
-            return challenge in active_challenges and active_challenges[challenge] > time.time()
-    else:
-        return challenge in active_challenges and active_challenges[challenge] > time.time()
+    """Check if challenge exists and is not expired"""
+    return challenge in active_challenges and active_challenges[challenge] > time.time()
 
 def remove_challenge(challenge: str):
-    """Remove challenge from Redis or memory"""
-    if USE_REDIS:
-        try:
-            redis_client.delete(f"challenge:{challenge}")
-        except Exception as e:
-            print(f"[WARNING] Redis delete failed: {str(e)}. Falling back to memory.")
-            active_challenges.pop(challenge, None)
-    else:
-        active_challenges.pop(challenge, None)
+    """Remove challenge from memory"""
+    active_challenges.pop(challenge, None)
 
 # Clean up expired challenges periodically
 def cleanup_expired_challenges():
@@ -835,37 +797,15 @@ def start_network_scan_endpoint():
             challenge, nonce = captcha_token.split(':')
             logger.info(f"Split token - Challenge: {challenge}, Nonce: {nonce}")
             
-            # Verify with local endpoint
-            logger.info("Attempting CAPTCHA verification...")
-            verify_response = requests.post(
-                CAPTCHA_VERIFY_URL,
-                json={"challenge": challenge, "nonce": nonce},
-                headers={"X-Internal-Verify": "true"},
-                timeout=5
-            )
-            
-            logger.info(f"CAPTCHA verification response status: {verify_response.status_code}")
-            logger.info(f"CAPTCHA verification response: {verify_response.text}")
-            
-            if not verify_response.ok:
-                logger.error(f"CAPTCHA verification failed with status {verify_response.status_code}")
-                return jsonify({"error": "Invalid CAPTCHA token"}), 400
+            # Use internal verification instead of HTTP request
+            is_valid, error_msg = verify_captcha_internal(challenge, nonce)
+            if not is_valid:
+                logger.error(f"CAPTCHA verification failed: {error_msg}")
+                return jsonify({"error": error_msg}), 400
                 
-            verify_data = verify_response.json()
-            if verify_data.get('error'):
-                logger.error(f"CAPTCHA verification error: {verify_data['error']}")
-                return jsonify({"error": verify_data['error']}), 400
-                
-            if not verify_data.get('success', False):
-                logger.error("CAPTCHA verification returned success=False")
-                return jsonify({"error": "CAPTCHA verification failed"}), 400
-                
-            # Now that verification is complete and scan is starting, remove the challenge
-            if challenge in active_challenges:
-                logger.info("Removing used challenge from active challenges")
-                del active_challenges[challenge]
-            else:
-                logger.warning(f"Challenge {challenge} not found in active challenges")
+            # Remove challenge after successful verification
+            remove_challenge(challenge)
+            logger.info("CAPTCHA verification successful")
                 
         except Exception as e:
             logger.error(f"Error during CAPTCHA verification: {str(e)}")
@@ -1018,7 +958,7 @@ def get_challenge():
         challenge = generate_challenge()
         expiry = int(time.time() + CAPTCHA_EXPIRY)
         
-        # Store in Redis instead of memory
+        # Store in memory
         store_challenge(challenge, CAPTCHA_EXPIRY)
         
         return jsonify({
