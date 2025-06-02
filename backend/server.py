@@ -330,21 +330,30 @@ def scan():
         logger.info("=== Starting scan request ===")
         logger.info(f"Request headers: {dict(request.headers)}")
         logger.info(f"Request data: {request.get_data()}")
+        logger.info(f"Request origin: {request.headers.get('Origin')}")
+        logger.info(f"Request remote addr: {request.remote_addr}")
+        logger.info(f"Request X-Forwarded-For: {request.headers.get('X-Forwarded-For')}")
+        logger.info(f"Request X-Real-IP: {request.headers.get('X-Real-IP')}")
         
-        data = request.get_json()
+        try:
+            data = request.get_json()
+        except Exception as e:
+            logger.error(f"Failed to parse JSON data: {str(e)}", exc_info=True)
+            return jsonify({"error": "Invalid JSON data"}), 400
+            
         if not data:
             logger.error("No JSON data in request")
             return jsonify({"error": "No data provided"}), 400
             
         target_url = data.get("url")
+        if not target_url:
+            logger.error("No URL provided in request")
+            return jsonify({"error": "No URL provided"}), 400
+            
         target_url = sanitize_url(target_url)
         session_id = data.get("session_id")
 
         logger.info(f"Received scan request for URL: {target_url}, session_id: {session_id}")
-
-        if not target_url:
-            logger.error("No URL provided in request")
-            return jsonify({"error": "No URL provided"}), 400
 
         if not session_id:
             logger.error("No session_id provided in request")
@@ -381,56 +390,80 @@ def scan():
             return jsonify({"error": "CAPTCHA verification error"}), 400
 
         # Check weekly scan limit
-        print(f"[*] Checking scan limit...")
-        is_limited, limit_message = check_weekly_scan_limit(target_url)
-        
-        if (is_limited):
-            print(f"[!] Scan limit reached: {limit_message}")
-            return jsonify({"error": limit_message}), 429
+        try:
+            logger.info(f"Checking scan limit for URL: {target_url}")
+            is_limited, limit_message = check_weekly_scan_limit(target_url)
+            
+            if (is_limited):
+                logger.warning(f"Scan limit reached: {limit_message}")
+                return jsonify({"error": limit_message}), 429
+        except Exception as e:
+            logger.error(f"Error checking scan limit: {str(e)}", exc_info=True)
+            return jsonify({"error": "Failed to check scan limit"}), 500
 
         # Get the user's IP address and timestamp
-        user_ip = get_client_ip(request)
-        timestamp = datetime.now()
+        try:
+            user_ip = get_client_ip(request)
+            timestamp = datetime.now()
+            logger.info(f"User IP: {user_ip}, Timestamp: {timestamp}")
+        except Exception as e:
+            logger.error(f"Error getting client IP: {str(e)}", exc_info=True)
+            return jsonify({"error": "Failed to get client information"}), 500
 
         # Generate scan_id first
-        scan_id = str(uuid.uuid4())
-        active_scans[scan_id] = session_id
+        try:
+            scan_id = str(uuid.uuid4())
+            active_scans[scan_id] = session_id
+            logger.info(f"Generated scan_id: {scan_id}")
+        except Exception as e:
+            logger.error(f"Error generating scan ID: {str(e)}", exc_info=True)
+            return jsonify({"error": "Failed to generate scan ID"}), 500
 
         # Save scan request to database with scan_id
         try:
             save_scan_request(target_url, user_ip, timestamp, scan_id=scan_id)
-            print(f"[+] Scan request saved to database with scan_id: {scan_id}")
+            logger.info(f"Scan request saved to database with scan_id: {scan_id}")
         except Exception as e:
-            print(f"[ERROR] Failed to save scan request: {str(e)}")
+            logger.error(f"Failed to save scan request: {str(e)}", exc_info=True)
             return jsonify({"error": f"Failed to save scan request: {str(e)}"}), 500
 
         # Add URL to running scans
-        running_scans[target_url] = datetime.now()
+        try:
+            running_scans[target_url] = datetime.now()
+            logger.info(f"Added {target_url} to running scans")
+        except Exception as e:
+            logger.error(f"Error adding URL to running scans: {str(e)}", exc_info=True)
+            return jsonify({"error": "Failed to track running scan"}), 500
 
         # Run ZAP Scan in a separate thread
         def run_scan():
             nonlocal scan_id, target_url
-            print(f"[*] Triggering scan for {target_url}...")
+            logger.info(f"Starting scan thread for {target_url}")
             try:
                 scan_target(target_url, socketio, scan_id, active_scans)
             except Exception as e:
-                print(f"[ERROR] Scan failed: {e}")
+                logger.error(f"Scan failed: {str(e)}", exc_info=True)
                 session_id = active_scans.get(scan_id)
                 if session_id:
                     socketio.emit('scan_completed', {'error': str(e), 'target_url': target_url}, room=session_id)
             finally:
                 running_scans.pop(target_url, None)
+                logger.info(f"Removed {target_url} from running scans")
 
-        scan_thread = threading.Thread(target=run_scan)
-        scan_thread.daemon = True
-        scan_thread.start()
+        try:
+            scan_thread = threading.Thread(target=run_scan)
+            scan_thread.daemon = True
+            scan_thread.start()
+            logger.info("Scan thread started successfully")
+        except Exception as e:
+            logger.error(f"Failed to start scan thread: {str(e)}", exc_info=True)
+            return jsonify({"error": "Failed to start scan"}), 500
 
         return jsonify({"message": "Scan started!", "scan_id": scan_id, "target_url": target_url})
 
     except Exception as e:
-        error_msg = f"Scan request failed: {str(e)}"
-        print(f"[ERROR] {error_msg}")
-        return jsonify({"error": error_msg}), 500
+        logger.error(f"Unexpected error in scan endpoint: {str(e)}", exc_info=True)
+        return jsonify({"error": "Internal server error"}), 500
 
 @app.route("/api/report-request", methods=["POST"])
 def handle_report_request():
