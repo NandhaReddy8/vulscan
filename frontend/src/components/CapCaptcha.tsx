@@ -166,11 +166,31 @@ const CapCaptcha: React.FC<CapCaptchaProps> = ({ onVerified, onError }) => {
         const hash = await calculateHash(data);
         
         if (hash.startsWith(target)) {
-          // Found valid nonce - just return it without verifying
-          setProgress(100);
-          onVerified(`${currentChallenge}:${nonce}`);
-          setIsComputing(false);
-          return;
+          // Found valid nonce
+          try {
+            const verifyResponse = await fetch(`${BACKEND_URL}/api/cap/verify`, {
+              method: 'POST',
+              headers: { 
+                'Content-Type': 'application/json',
+                'X-Internal-Verify': 'true'
+              },
+              body: JSON.stringify({ challenge: currentChallenge, nonce: nonce.toString() })
+            });
+            
+            if (!verifyResponse.ok) {
+              throw new Error('Verification failed');
+            }
+            
+            const verifyData = await verifyResponse.json();
+            if (verifyData.success) {
+              setProgress(100);
+              onVerified(`${currentChallenge}:${nonce}`);
+              setIsComputing(false);
+              return;
+            }
+          } catch {
+            throw new Error('Failed to verify solution');
+          }
         }
         
         nonce++;

@@ -11,11 +11,8 @@ FLASK_HOST = os.getenv("FLASK_HOST", "127.0.0.1")
 FLASK_PORT = int(os.getenv("FLASK_PORT", 5000))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 
-# Determine base URL based on environment
-BASE_URL = "https://vas.virtuelity.com/backend" if not FLASK_DEBUG else f"http://{FLASK_HOST}:{FLASK_PORT}"
-
 # CAPTCHA Configuration
-CAPTCHA_VERIFY_URL = os.getenv("CAPTCHA_VERIFY_URL", f"{BASE_URL}/api/cap/verify")
+CAPTCHA_VERIFY_URL = os.getenv("CAPTCHA_VERIFY_URL", "http://127.0.0.1:5000/api/cap/verify")
 CAPTCHA_DIFFICULTY = int(os.getenv("CAPTCHA_DIFFICULTY", "4"))
 CAPTCHA_EXPIRY = int(os.getenv("CAPTCHA_EXPIRY", "300"))
 CAPTCHA_LENGTH = int(os.getenv("CAPTCHA_LENGTH", "32"))

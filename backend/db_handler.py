@@ -37,7 +37,6 @@ class DatabaseHandler:
             port=os.getenv("DB_PORT", "5432")
         )
         self.initialize_tables()
-        self.ensure_default_admin()
 
     def get_connection(self):
         return self.pool.getconn()
@@ -601,45 +600,3 @@ class DatabaseHandler:
         except Exception as e:
             print(f"[ERROR] Failed to get scans from last 30d: {str(e)}")
             return []
-
-    def ensure_default_admin(self):
-        """Ensure a default admin user exists in the database"""
-        conn = self.get_connection()
-        try:
-            with conn.cursor() as cur:
-                # Check if any admin user exists
-                cur.execute("""
-                    SELECT COUNT(*) FROM users WHERE role = 'admin'
-                """)
-                admin_count = cur.fetchone()[0]
-                
-                if admin_count == 0:
-                    print("[INFO] No admin user found, creating default admin...")
-                    # Create default admin user
-                    default_admin = {
-                        'username': 'admin',
-                        'email': 'admin@virtuestech.com',
-                        'password': 'Admin@123',  # Default password
-                        'role': 'admin'
-                    }
-                    
-                    # Create the admin user
-                    user_id = self.create_user(
-                        username=default_admin['username'],
-                        email=default_admin['email'],
-                        password=default_admin['password'],
-                        role=default_admin['role']
-                    )
-                    
-                    if user_id:
-                        print(f"[SUCCESS] Default admin user created with ID: {user_id}")
-                        print("[IMPORTANT] Please change the default admin password after first login!")
-                    else:
-                        print("[ERROR] Failed to create default admin user")
-                else:
-                    print("[INFO] Admin user(s) already exist in database")
-        except Exception as e:
-            print(f"[ERROR] Failed to ensure default admin: {str(e)}")
-            raise
-        finally:
-            self.put_connection(conn)
