@@ -239,30 +239,45 @@ def get_client_ip(request):
 @app.route("/api/scan", methods=["POST"])
 def scan():
     try:
+        logger.info("=== Starting scan request ===")
+        logger.info(f"Request headers: {dict(request.headers)}")
+        logger.info(f"Request data: {request.get_data()}")
+        
         data = request.get_json()
+        if not data:
+            logger.error("No JSON data in request")
+            return jsonify({"error": "No data provided"}), 400
+            
         target_url = data.get("url")
         target_url = sanitize_url(target_url)
         session_id = data.get("session_id")
 
-        print(f"[*] Received scan request for URL: {target_url}")
+        logger.info(f"Received scan request for URL: {target_url}, session_id: {session_id}")
 
         if not target_url:
+            logger.error("No URL provided in request")
             return jsonify({"error": "No URL provided"}), 400
 
         if not session_id:
+            logger.error("No session_id provided in request")
             return jsonify({"error": "No session_id provided"}), 400
 
         # Get CAPTCHA token from header
         captcha_token = request.headers.get('X-Captcha-Token')
+        logger.info(f"CAPTCHA token from header: {captcha_token}")
+        
         if not captcha_token:
+            logger.error("Missing CAPTCHA token in headers")
             return jsonify({"error": "Missing CAPTCHA token"}), 400
 
         # Verify CAPTCHA token
         try:
             # Split the token into challenge and nonce
             challenge, nonce = captcha_token.split(':')
+            logger.info(f"Split token - Challenge: {challenge}, Nonce: {nonce}")
             
             # Verify with local endpoint
+            logger.info(f"Attempting CAPTCHA verification with URL: {CAPTCHA_VERIFY_URL}")
             verify_response = requests.post(
                 CAPTCHA_VERIFY_URL,
                 json={"challenge": challenge, "nonce": nonce},
@@ -270,18 +285,25 @@ def scan():
                 timeout=5
             )
             
+            logger.info(f"CAPTCHA verification response status: {verify_response.status_code}")
+            logger.info(f"CAPTCHA verification response: {verify_response.text}")
+            
             if not verify_response.ok:
+                logger.error(f"CAPTCHA verification failed with status {verify_response.status_code}")
                 return jsonify({"error": "Invalid CAPTCHA token"}), 400
                 
             verify_data = verify_response.json()
             if verify_data.get('error'):
+                logger.error(f"CAPTCHA verification error: {verify_data['error']}")
                 return jsonify({"error": verify_data['error']}), 400
                 
             if not verify_data.get('success', False):
+                logger.error("CAPTCHA verification returned success=False")
                 return jsonify({"error": "CAPTCHA verification failed"}), 400
                 
             # Now that verification is complete, remove the challenge
             if challenge in active_challenges:
+                logger.info("Removing used challenge from active challenges")
                 del active_challenges[challenge]
         except Exception as e:
             logger.error(f"Error verifying CAPTCHA token: {str(e)}")
@@ -943,27 +965,47 @@ def get_challenge():
 @app.route('/api/cap/verify', methods=['POST'])
 def verify_challenge():
     """Verify a submitted proof of work."""
-    data = request.get_json()
-    if not data or 'challenge' not in data or 'nonce' not in data:
-        return jsonify({'error': 'Missing challenge or nonce'}), 400
-    
-    challenge = data['challenge']
-    nonce = data['nonce']
-    
-    # Check if challenge exists and hasn't expired
-    if challenge not in active_challenges:
-        return jsonify({'error': 'Invalid or expired challenge'}), 400
-    
-    if time.time() > active_challenges[challenge]:
-        del active_challenges[challenge]
-        return jsonify({'error': 'Challenge expired'}), 400
-    
-    # Verify proof of work
-    if verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
-        # Don't remove the challenge here - it will be removed after successful scan start
-        return jsonify({'success': True})
-    
-    return jsonify({'error': 'Invalid proof of work'}), 400
+    try:
+        logger.info("=== Starting CAPTCHA verification ===")
+        logger.info(f"Request headers: {dict(request.headers)}")
+        logger.info(f"Request data: {request.get_data()}")
+        
+        data = request.get_json()
+        if not data:
+            logger.error("No JSON data in request")
+            return jsonify({'error': 'No data provided'}), 400
+            
+        if 'challenge' not in data or 'nonce' not in data:
+            logger.error(f"Missing challenge or nonce in data: {data}")
+            return jsonify({'error': 'Missing challenge or nonce'}), 400
+        
+        challenge = data['challenge']
+        nonce = data['nonce']
+        logger.info(f"Verifying challenge: {challenge}, nonce: {nonce}")
+        
+        # Check if challenge exists and hasn't expired
+        if challenge not in active_challenges:
+            logger.error(f"Challenge not found in active challenges: {challenge}")
+            return jsonify({'error': 'Invalid or expired challenge'}), 400
+        
+        if time.time() > active_challenges[challenge]:
+            logger.error(f"Challenge expired: {challenge}")
+            del active_challenges[challenge]
+            return jsonify({'error': 'Challenge expired'}), 400
+        
+        # Verify proof of work
+        is_valid = verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY)
+        logger.info(f"Proof of work verification result: {is_valid}")
+        
+        if is_valid:
+            return jsonify({'success': True})
+        
+        logger.error("Invalid proof of work")
+        return jsonify({'error': 'Invalid proof of work'}), 400
+        
+    except Exception as e:
+        logger.error(f"Error in verify_challenge: {str(e)}", exc_info=True)
+        return jsonify({'error': 'Internal server error'}), 500
 
 # Update the socket binding logic
 if __name__ == "__main__":
