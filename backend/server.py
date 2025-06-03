@@ -245,7 +245,8 @@ def scan():
         target_url = sanitize_url(target_url)
         session_id = data.get("session_id")
 
-        print(f"[*] Received scan request for URL: {target_url}")
+        logger.info(f"[DEBUG] Received scan request for URL: {target_url}")
+        logger.info(f"[DEBUG] Current active challenges: {active_challenges}")
 
         if not target_url:
             return jsonify({"error": "No URL provided"}), 400
@@ -262,6 +263,7 @@ def scan():
         try:
             # Split the token into challenge and nonce
             challenge, nonce = captcha_token.split(':')
+            logger.info(f"[DEBUG] Verifying scan token - Challenge: {challenge[:8]}..., Nonce: {nonce[:8]}...")
             
             # Check if challenge exists and is verified
             if challenge not in active_challenges:
@@ -269,7 +271,14 @@ def scan():
                 return jsonify({"error": "Invalid or expired CAPTCHA token"}), 400
             
             challenge_data = active_challenges[challenge]
-            if not isinstance(challenge_data, dict) or not challenge_data.get('verified'):
+            logger.info(f"[DEBUG] Challenge data type: {type(challenge_data)}, value: {challenge_data}")
+            
+            if not isinstance(challenge_data, dict):
+                logger.error(f"Invalid challenge data format: {challenge[:8]}... Type: {type(challenge_data)}, Value: {challenge_data}")
+                del active_challenges[challenge]
+                return jsonify({"error": "Invalid CAPTCHA token"}), 400
+            
+            if not challenge_data.get('verified'):
                 logger.error(f"Challenge not verified: {challenge[:8]}...")
                 return jsonify({"error": "CAPTCHA not verified"}), 400
             
@@ -284,7 +293,8 @@ def scan():
                 
             # Now that verification is complete and scan is starting, remove the challenge
             del active_challenges[challenge]
-            logger.info(f"Challenge removed after successful scan start: {challenge[:8]}...")
+            logger.info(f"[DEBUG] Challenge removed after successful scan start: {challenge[:8]}...")
+            logger.info(f"[DEBUG] Remaining active challenges: {active_challenges}")
             
         except Exception as e:
             logger.error(f"Error verifying CAPTCHA token: {str(e)}")
@@ -939,13 +949,21 @@ def get_challenge():
     """Generate and return a new challenge."""
     # Clean up expired challenges
     current_time = time.time()
-    expired = [k for k, v in active_challenges.items() if current_time > v]
+    logger.info(f"[DEBUG] Current active challenges: {active_challenges}")
+    expired = [k for k, v in active_challenges.items() 
+              if isinstance(v, dict) and current_time > v['expiry']]
     for k in expired:
+        logger.info(f"[DEBUG] Removing expired challenge: {k[:8]}...")
         del active_challenges[k]
     
     # Generate new challenge
     challenge = generate_challenge()
-    active_challenges[challenge] = current_time + CAPTCHA_EXPIRY
+    active_challenges[challenge] = {
+        'expiry': current_time + CAPTCHA_EXPIRY,
+        'verified': False,
+        'nonce': None
+    }
+    logger.info(f"[DEBUG] Created new challenge: {challenge[:8]}... with data: {active_challenges[challenge]}")
     
     return jsonify({
         'challenge': challenge,
@@ -963,25 +981,34 @@ def verify_challenge():
     challenge = data['challenge']
     nonce = data['nonce']
     
+    logger.info(f"[DEBUG] Verifying challenge: {challenge[:8]}...")
+    logger.info(f"[DEBUG] Current active challenges: {active_challenges}")
+    
     # Check if challenge exists and hasn't expired
     if challenge not in active_challenges:
         logger.error(f"Challenge not found in active challenges: {challenge[:8]}...")
         return jsonify({'error': 'Invalid or expired challenge'}), 400
     
-    if time.time() > active_challenges[challenge]:
+    challenge_data = active_challenges[challenge]
+    logger.info(f"[DEBUG] Challenge data type: {type(challenge_data)}, value: {challenge_data}")
+    
+    if not isinstance(challenge_data, dict):
+        logger.error(f"Invalid challenge data format: {challenge[:8]}... Type: {type(challenge_data)}, Value: {challenge_data}")
+        del active_challenges[challenge]
+        return jsonify({'error': 'Invalid challenge format'}), 400
+    
+    if time.time() > challenge_data['expiry']:
         logger.error(f"Challenge expired: {challenge[:8]}...")
         del active_challenges[challenge]
         return jsonify({'error': 'Challenge expired'}), 400
     
     # Verify proof of work
     if verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
-        # Mark the challenge as verified but don't remove it yet
-        active_challenges[challenge] = {
-            'expiry': time.time() + CAPTCHA_EXPIRY,
-            'verified': True,
-            'nonce': nonce
-        }
-        logger.info(f"Challenge verified successfully: {challenge[:8]}...")
+        # Update the challenge data
+        challenge_data['verified'] = True
+        challenge_data['nonce'] = nonce
+        active_challenges[challenge] = challenge_data
+        logger.info(f"[DEBUG] Challenge verified successfully: {challenge[:8]}... Updated data: {challenge_data}")
         return jsonify({'success': True})
     
     logger.error(f"Invalid proof of work for challenge: {challenge[:8]}...")
