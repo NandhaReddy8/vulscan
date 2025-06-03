@@ -262,24 +262,28 @@ def scan():
             # Split the token into challenge and nonce
             challenge, nonce = captcha_token.split(':')
             
-            # Check if challenge exists and hasn't expired
+            # Check if challenge exists and is verified
             if challenge not in active_challenges:
                 logger.error(f"Challenge not found in active challenges: {challenge[:8]}...")
                 return jsonify({"error": "Invalid or expired CAPTCHA token"}), 400
             
-            current_time = time.time()
-            if current_time > active_challenges[challenge]:
+            challenge_data = active_challenges[challenge]
+            if not isinstance(challenge_data, dict) or not challenge_data.get('verified'):
+                logger.error(f"Challenge not verified: {challenge[:8]}...")
+                return jsonify({"error": "CAPTCHA not verified"}), 400
+            
+            if time.time() > challenge_data['expiry']:
                 logger.error(f"Challenge expired: {challenge[:8]}...")
                 del active_challenges[challenge]
                 return jsonify({"error": "CAPTCHA token expired"}), 400
             
-            # Verify proof of work directly
-            if not verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
-                logger.error(f"Invalid proof of work for challenge: {challenge[:8]}...")
+            if challenge_data['nonce'] != nonce:
+                logger.error(f"Nonce mismatch for challenge: {challenge[:8]}...")
                 return jsonify({"error": "Invalid CAPTCHA token"}), 400
                 
-            # Now that verification is complete, remove the challenge
+            # Now that verification is complete and scan is starting, remove the challenge
             del active_challenges[challenge]
+            logger.info(f"Challenge removed after successful scan start: {challenge[:8]}...")
             
         except Exception as e:
             logger.error(f"Error verifying CAPTCHA token: {str(e)}")
@@ -961,17 +965,26 @@ def verify_challenge():
     
     # Check if challenge exists and hasn't expired
     if challenge not in active_challenges:
+        logger.error(f"Challenge not found in active challenges: {challenge[:8]}...")
         return jsonify({'error': 'Invalid or expired challenge'}), 400
     
     if time.time() > active_challenges[challenge]:
+        logger.error(f"Challenge expired: {challenge[:8]}...")
         del active_challenges[challenge]
         return jsonify({'error': 'Challenge expired'}), 400
     
     # Verify proof of work
     if verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
-        # Don't remove the challenge here - it will be removed after successful scan start
+        # Mark the challenge as verified but don't remove it yet
+        active_challenges[challenge] = {
+            'expiry': time.time() + CAPTCHA_EXPIRY,
+            'verified': True,
+            'nonce': nonce
+        }
+        logger.info(f"Challenge verified successfully: {challenge[:8]}...")
         return jsonify({'success': True})
     
+    logger.error(f"Invalid proof of work for challenge: {challenge[:8]}...")
     return jsonify({'error': 'Invalid proof of work'}), 400
 
 # Update the socket binding logic
