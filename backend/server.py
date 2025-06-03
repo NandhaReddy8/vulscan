@@ -262,27 +262,25 @@ def scan():
             # Split the token into challenge and nonce
             challenge, nonce = captcha_token.split(':')
             
-            # Verify with local endpoint
-            verify_response = requests.post(
-                CAPTCHA_VERIFY_URL,
-                json={"challenge": challenge, "nonce": nonce},
-                headers={"X-Internal-Verify": "true"},
-                timeout=5
-            )
+            # Check if challenge exists and hasn't expired
+            if challenge not in active_challenges:
+                logger.error(f"Challenge not found in active challenges: {challenge[:8]}...")
+                return jsonify({"error": "Invalid or expired CAPTCHA token"}), 400
             
-            if not verify_response.ok:
+            current_time = time.time()
+            if current_time > active_challenges[challenge]:
+                logger.error(f"Challenge expired: {challenge[:8]}...")
+                del active_challenges[challenge]
+                return jsonify({"error": "CAPTCHA token expired"}), 400
+            
+            # Verify proof of work directly
+            if not verify_proof_of_work(challenge, nonce, CAPTCHA_DIFFICULTY):
+                logger.error(f"Invalid proof of work for challenge: {challenge[:8]}...")
                 return jsonify({"error": "Invalid CAPTCHA token"}), 400
                 
-            verify_data = verify_response.json()
-            if verify_data.get('error'):
-                return jsonify({"error": verify_data['error']}), 400
-                
-            if not verify_data.get('success', False):
-                return jsonify({"error": "CAPTCHA verification failed"}), 400
-                
             # Now that verification is complete, remove the challenge
-            if challenge in active_challenges:
-                del active_challenges[challenge]
+            del active_challenges[challenge]
+            
         except Exception as e:
             logger.error(f"Error verifying CAPTCHA token: {str(e)}")
             return jsonify({"error": "CAPTCHA verification error"}), 400
