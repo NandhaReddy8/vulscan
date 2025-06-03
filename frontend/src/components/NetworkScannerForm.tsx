@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader, Shield, CheckCircle2 } from "lucide-react";
+import { Loader, Shield } from "lucide-react";
 import CapCaptcha from './CapCaptcha';
 
 interface NetworkScannerFormProps {
@@ -19,10 +18,25 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
   error: externalError
 }) => {
   const [ip, setIp] = useState("");
-  const [showCaptcha, setShowCaptcha] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isInputValid, setIsInputValid] = useState(false);
+
+  // Reset form when scan completes
+  useEffect(() => {
+    if (!isLoading) {
+      setCaptchaToken(null);
+      setIp('');
+      setError(null);
+    }
+  }, [isLoading]);
+
+  // Show captcha when input becomes valid
+  useEffect(() => {
+    if (isInputValid) {
+      setCaptchaToken(null); // Reset captcha token when input changes
+    }
+  }, [isInputValid]);
 
   // Validate input whenever it changes
   useEffect(() => {
@@ -72,7 +86,6 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
     // Allow letters, numbers, dots, and hyphens for domain names
     const validInput = input.replace(/[^a-zA-Z0-9.-]/g, "");
     setIp(validInput);
-    setShowCaptcha(false); // Hide CAPTCHA when input changes
     setCaptchaToken(null); // Clear CAPTCHA token
   };
 
@@ -105,11 +118,8 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
   return (
     <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mt-8 max-w-3xl mx-auto">
       <div className="flex flex-col gap-4">
-        {/* Step 1: Input */}
+        {/* Input */}
         <div className="space-y-2">
-          <label htmlFor="ip-input" className="text-sm font-medium text-gray-300">
-            Step 1: Enter Target
-          </label>
           <div className="flex gap-2">
             <input
               id="ip-input"
@@ -123,24 +133,11 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
               aria-label="Target Address"
             />
           </div>
-          {isInputValid && !showCaptcha && (
-            <button
-              type="button"
-              onClick={() => setShowCaptcha(true)}
-              className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm"
-            >
-              <CheckCircle2 className="h-4 w-4" />
-              Verify CAPTCHA
-            </button>
-          )}
         </div>
 
-        {/* Step 2: CAPTCHA */}
-        {showCaptcha && (
+        {/* CAPTCHA - Show directly when input is valid */}
+        {isInputValid && (
           <div className="space-y-2">
-            <label className="text-sm font-medium text-gray-300">
-              Step 2: Complete Verification
-            </label>
             <CapCaptcha
               onVerified={(token) => {
                 setCaptchaToken(token);
@@ -154,22 +151,18 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
           </div>
         )}
 
-        {/* Error Display */}
+        {/* Error Display - Only show if there's an actual error */}
         {(error || externalError) && (
-          <Alert variant="destructive" className="mt-2">
-            <AlertDescription>
-              {error || externalError}
-            </AlertDescription>
-          </Alert>
+          <div className="text-gray-400 text-sm mt-2">
+            {error || externalError}
+          </div>
         )}
 
         {/* Rate Limit Warning */}
         {isRateLimited && retryAfter && (
-          <Alert variant="warning" className="mt-2">
-            <AlertDescription>
-              Rate limit exceeded. Please try again in {Math.ceil((retryAfter - Date.now()) / 1000)} seconds.
-            </AlertDescription>
-          </Alert>
+          <div className="text-gray-400 text-sm mt-2">
+            Rate limit exceeded. Please try again in {Math.ceil((retryAfter - Date.now()) / 1000)} seconds.
+          </div>
         )}
 
         {/* Submit Button */}

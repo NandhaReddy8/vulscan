@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Loader, StopCircle, CheckCircle2 } from "lucide-react";
+import { Loader, StopCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import CapCaptcha from './CapCaptcha';
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 interface ScannerProps {
   onScanSubmit: (url: string, captchaToken: string) => void;
@@ -24,8 +23,23 @@ const Scanner: React.FC<ScannerProps> = ({
   const [protocol, setProtocol] = useState("https://");
   const [error, setError] = useState<string | null>(null);
   const [captchaToken, setCaptchaToken] = useState<string | null>(null);
-  const [showCaptcha, setShowCaptcha] = useState(false);
   const [isInputValid, setIsInputValid] = useState(false);
+
+  // Reset form when scan completes
+  useEffect(() => {
+    if (!isLoading) {
+      setCaptchaToken(null);
+      setUrl('');
+      setError(null);
+    }
+  }, [isLoading, setUrl]);
+
+  // Show captcha when input becomes valid
+  useEffect(() => {
+    if (isInputValid) {
+      setCaptchaToken(null); // Reset captcha token when input changes
+    }
+  }, [isInputValid]);
 
   // Validate input whenever it changes
   useEffect(() => {
@@ -58,7 +72,6 @@ const Scanner: React.FC<ScannerProps> = ({
     // Remove any protocol prefix if present
     const cleanUrl = input.replace(/^https?:\/\//, '');
     setUrl(cleanUrl);
-    setShowCaptcha(false); // Hide CAPTCHA when input changes
     setCaptchaToken(null); // Clear CAPTCHA token
   };
 
@@ -129,11 +142,8 @@ const Scanner: React.FC<ScannerProps> = ({
         className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mt-8 max-w-3xl mx-auto"
       >
         <div className="flex flex-col gap-4">
-          {/* Step 1: Input */}
+          {/* Input */}
           <div className="space-y-2">
-            <label htmlFor="url-input" className="text-sm font-medium text-gray-300">
-              Step 1: Enter Target URL
-            </label>
             <div className="flex gap-2">
               <select
                 value={protocol}
@@ -158,24 +168,11 @@ const Scanner: React.FC<ScannerProps> = ({
                 title="Enter website URL"
               />
             </div>
-            {isInputValid && !showCaptcha && (
-              <button
-                type="button"
-                onClick={() => setShowCaptcha(true)}
-                className="mt-2 px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors flex items-center gap-2 text-sm"
-              >
-                <CheckCircle2 className="h-4 w-4" />
-                Verify CAPTCHA
-              </button>
-            )}
           </div>
 
-          {/* Step 2: CAPTCHA */}
-          {showCaptcha && (
+          {/* CAPTCHA - Show directly when input is valid */}
+          {isInputValid && (
             <div className="space-y-2">
-              <label className="text-sm font-medium text-gray-300">
-                Step 2: Complete Verification
-              </label>
               <CapCaptcha
                 onVerified={(token) => {
                   setCaptchaToken(token);
@@ -189,11 +186,9 @@ const Scanner: React.FC<ScannerProps> = ({
             </div>
           )}
 
-          {/* Error Display */}
+          {/* Error Display - Only show if there's an actual error */}
           {error && (
-            <Alert variant="destructive" className="mt-2">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
+            <div className="text-gray-400 text-sm mt-2">{error}</div>
           )}
 
           {/* Submit Button */}
