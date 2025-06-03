@@ -31,6 +31,7 @@ import json
 from networkscan import start_network_scan, get_scan_status
 import asyncio
 import requests
+import re
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -345,22 +346,31 @@ def scan():
 def handle_report_request():
     try:
         data = request.get_json()
-        print(f"[*] Received report request for target: {data.get('targetUrl', 'Unknown')}")
+        user_input_url = data.get('targetUrl', '').strip()
+        if not user_input_url:
+            return jsonify({"error": "Target URL is required"}), 400
 
-        user_input_url = data['targetUrl'].strip()
+        # Normalize the URL for matching
+        def normalize_url(url):
+            # Remove protocol and trailing slash
+            url = url.lower().strip()
+            url = re.sub(r'^https?://', '', url)
+            url = url.rstrip('/')
+            return url
+
+        normalized_input = normalize_url(user_input_url)
 
         # Try to find the protocol used in the most recent scan for this domain
         conn = db.get_connection()
         try:
             with conn.cursor() as cur:
-                # Remove protocol for matching
-                domain = user_input_url.replace('http://', '').replace('https://', '').rstrip('/')
+                # Query using normalized URL
                 cur.execute("""
                     SELECT url FROM scan_requests
-                    WHERE REPLACE(REPLACE(url, 'http://', ''), 'https://', '') = %s
+                    WHERE LOWER(REPLACE(REPLACE(url, 'http://', ''), 'https://', '')) = %s
                     ORDER BY timestamp DESC
                     LIMIT 1
-                """, (domain,))
+                """, (normalized_input,))
                 row = cur.fetchone()
                 if row:
                     target_url = row[0]  # Use the exact URL (with protocol) from the scan
@@ -384,50 +394,49 @@ def handle_report_request():
                 timestamp
             )
         except Exception as e:
-            print(f"[ERROR] Failed to save report request: {str(e)}")
+            return jsonify({"error": f"Failed to save report request: {str(e)}"}), 500
 
         try:
             db.update_scan_summary(target_url=target_url)
         except Exception as e:
-            print(f"[ERROR] Failed to update marketing summary after report request: {str(e)}")
+            return jsonify({"error": f"Failed to update marketing summary: {str(e)}"}), 500
 
-        # Get report from database with better URL matching
+        # Get report from database with improved URL matching
         try:
             conn = db.get_connection()
             try:
                 with conn.cursor() as cur:
+                    # Try multiple URL patterns
                     url_patterns = [
-                        target_url,  # Exact
+                        target_url,  # Exact match
                         target_url.rstrip('/'),  # Without trailing slash
+                        normalize_url(target_url),  # Normalized (no protocol, no trailing slash)
+                        f"http://{normalize_url(target_url)}",  # With http
+                        f"https://{normalize_url(target_url)}"  # With https
                     ]
-                    print(f"[DEBUG] Trying URL patterns: {url_patterns}")
+                    
                     for pattern in url_patterns:
                         cur.execute("""
                             SELECT content, target_url 
                             FROM zap_reports 
-                            WHERE target_url = %s 
+                            WHERE LOWER(REPLACE(REPLACE(target_url, 'http://', ''), 'https://', '')) = LOWER(%s)
                             AND report_type = 'html'
                             ORDER BY timestamp DESC 
                             LIMIT 1
-                            """, (pattern,))
+                            """, (normalize_url(pattern),))
                         result = cur.fetchone()
                         if result:
-                            print(f"[+] Retrieved report from database using pattern: {pattern}")
-                            print(f"[DEBUG] Matched with stored URL: {result[1]}")
                             return result[0], 200, {'Content-Type': 'text/html; charset=utf-8'}
 
-                    print("[!] No matching report found in database")
                     return jsonify({
                         "error": "Scan report not found. Please ensure scan is completed."
                     }), 404
             finally:
                 db.put_connection(conn)
         except Exception as e:
-            print(f"[ERROR] Failed to retrieve report from database: {str(e)}")
             return jsonify({"error": f"Failed to retrieve report: {str(e)}"}), 500
 
     except Exception as e:
-        print(f"[ERROR] Report request failed: {str(e)}")
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/stop-scan", methods=["POST", "OPTIONS"])
@@ -753,43 +762,34 @@ def start_network_scan_endpoint():
         requester_ip = get_client_ip(request)
         logger.info(f"IP Address: {ip_address}, Requester IP: {requester_ip}")
 
-        # Verify CAPTCHA token first
+        # Verify CAPTCHA token directly
         try:
             # Split the token into challenge and nonce
             challenge, nonce = captcha_token.split(':')
             logger.info(f"Split token - Challenge: {challenge}, Nonce: {nonce}")
             
-            # Verify with local endpoint
-            logger.info("Attempting CAPTCHA verification...")
-            verify_response = requests.post(
-                CAPTCHA_VERIFY_URL,
-                json={"challenge": challenge, "nonce": nonce},
-                headers={"X-Internal-Verify": "true"},
-                timeout=5
-            )
+            # Check if challenge exists and is verified
+            if challenge not in active_challenges:
+                logger.error(f"Challenge not found in active challenges: {challenge[:8]}...")
+                return jsonify({"error": "Invalid or expired CAPTCHA token"}), 400
             
-            logger.info(f"CAPTCHA verification response status: {verify_response.status_code}")
-            logger.info(f"CAPTCHA verification response: {verify_response.text}")
+            challenge_data = active_challenges[challenge]
+            if not isinstance(challenge_data, dict) or not challenge_data.get('verified'):
+                logger.error(f"Challenge not verified: {challenge[:8]}...")
+                return jsonify({"error": "CAPTCHA not verified"}), 400
             
-            if not verify_response.ok:
-                logger.error(f"CAPTCHA verification failed with status {verify_response.status_code}")
+            if time.time() > challenge_data['expiry']:
+                logger.error(f"Challenge expired: {challenge[:8]}...")
+                del active_challenges[challenge]
+                return jsonify({"error": "CAPTCHA token expired"}), 400
+            
+            if challenge_data['nonce'] != nonce:
+                logger.error(f"Nonce mismatch for challenge: {challenge[:8]}...")
                 return jsonify({"error": "Invalid CAPTCHA token"}), 400
                 
-            verify_data = verify_response.json()
-            if verify_data.get('error'):
-                logger.error(f"CAPTCHA verification error: {verify_data['error']}")
-                return jsonify({"error": verify_data['error']}), 400
-                
-            if not verify_data.get('success', False):
-                logger.error("CAPTCHA verification returned success=False")
-                return jsonify({"error": "CAPTCHA verification failed"}), 400
-                
             # Now that verification is complete and scan is starting, remove the challenge
-            if challenge in active_challenges:
-                logger.info("Removing used challenge from active challenges")
-                del active_challenges[challenge]
-            else:
-                logger.warning(f"Challenge {challenge} not found in active challenges")
+            logger.info("Removing used challenge from active challenges")
+            del active_challenges[challenge]
                 
         except Exception as e:
             logger.error(f"Error during CAPTCHA verification: {str(e)}")

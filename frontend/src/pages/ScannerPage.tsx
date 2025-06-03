@@ -241,6 +241,7 @@ const ScannerPage = () => {
     setIsScanning(true);
     setShowResults(false);
     setScanError(null);
+    setUrl(url);
     setScanProgress({
       progress: 0,
       message: "Starting scan...",

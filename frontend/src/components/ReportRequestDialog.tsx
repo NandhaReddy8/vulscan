@@ -36,26 +36,35 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
         throw new Error('Backend URL not configured');
       }
 
+      const requestBody = {
+        name: formData.get('name'),
+        email: formData.get('email'),
+        phone: formData.get('phone') || '',
+        targetUrl: targetUrl
+      };
+
       const response = await fetch(`${backendUrl}/api/report-request`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          name: formData.get('name'),
-          email: formData.get('email'),
-          phone: formData.get('phone') || '',
-          targetUrl: targetUrl
-        })
+        body: JSON.stringify(requestBody)
       });
 
+      const responseText = await response.text();
+
       if (!response.ok) {
-        const errorData = await response.json();
+        let errorData;
+        try {
+          errorData = JSON.parse(responseText);
+        } catch (e) {
+          errorData = { error: responseText };
+        }
         throw new Error(errorData.error || 'Failed to submit request');
       }
 
       // Get the HTML content and open in new tab
-      const blob = await response.blob();
+      const blob = new Blob([responseText], { type: 'text/html' });
       if (blob.size === 0) {
         throw new Error('Received empty report');
       }
@@ -66,7 +75,6 @@ const ReportRequestDialog: React.FC<ReportRequestDialogProps> = ({
 
       setShowSuccess(true);
     } catch (err) {
-      console.error('Error submitting report request:', err);
       setError(err instanceof Error ? err.message : 'Failed to submit request');
     } finally {
       setIsSubmitting(false);

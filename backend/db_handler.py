@@ -366,9 +366,7 @@ class DatabaseHandler:
                     user_email, user_name, user_phone, target_url
                 ))
             conn.commit()
-            print(f"[+] Marketing summary updated for URL: {target_url}")
         except Exception as e:
-            print(f"[ERROR] Failed to update marketing summary: {str(e)}")
             conn.rollback()
             raise
         finally:

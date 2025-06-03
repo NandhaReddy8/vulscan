@@ -29,7 +29,7 @@ const Scanner: React.FC<ScannerProps> = ({
   useEffect(() => {
     if (!isLoading) {
       setCaptchaToken(null);
-      setUrl('');
+      // Don't reset URL as it's needed for report requests
       setError(null);
     }
   }, [isLoading, setUrl]);
