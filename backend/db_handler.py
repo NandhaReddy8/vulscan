@@ -3,8 +3,6 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from psycopg2 import pool
 from dotenv import load_dotenv
-import json
-from datetime import datetime
 import logging
 import psycopg2.pool
 import bcrypt

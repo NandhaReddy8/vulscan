@@ -1,9 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Loader, Shield } from "lucide-react";
-import CapCaptcha from './CapCaptcha';
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface NetworkScannerFormProps {
-  onSubmit: (ip: string, captchaToken: string) => void;
+  onSubmit: (ip: string, recaptchaToken: string) => void;
   isLoading: boolean;
   isRateLimited: boolean;
   retryAfter: number | null;
@@ -18,25 +18,25 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
   error: externalError
 }) => {
   const [ip, setIp] = useState("");
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isInputValid, setIsInputValid] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
   // Reset form when scan completes
   useEffect(() => {
     if (!isLoading) {
-      setCaptchaToken(null);
       setIp('');
       setError(null);
+      setRecaptchaToken(null);
+      // Reset reCAPTCHA
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
     }
   }, [isLoading]);
-
-  // Show captcha when input becomes valid
-  useEffect(() => {
-    if (isInputValid) {
-      setCaptchaToken(null); // Reset captcha token when input changes
-    }
-  }, [isInputValid]);
 
   // Validate input whenever it changes
   useEffect(() => {
@@ -86,7 +86,15 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
     // Allow letters, numbers, dots, and hyphens for domain names
     const validInput = input.replace(/[^a-zA-Z0-9.-]/g, "");
     setIp(validInput);
-    setCaptchaToken(null); // Clear CAPTCHA token
+  };
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+    if (!token) {
+      setError("Please complete the reCAPTCHA verification");
+    } else if (error === "Please complete the reCAPTCHA verification") {
+      setError(null);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -105,15 +113,27 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
       return;
     }
 
-    // Check if we have a valid CAPTCHA token
-    if (!captchaToken) {
-      setError("Please complete the proof-of-work verification");
+    // Check reCAPTCHA
+    if (!recaptchaToken) {
+      setError("Please complete the reCAPTCHA verification");
       return;
     }
 
     // Submit the scan request
-    onSubmit(ip, captchaToken);
+    onSubmit(ip, recaptchaToken);
   };
+
+  // Don't render if no reCAPTCHA site key is configured
+  if (!RECAPTCHA_SITE_KEY || RECAPTCHA_SITE_KEY === 'your_google_recaptcha_site_key_here') {
+    return (
+      <div className="bg-red-800/50 p-6 rounded-lg shadow-md border border-red-700 mt-8 max-w-3xl mx-auto">
+        <h3 className="text-xl font-semibold text-red-300 mb-4 text-center">Configuration Required</h3>
+        <p className="text-red-200 text-center">
+          Google reCAPTCHA is not configured. Please set the VITE_RECAPTCHA_SITE_KEY environment variable.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg shadow-md border border-gray-700 mt-8 max-w-3xl mx-auto">
@@ -135,32 +155,26 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
           </div>
         </div>
 
-        {/* CAPTCHA - Show directly when input is valid */}
-        {isInputValid && (
-          <div className="space-y-2">
-            <CapCaptcha
-              onVerified={(token) => {
-                setCaptchaToken(token);
-                setError(null);
-              }}
-              onError={(error) => {
-                setError(error);
-                setCaptchaToken(null);
-              }}
-            />
-          </div>
-        )}
+        {/* reCAPTCHA */}
+        <div className="flex justify-center mt-4">
+          <ReCAPTCHA
+            ref={recaptchaRef}
+            sitekey={RECAPTCHA_SITE_KEY}
+            onChange={handleRecaptchaChange}
+            theme="dark"
+          />
+        </div>
 
         {/* Error Display - Only show if there's an actual error */}
         {(error || externalError) && (
-          <div className="text-gray-400 text-sm mt-2">
+          <div className="text-red-400 text-sm mt-2 text-center">
             {error || externalError}
           </div>
         )}
 
         {/* Rate Limit Warning */}
         {isRateLimited && retryAfter && (
-          <div className="text-gray-400 text-sm mt-2">
+          <div className="text-yellow-400 text-sm mt-2 text-center">
             Rate limit exceeded. Please try again in {Math.ceil((retryAfter - Date.now()) / 1000)} seconds.
           </div>
         )}
@@ -169,7 +183,7 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            disabled={isLoading || !captchaToken || !isInputValid || isRateLimited}
+            disabled={isLoading || !isInputValid || isRateLimited || !recaptchaToken}
             className={`px-8 py-2.5 bg-blue-600 text-white rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium shadow-lg hover:shadow-blue-500/20 ${
               isLoading ? 'bg-blue-700' : 'hover:bg-blue-700'
             }`}

@@ -2,7 +2,6 @@ import time
 import json
 import requests
 import os
-import csv
 from urllib.parse import urlparse, urlunparse
 from zapv2 import ZAPv2
 from collections import defaultdict
@@ -12,10 +11,6 @@ import socket
 import base64
 import re
 import logging
-import eventlet
-import eventlet.tpool
-from weasyprint import HTML, CSS
-from weasyprint.text.fonts import FontConfiguration
 from db_handler import DatabaseHandler
 db = DatabaseHandler()
 
@@ -206,16 +201,31 @@ def scan_target(target_url, socketio, scan_id, active_scans):
         save_scan_results(scan_id, target_url, results, context_name)
         
         # Generate reports
-        html_file = generate_reports(
-            target_url,
-            results,
-            scan_id,
-            context_name,
-            socketio,
-            session_id
-        )
+        print(f"[{scan_id}] Calling generate_reports function...")
+        print(f"[{scan_id}] Parameters: target_url={target_url}, scan_id={scan_id}, context_name={context_name}")
+        try:
+            html_file = generate_reports(
+                target_url,
+                results,
+                scan_id,
+                context_name,
+                socketio,
+                session_id
+            )
+            print(f"[{scan_id}] generate_reports completed successfully, returned: {html_file}")
+        except Exception as e:
+            error_msg = f"generate_reports failed: {str(e)}"
+            print(f"[{scan_id}] ❌ ERROR: {error_msg}")
+            # Don't raise here - we want the scan to complete even if report generation fails
+            # but we should emit an error to the frontend
+            socketio.emit('scan_error', {
+                'scan_id': scan_id,
+                'error': f"Scan completed but report generation failed: {error_msg}"
+            }, room=session_id)
+            return  # Exit early since report generation failed
 
         if scan_id not in active_scans:
+            print(f"[{scan_id}] Scan was stopped by user, not sending completion event")
             return
 
         # Update the completion event to include report URL instead of file path
@@ -289,7 +299,48 @@ def save_scan_results(scan_id, target_url, results, context_name=None):
         print(f"[ERROR] Failed to save results: {str(e)}")
         raise
 
+def clean_html_content(html_content):
+    """Clean HTML content to remove characters that PostgreSQL cannot handle"""
+    if not html_content:
+        return ""
+    
+    original_length = len(html_content)
+    
+    # Remove null bytes (0x00) - PostgreSQL cannot handle these
+    null_byte_count = html_content.count('\x00')
+    cleaned_content = html_content.replace('\x00', '')
+    
+    # Remove other problematic control characters except common ones like \t, \n, \r
+    control_char_count = 0
+    filtered_chars = []
+    for char in cleaned_content:
+        if ord(char) >= 32 or char in '\t\n\r':
+            filtered_chars.append(char)
+        else:
+            control_char_count += 1
+    
+    cleaned_content = ''.join(filtered_chars)
+    
+    # Ensure the content is valid UTF-8
+    try:
+        cleaned_content = cleaned_content.encode('utf-8', errors='ignore').decode('utf-8')
+    except UnicodeDecodeError:
+        # Fallback: replace problematic characters
+        cleaned_content = cleaned_content.encode('utf-8', errors='replace').decode('utf-8')
+    
+    final_length = len(cleaned_content)
+    
+    # Log what was cleaned if anything was removed
+    if null_byte_count > 0 or control_char_count > 0 or final_length != original_length:
+        print(f"[DEBUG] HTML content cleaned: original={original_length} chars, "
+              f"final={final_length} chars, "
+              f"null_bytes_removed={null_byte_count}, "
+              f"control_chars_removed={control_char_count}")
+    
+    return cleaned_content
+
 def generate_reports(target_url, results, scan_id, context_name, socketio, session_id):
+    """Generate HTML report and save to database"""
     try:
         print(f"[{scan_id}] Starting report generation...") 
         output_dir = "./zap_reports"
@@ -297,6 +348,9 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
 
         # Get results from JSON file
         json_file = f"./zap_results/{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.json"
+        if not os.path.exists(json_file):
+            raise FileNotFoundError(f"Results file not found: {json_file}")
+            
         with open(json_file, 'r') as f:
             saved_results = json.load(f)
             results = saved_results['results']
@@ -314,20 +368,37 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
                 'sites': target_url,
             },
             headers={'Accept': 'application/json'},
-            verify=False
+            verify=False,
+            timeout=30  # Add timeout
         )
         
         if response.status_code != 200:
-            raise Exception(f"Failed to generate report: {response.text}")
+            raise Exception(f"Failed to generate report (HTTP {response.status_code}): {response.text}")
 
         # Get generated HTML file path
-        html_file = response.json().get('generate', '').replace('//', '/')
-        if not html_file or not os.path.exists(html_file):
+        response_data = response.json()
+        html_file = response_data.get('generate', '').replace('//', '/')
+        
+        if not html_file:
+            raise Exception(f"ZAP API did not return a file path. Response: {response_data}")
+            
+        print(f"[{scan_id}] ZAP generated report at: {html_file}")
+        
+        if not os.path.exists(html_file):
             raise FileNotFoundError(f"Generated HTML report not found at path: {html_file}")
 
         # Read the report content
-        with open(html_file, 'r', encoding='utf-8') as f:
-            html_content = f.read()
+        try:
+            with open(html_file, 'r', encoding='utf-8') as f:
+                html_content = f.read()
+        except Exception as e:
+            raise Exception(f"Failed to read generated report file: {str(e)}")
+
+        # Verify we have content
+        if not html_content or len(html_content) < 100:
+            raise Exception(f"Generated report appears to be empty or corrupted (length: {len(html_content) if html_content else 0})")
+
+        print(f"[{scan_id}] Successfully read report content ({len(html_content)} characters)")
 
         # Updated logo handling with absolute path and error checking
         try:
@@ -342,11 +413,25 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
             
             with open(logo_path, 'rb') as img_file:
                 logo_base64 = base64.b64encode(img_file.read()).decode('utf-8')
-                print("[DEBUG] Successfully loaded and encoded logo")
-        
-        except Exception as logo_error:
-            print(f"[ERROR] Failed to load logo: {str(logo_error)}")
-            logo_base64 = ""
+                logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="VirtuesTech Logo" style="height: 64px; margin-bottom: 1rem;">'
+                print("[DEBUG] Successfully embedded logo")
+        except Exception as e:
+            print(f"[ERROR] Failed to load logo: {str(e)}")
+            logo_html = '<!-- Logo failed to load -->'
+
+        # Updated header HTML with embedded logo
+        header_html = f"""
+        <div class="report-container">
+            <header>
+                {logo_html}
+                <h1>Vulnerability Scan Report</h1>
+                <div class="scan-info">
+                    <p>Target: {target_url}</p>
+                    <p>Date: {time.strftime('%Y-%m-%d %H:%M:%S')}</p>
+                </div>
+            </header>
+            <main>
+        """
 
         # Custom CSS combining normalize.css with our styles
         custom_css = """
@@ -491,207 +576,73 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
             font-weight: bold;
             font-family: monospace, monospace;
         }
-        
+
         .alert-low { 
-            color: var(--primary-color); 
+            color: #6f42c1; 
             font-weight: bold;
             font-family: monospace, monospace;
         }
 
-        /* Code/Pre Formatting */
-        pre {
-            margin: 0;
-            padding: 1rem;
-            background: #f8f9fa;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            overflow-x: auto;
-        }
-
-        code {
-            font-family: monospace, monospace;
-            font-size: 0.95em;
-        }
-
-        /* Responsive Design */
-        @media screen and (max-width: 1200px) {
-            body { padding: 1rem; }
-            .report-container { margin: 0 1rem; }
-            table { font-size: 0.9rem; }
-            td, th { padding: 0.75rem; }
-        }
-
-        @media screen and (max-width: 768px) {
-            header h1 { font-size: 2rem; }
-            h2 { font-size: 1.5rem; }
-            h3 { font-size: 1.25rem; }
-            h4 { font-size: 1.1rem; }
-            td, th { padding: 0.5rem; }
-        }
-
-        /* Alert Table Styling */
-        .alerts-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 1.5rem 0;
-            border: 1px solid var(--border-color);
-            background: white;
-        }
-
-        .alerts-table th {
-            background: var(--primary-color);
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            border: 1px solid var(--border-color);
-            font-weight: 600;
-        }
-
-        .alerts-table td {
-            padding: 1rem;
-            border: 1px solid var(--border-color);
-            background: white;  /* Force white background */
-            color: var(--text-color);  /* Force dark text color */
-        }
-
-        /* Risk Level Colors with White Background */
-        .alert-high { 
-            color: #dc3545; 
+        .alert-informational { 
+            color: #17a2b8; 
             font-weight: bold;
             font-family: monospace, monospace;
-            background: white;
-        }
-        
-        .alert-medium { 
-            color: var(--secondary-color); 
-            font-weight: bold;
-            font-family: monospace, monospace;
-            background: white;
-        }
-        
-        .alert-low { 
-            color: var(--primary-color); 
-            font-weight: bold;
-            font-family: monospace, monospace;
-            background: white;
         }
 
-        /* Alert Type Table Specific */
-        .alert-types-table th {
-            background: var(--primary-color);
-            color: white;
+        .risk-high { 
+            background-color: #f8d7da !important; 
+            color: #721c24 !important; 
         }
 
-        .alert-types-table td {
-            background: white;
-            color: var(--text-color);
+        .risk-medium { 
+            background-color: #fff3cd !important; 
+            color: #856404 !important; 
         }
 
-        /* Ensure links in tables are visible */
-        .alerts-table a,
-        .alert-types-table a {
-            color: var(--primary-color);
-            text-decoration: underline;
+        .risk-low { 
+            background-color: #d1ecf1 !important; 
+            color: #0c5460 !important; 
         }
 
-        .alerts-table a:hover,
-        .alert-types-table a:hover {
-            color: var(--secondary-color);
+        .risk-informational { 
+            background-color: #e2e3e5 !important; 
+            color: #383d41 !important; 
         }
 
-        /* Table Row Hover Effect */
-        .alerts-table tr:hover td,
-        .alert-types-table tr:hover td {
-            background: rgba(3, 105, 186, 0.05);
+        /* Responsive tables */
+        @media (max-width: 768px) {
+            table {
+                font-size: 0.85rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
         }
 
-        /* Alert Type Table Specific - Force White Background */
-        .alert-type-counts-table td {
-            background-color: white !important;  /* Force white background */
-            color: white !important;  /* Force text color */
-            border: 1px solid var(--border-color);
-            padding: 1rem;
+        .scan-info {
+            margin-top: 1rem;
+            opacity: 0.9;
         }
 
-        .alert-type-counts-table th {
-            background: white;
-            color: white;
-            padding: 1rem;
-            text-align: left;
-            border: 1px solid var(--border-color);
-        }
-
-        .alert-type-counts-table tr:hover td {
-            background-color: rgba(3, 105, 186, 0.02) !important;
-        }
-
-        /* Hide Context Section */
-        #contexts, 
-        .contexts,
-        section[id*="context"],
-        div[class*="context"] {
-            display: none !important;
-        }
-
-        /* Alert Type Table Specific - Blue Background with White Text */
-        .alert-type-counts-table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin: 1.5rem 0;
-            border: 1px solid var(--border-color);
-        }
-
-        /* Header row - Primary color background */
-        .alert-type-counts-table tr:first-child th {
-            background-color: var(--primary-color) !important;
-            color: white !important;
-            padding: 1rem;
-            text-align: left;
-            border: 1px solid var(--border-color);
-            font-weight: 600;
-        }
-
-        /* All cells including first column - White background */
-        .alert-type-counts-table td,
-        .alert-type-counts-table td:first-child {
-            background-color: white !important;
-            color: var(--text-color) !important;
-            border: 1px solid var(--border-color);
-            padding: 1rem;
-        }
-
-        /* Links in table cells */
-        .alert-type-counts-table td a {
-            color: var(--primary-color) !important;
-            text-decoration: none;
-            padding: 0.2rem 0.5rem;
-            border-radius: 4px;
-            margin: 0 0.2rem;
-            display: inline-block;
-        }
-
-        /* Hover effects */
-        .alert-type-counts-table tr:hover td {
-            background-color: #f8f9fa !important;
+        .scan-info p {
+            margin: 0.25rem 0;
+            font-size: 1.1rem;
         }
         </style>
         """
 
-        # Custom JavaScript
+        # Custom JavaScript for interactive features
         custom_js = """
         <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Add collapsible functionality to sections
-            document.querySelectorAll('.section h2').forEach(header => {
+            // Add click handlers for expandable sections
+            document.querySelectorAll('h2, h3').forEach(header => {
                 header.style.cursor = 'pointer';
-                header.addEventListener('click', () => {
-                    const content = header.parentElement.querySelector('.section-content');
-                    if (content) {
-                        const isHidden = content.style.display === 'none';
-                        content.style.display = isHidden ? 'block' : 'none';
-                        header.classList.toggle('collapsed', !isHidden);
+                header.addEventListener('click', function() {
+                    const nextElement = this.nextElementSibling;
+                    if (nextElement) {
+                        nextElement.style.display = nextElement.style.display === 'none' ? 'block' : 'none';
                     }
                 });
             });
@@ -706,38 +657,6 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
             });
         });
         </script>
-        """
-
-        # Load and embed logo directly in HTML
-        try:
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            logo_path = os.path.join(current_dir, 'virtuestech_logo.png')
-            
-            print(f"[DEBUG] Loading logo from: {logo_path}")
-            
-            if not os.path.exists(logo_path):
-                raise FileNotFoundError(f"Logo file not found at: {logo_path}")
-            
-            with open(logo_path, 'rb') as img_file:
-                logo_base64 = base64.b64encode(img_file.read()).decode('utf-8')
-                logo_html = f'<img src="data:image/png;base64,{logo_base64}" alt="VirtuesTech Logo" style="height: 64px; margin-bottom: 1rem;">'
-                print("[DEBUG] Successfully embedded logo")
-        except Exception as e:
-            print(f"[ERROR] Failed to load logo: {str(e)}")
-            logo_html = '<!-- Logo failed to load -->'
-
-        # Updated header HTML with embedded logo
-        header_html = f"""
-        <div class="report-container">
-            <header>
-                {logo_html}
-                <h1>Vulnerability Scan Report</h1>
-                <div class="scan-info">
-                    <p>Target: {target_url}</p>
-                    <p>Date: {time.strftime('%Y-%m-%d %H:%M:%S')}</p>
-                </div>
-            </header>
-            <main>
         """
 
         # Remove ZAP references and replace header
@@ -755,44 +674,98 @@ def generate_reports(target_url, results, scan_id, context_name, socketio, sessi
         # Add closing tags at the end of the document
         html_content = html_content.replace('</body>', '</main></div></body>')
 
-        # Save the customized report
+        # Clean HTML content
+        cleaned_content = clean_html_content(html_content)
+
+        # Save the customized report to file
         safe_filename = f"{scan_id}_{target_url.replace('://', '_').replace('/', '_')}.html"
         custom_html_filename = os.path.join(output_dir, safe_filename)
-        with open(custom_html_filename, 'w', encoding='utf-8') as f:
-            f.write(html_content)
-
-        print(f"[{scan_id}] Generated HTML report at: {custom_html_filename}")
-
-        # Save report to database
+        
         try:
+            with open(custom_html_filename, 'w', encoding='utf-8') as f:
+                f.write(cleaned_content)
+            print(f"[{scan_id}] Generated HTML report at: {custom_html_filename}")
+        except Exception as e:
+            raise Exception(f"Failed to save customized report to file: {str(e)}")
+
+        # Save report to database - THIS IS THE CRITICAL PART
+        try:
+            print(f"[{scan_id}] Ensuring database tables exist...")
+            db.ensure_tables_exist()
+            
+            print(f"[{scan_id}] Getting database connection...")
             conn = db.get_connection()
+            
             try:
                 with conn.cursor() as cur:
-                    print(f"[DEBUG] Saving report to database for URL: {target_url}")
+                    print(f"[{scan_id}] Saving report to database for URL: {target_url}")
+                    print(f"[{scan_id}] Report content length: {len(cleaned_content)} characters")
+                    
+                    # Check if report already exists for this scan_id
                     cur.execute("""
-                        INSERT INTO zap_reports 
-                        (scan_id, target_url, report_type, content, timestamp)
-                        VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
-                        """, 
-                        (scan_id, target_url, 'html', html_content)
-                    )
+                        SELECT COUNT(*) FROM zap_reports 
+                        WHERE scan_id = %s AND target_url = %s
+                    """, (scan_id, target_url))
+                    
+                    existing_count = cur.fetchone()[0]
+                    if existing_count > 0:
+                        print(f"[{scan_id}] Report already exists for this scan, updating...")
+                        cur.execute("""
+                            UPDATE zap_reports 
+                            SET content = %s, timestamp = CURRENT_TIMESTAMP
+                            WHERE scan_id = %s AND target_url = %s
+                        """, (cleaned_content, scan_id, target_url))
+                    else:
+                        print(f"[{scan_id}] Inserting new report...")
+                        cur.execute("""
+                            INSERT INTO zap_reports 
+                            (scan_id, target_url, report_type, content, timestamp)
+                            VALUES (%s, %s, %s, %s, CURRENT_TIMESTAMP)
+                        """, (scan_id, target_url, 'html', cleaned_content))
+                    
                 conn.commit()
-                print(f"[{scan_id}] Report saved to database")
+                print(f"[{scan_id}] ✅ Report successfully saved to database!")
+                
+                # Verify the save by checking the database
+                with conn.cursor() as cur:
+                    cur.execute("""
+                        SELECT scan_id, target_url, LENGTH(content) as content_length, timestamp 
+                        FROM zap_reports 
+                        WHERE scan_id = %s AND target_url = %s
+                    """, (scan_id, target_url))
+                    
+                    verification = cur.fetchone()
+                    if verification:
+                        print(f"[{scan_id}] ✅ Database verification successful: "
+                              f"scan_id={verification[0]}, url={verification[1]}, "
+                              f"content_length={verification[2]}, timestamp={verification[3]}")
+                    else:
+                        raise Exception("Failed to verify report was saved to database")
+                        
             except Exception as e:
-                print(f"[ERROR] Database insertion failed: {str(e)}")
+                print(f"[{scan_id}] ❌ Database insertion failed: {str(e)}")
                 conn.rollback()
-                raise
+                raise Exception(f"Database save failed: {str(e)}")
             finally:
                 db.put_connection(conn)
+                
         except Exception as e:
-            print(f"[ERROR] Failed to save report to database: {str(e)}")
+            # This is critical - if database save fails, we should know about it
+            error_msg = f"Failed to save report to database: {str(e)}"
+            print(f"[{scan_id}] ❌ CRITICAL ERROR: {error_msg}")
+            logger.error(f"[{scan_id}] Database save error: {error_msg}", exc_info=True)
+            
+            # Still return the file, but log the database failure
+            # Don't raise here to avoid breaking the scan, but ensure it's logged
+            print(f"[{scan_id}] ⚠️  Report file saved successfully, but database save failed!")
 
         return custom_html_filename, None
 
     except Exception as e:
-        print(f"[{scan_id}] [ERROR] Report generation failed: {str(e)}")
-        logger.error(f"Report generation failed: {str(e)}", exc_info=True)
-        raise
+        error_msg = f"Report generation failed: {str(e)}"
+        print(f"[{scan_id}] ❌ ERROR: {error_msg}")
+        logger.error(f"[{scan_id}] {error_msg}", exc_info=True)
+        raise Exception(error_msg)
 
 
 def process_scan_results(alerts):

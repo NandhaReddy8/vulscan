@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Loader, StopCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
-import CapCaptcha from './CapCaptcha';
+import ReCAPTCHA from "react-google-recaptcha";
 
 interface ScannerProps {
-  onScanSubmit: (url: string, captchaToken: string) => void;
+  onScanSubmit: (url: string, recaptchaToken: string) => void;
   onStopScan: () => void;
   isLoading: boolean;
   url: string;
@@ -22,24 +22,24 @@ const Scanner: React.FC<ScannerProps> = ({
   const location = useLocation();
   const [protocol, setProtocol] = useState("https://");
   const [error, setError] = useState<string | null>(null);
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
   const [isInputValid, setIsInputValid] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
+
+  const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
   // Reset form when scan completes
   useEffect(() => {
     if (!isLoading) {
-      setCaptchaToken(null);
       // Don't reset URL as it's needed for report requests
       setError(null);
+      setRecaptchaToken(null);
+      // Reset reCAPTCHA
+      if (recaptchaRef.current) {
+        recaptchaRef.current.reset();
+      }
     }
   }, [isLoading, setUrl]);
-
-  // Show captcha when input becomes valid
-  useEffect(() => {
-    if (isInputValid) {
-      setCaptchaToken(null); // Reset captcha token when input changes
-    }
-  }, [isInputValid]);
 
   // Validate input whenever it changes
   useEffect(() => {
@@ -72,7 +72,15 @@ const Scanner: React.FC<ScannerProps> = ({
     // Remove any protocol prefix if present
     const cleanUrl = input.replace(/^https?:\/\//, '');
     setUrl(cleanUrl);
-    setCaptchaToken(null); // Clear CAPTCHA token
+  };
+
+  const handleRecaptchaChange = (token: string | null) => {
+    setRecaptchaToken(token);
+    if (!token) {
+      setError("Please complete the reCAPTCHA verification");
+    } else if (error === "Please complete the reCAPTCHA verification") {
+      setError(null);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -86,16 +94,30 @@ const Scanner: React.FC<ScannerProps> = ({
       return;
     }
 
-    // Check if we have a valid CAPTCHA token
-    if (!captchaToken) {
-      setError("Please complete the proof-of-work verification");
+    // Check reCAPTCHA
+    if (!recaptchaToken) {
+      setError("Please complete the reCAPTCHA verification");
       return;
     }
 
     // Proceed with the scan
     const fullUrl = `${protocol}${url}`;
-    onScanSubmit(fullUrl, captchaToken);
+    onScanSubmit(fullUrl, recaptchaToken);
   };
+
+  // Don't render if no reCAPTCHA site key is configured
+  if (!RECAPTCHA_SITE_KEY || RECAPTCHA_SITE_KEY === 'your_google_recaptcha_site_key_here') {
+    return (
+      <section className="text-center" data-aos="fade-up">
+        <div className="bg-red-800/50 p-6 rounded-lg shadow-md border border-red-700 mt-8 max-w-3xl mx-auto">
+          <h3 className="text-xl font-semibold text-red-300 mb-4">Configuration Required</h3>
+          <p className="text-red-200">
+            Google reCAPTCHA is not configured. Please set the VITE_RECAPTCHA_SITE_KEY environment variable.
+          </p>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="text-center" data-aos="fade-up">
@@ -170,25 +192,19 @@ const Scanner: React.FC<ScannerProps> = ({
             </div>
           </div>
 
-          {/* CAPTCHA - Show directly when input is valid */}
-          {isInputValid && (
-            <div className="space-y-2">
-              <CapCaptcha
-                onVerified={(token) => {
-                  setCaptchaToken(token);
-                  setError(null);
-                }}
-                onError={(error) => {
-                  setError(error);
-                  setCaptchaToken(null);
-                }}
-              />
-            </div>
-          )}
+          {/* reCAPTCHA */}
+          <div className="flex justify-center mt-4">
+            <ReCAPTCHA
+              ref={recaptchaRef}
+              sitekey={RECAPTCHA_SITE_KEY}
+              onChange={handleRecaptchaChange}
+              theme="dark"
+            />
+          </div>
 
           {/* Error Display - Only show if there's an actual error */}
           {error && (
-            <div className="text-gray-400 text-sm mt-2">{error}</div>
+            <div className="text-red-400 text-sm mt-2 text-center">{error}</div>
           )}
 
           {/* Submit Button */}
@@ -205,7 +221,7 @@ const Scanner: React.FC<ScannerProps> = ({
             ) : (
               <button
                 type="submit"
-                disabled={isLoading || !captchaToken || !isInputValid}
+                disabled={isLoading || !isInputValid || !recaptchaToken}
                 className="px-8 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 text-sm font-medium shadow-lg hover:shadow-blue-500/20"
               >
                 {isLoading ? (

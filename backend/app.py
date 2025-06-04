@@ -1,6 +1,6 @@
 import importlib
 import sys
-from flask import Flask, request, jsonify
+from flask import request, jsonify
 
 @app.route('/api/reload', methods=['POST'])
 def reload_modules():
@@ -24,12 +24,8 @@ def start_scan():
             
         ip_address = data['ip_address']
         requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
-        captcha_token = request.headers.get('X-Captcha-Token')
-        
-        if not captcha_token:
-            return jsonify({'error': 'Missing CAPTCHA token'}), 400
             
-        success, message, scan_id = start_network_scan(ip_address, requester_ip, captcha_token)
+        success, message, scan_id = start_network_scan(ip_address, requester_ip)
         
         if not success:
             return jsonify({'error': message}), 400

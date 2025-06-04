@@ -11,12 +11,6 @@ FLASK_HOST = os.getenv("FLASK_HOST", "127.0.0.1")
 FLASK_PORT = int(os.getenv("FLASK_PORT", 5000))
 FLASK_DEBUG = os.getenv("FLASK_DEBUG", "True") == "True"
 
-# CAPTCHA Configuration
-CAPTCHA_VERIFY_URL = os.getenv("CAPTCHA_VERIFY_URL", "http://127.0.0.1:5000/api/cap/verify")
-CAPTCHA_DIFFICULTY = int(os.getenv("CAPTCHA_DIFFICULTY", "4"))
-CAPTCHA_EXPIRY = int(os.getenv("CAPTCHA_EXPIRY", "300"))
-CAPTCHA_LENGTH = int(os.getenv("CAPTCHA_LENGTH", "32"))
-
 # Security Configuration
 JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-secret-key-here")
 JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
@@ -90,6 +84,10 @@ DB_PORT = os.getenv("DB_PORT", "5432")
 ZAP_URL = os.getenv("ZAP_URL", "http://127.0.0.1:8080")
 ZAP_API_KEY = os.getenv("ZAP_API_KEY", "3ek27hdj10tooh0defcrknlm8o")
 
+# Google reCAPTCHA Configuration
+RECAPTCHA_SITE_KEY = os.getenv("RECAPTCHA_SITE_KEY", "")
+RECAPTCHA_SECRET_KEY = os.getenv("RECAPTCHA_SECRET_KEY", "")
+
 # Rate Limiting
 RATELIMIT_DEFAULT = os.getenv("RATELIMIT_DEFAULT", "200 per day")
 RATELIMIT_STORAGE_URL = os.getenv("REDIS_URL", "memory://")
@@ -97,7 +95,7 @@ RATELIMIT_STRATEGY = os.getenv("RATELIMIT_STRATEGY", "fixed-window")
 
 # Ensure required environment variables are set in production
 if not FLASK_DEBUG:
-    required_vars = ["JWT_SECRET_KEY"]
+    required_vars = ["JWT_SECRET_KEY", "RECAPTCHA_SECRET_KEY"]
     missing_vars = [var for var in required_vars if not os.getenv(var)]
     if missing_vars:
         raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")

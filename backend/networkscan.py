@@ -3,9 +3,7 @@ import sys
 import datetime
 import ipaddress
 import os
-import platform
 import json
-import hashlib
 import uuid
 import asyncio
 import threading
@@ -13,13 +11,12 @@ import socket
 import re
 import requests
 from concurrent.futures import ThreadPoolExecutor
-from typing import Dict, Optional, Tuple, Any, List
+from typing import Dict, Optional, Tuple, List
 from database import (create_scan_record,update_scan_status,get_scan_by_id,get_active_scans,get_recent_scans)
 import logging
 import time
-from datetime import timedelta
-from psycopg2.extras import DictCursor
-from config import CAPTCHA_VERIFY_URL
+from db_handler import DatabaseHandler
+from config import FLASK_DEBUG
 
 # Configure logging
 logging.basicConfig(
@@ -31,6 +28,8 @@ logging.basicConfig(
     ]
 )
 logger = logging.getLogger(__name__)
+logging.getLogger("engineio").setLevel(logging.WARNING)
+logging.getLogger("socketio").setLevel(logging.WARNING)
 
 # Global thread pool for running scans
 scan_executor = ThreadPoolExecutor(max_workers=5)  # Limit concurrent scans
@@ -452,34 +451,7 @@ def validate_target(target: str) -> Tuple[bool, str, Optional[str]]:
         
     return True, clean_target, None
 
-def verify_captcha_token(token: str) -> Tuple[bool, str]:
-    """Verify a CAPTCHA token with the local verification endpoint."""
-    try:
-        # Split the token into challenge and nonce
-        challenge, nonce = token.split(':')
-        
-        # Verify with local endpoint
-        response = requests.post(
-            CAPTCHA_VERIFY_URL,
-            json={"challenge": challenge, "nonce": nonce},
-            headers={"X-Internal-Verify": "true"},
-            timeout=5
-        )
-        
-        if not response.ok:
-            return False, "Invalid CAPTCHA token"
-            
-        data = response.json()
-        if data.get('error'):
-            return False, data['error']
-            
-        return data.get('success', False), "CAPTCHA verification failed"
-        
-    except Exception as e:
-        logger.error(f"Error verifying CAPTCHA token: {str(e)}")
-        return False, "CAPTCHA verification error"
-
-def start_network_scan(target: str, requester_ip: str, captcha_token: str) -> Tuple[bool, str, Optional[str]]:
+def start_network_scan(target: str, requester_ip: str) -> Tuple[bool, str, Optional[str]]:
     """Start a new network scan with proper request deduplication."""
     logger.debug(f"Starting network scan for target: {target} from {requester_ip}")
     
@@ -594,7 +566,7 @@ if __name__ == "__main__":
     async def test_scan():
         test_ip = "8.8.8.8"
         print("\n=== Testing Network Scanner ===\n")
-        success, message, scan_id = await start_network_scan(test_ip, "127.0.0.1", "valid_captcha_token")
+        success, message, scan_id = await start_network_scan(test_ip, "127.0.0.1")
         print(f"\nScan started: {message}")
         print(f"Scan ID: {scan_id}")
         

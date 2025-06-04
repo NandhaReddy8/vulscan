@@ -1,0 +1,914 @@
+2025-06-05 01:57:22,696 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:00:38,070 - engineio.server - INFO - 6r6Z7dmrXpbr4T27AAAA: Sending packet OPEN data {'sid': '6r6Z7dmrXpbr4T27AAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:00:38,071 - engineio.server - INFO - 6r6Z7dmrXpbr4T27AAAA: Received request to upgrade to websocket
+2025-06-05 02:00:38,073 - engineio.server - INFO - 6r6Z7dmrXpbr4T27AAAA: Upgrade to websocket successful
+2025-06-05 02:00:38,091 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet OPEN data {'sid': 'mbMiqtGqnkVR-61qAAAB', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:00:38,093 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received request to upgrade to websocket
+2025-06-05 02:00:38,094 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Upgrade to websocket successful
+2025-06-05 02:00:38,099 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet MESSAGE data 0
+2025-06-05 02:00:38,100 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet MESSAGE data 0{"sid":"P4Hhb4fXbPtAjXRuAAAC"}
+2025-06-05 02:01:03,107 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:01:03,109 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:01:28,125 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:01:28,127 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:01:53,129 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:01:53,132 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:02:18,150 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:02:18,156 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:02:43,159 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:02:43,161 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:03:08,170 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:03:08,421 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:03:33,424 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:03:33,426 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Received packet PONG data 
+2025-06-05 02:03:58,445 - engineio.server - INFO - mbMiqtGqnkVR-61qAAAB: Sending packet PING data None
+2025-06-05 02:09:50,753 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:10:03,577 - engineio.server - INFO - RJUlBhd-n_0mR0gMAAAA: Sending packet OPEN data {'sid': 'RJUlBhd-n_0mR0gMAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:10:03,580 - engineio.server - INFO - RJUlBhd-n_0mR0gMAAAA: Received request to upgrade to websocket
+2025-06-05 02:10:03,583 - engineio.server - INFO - RJUlBhd-n_0mR0gMAAAA: Upgrade to websocket successful
+2025-06-05 02:10:03,597 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet OPEN data {'sid': 'CGXDZOk6eV4dkB2IAAAB', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:10:03,600 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received request to upgrade to websocket
+2025-06-05 02:10:03,600 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Upgrade to websocket successful
+2025-06-05 02:10:03,970 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet MESSAGE data 0
+2025-06-05 02:10:03,972 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet MESSAGE data 0{"sid":"hDP8CaXVzmrS9tQDAAAC"}
+2025-06-05 02:10:28,610 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:10:28,613 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:10:53,627 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:10:53,629 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:11:18,650 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:11:18,651 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:11:43,651 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:11:43,653 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:12:08,662 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:12:08,664 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:12:33,671 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:12:33,674 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:12:58,698 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:12:58,701 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Received packet PONG data 
+2025-06-05 02:13:23,706 - engineio.server - INFO - CGXDZOk6eV4dkB2IAAAB: Sending packet PING data None
+2025-06-05 02:13:26,851 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:13:26,938 - engineio.server - INFO - IWzlyuiwB6iKykLdAAAA: Sending packet OPEN data {'sid': 'IWzlyuiwB6iKykLdAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:13:26,939 - engineio.server - INFO - IWzlyuiwB6iKykLdAAAA: Received request to upgrade to websocket
+2025-06-05 02:13:26,940 - engineio.server - INFO - IWzlyuiwB6iKykLdAAAA: Upgrade to websocket successful
+2025-06-05 02:13:26,945 - engineio.server - INFO - IWzlyuiwB6iKykLdAAAA: Received packet MESSAGE data 0
+2025-06-05 02:13:26,947 - engineio.server - INFO - IWzlyuiwB6iKykLdAAAA: Sending packet MESSAGE data 0{"sid":"Nw5MRMf3h5TwpeByAAAB"}
+2025-06-05 02:13:32,751 - engineio.server - INFO - IWzlyuiwB6iKykLdAAAA: Received packet MESSAGE data 1
+2025-06-05 02:13:34,994 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Sending packet OPEN data {'sid': '22cfwD_CeRbdmYXuAAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:13:34,995 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Received request to upgrade to websocket
+2025-06-05 02:13:34,996 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Upgrade to websocket successful
+2025-06-05 02:13:35,001 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Received packet MESSAGE data 0
+2025-06-05 02:13:35,003 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Sending packet MESSAGE data 0{"sid":"PaOBWJUXF8eBu4EtAAAD"}
+2025-06-05 02:14:00,017 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Sending packet PING data None
+2025-06-05 02:14:00,019 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Received packet PONG data 
+2025-06-05 02:14:25,019 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Sending packet PING data None
+2025-06-05 02:14:25,021 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Received packet PONG data 
+2025-06-05 02:14:50,043 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Sending packet PING data None
+2025-06-05 02:14:50,047 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Received packet PONG data 
+2025-06-05 02:15:15,054 - engineio.server - INFO - 22cfwD_CeRbdmYXuAAAC: Sending packet PING data None
+2025-06-05 02:15:17,967 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:15:18,000 - engineio.server - INFO - LrGMg0hjVtKg1OwoAAAA: Sending packet OPEN data {'sid': 'LrGMg0hjVtKg1OwoAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:15:18,001 - engineio.server - INFO - LrGMg0hjVtKg1OwoAAAA: Received request to upgrade to websocket
+2025-06-05 02:15:18,003 - engineio.server - INFO - LrGMg0hjVtKg1OwoAAAA: Upgrade to websocket successful
+2025-06-05 02:15:18,008 - engineio.server - INFO - LrGMg0hjVtKg1OwoAAAA: Received packet MESSAGE data 0
+2025-06-05 02:15:18,009 - engineio.server - INFO - LrGMg0hjVtKg1OwoAAAA: Sending packet MESSAGE data 0{"sid":"kS2NvDjy4gUatmkGAAAB"}
+2025-06-05 02:15:22,541 - engineio.server - INFO - LrGMg0hjVtKg1OwoAAAA: Received packet MESSAGE data 1
+2025-06-05 02:15:25,155 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet OPEN data {'sid': 'XBrZBkv8ScFz1PTjAAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:15:25,156 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received request to upgrade to websocket
+2025-06-05 02:15:25,157 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Upgrade to websocket successful
+2025-06-05 02:15:25,161 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet MESSAGE data 0
+2025-06-05 02:15:25,162 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet MESSAGE data 0{"sid":"TDkCGZMCLjAQMrW5AAAD"}
+2025-06-05 02:15:50,172 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:15:50,176 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:16:15,188 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:16:15,191 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:16:40,205 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:16:40,207 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:17:05,213 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:17:05,214 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:17:30,215 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:17:30,217 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:17:55,213 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:17:55,214 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:18:20,220 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:18:20,224 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:18:45,226 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Sending packet PING data None
+2025-06-05 02:18:45,230 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet PONG data 
+2025-06-05 02:18:58,519 - engineio.server - INFO - XBrZBkv8ScFz1PTjAAAC: Received packet MESSAGE data 1
+2025-06-05 02:18:58,526 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet OPEN data {'sid': 'gaerZfOBohvZg6SlAAAE', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:18:58,528 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received request to upgrade to websocket
+2025-06-05 02:18:58,530 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Upgrade to websocket successful
+2025-06-05 02:18:58,534 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet MESSAGE data 0
+2025-06-05 02:18:58,535 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet MESSAGE data 0{"sid":"gDoCiaj9WNhkDJKkAAAF"}
+2025-06-05 02:19:23,544 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:19:23,545 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:19:48,549 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:19:48,552 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:20:13,565 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:20:13,567 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:20:38,577 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:20:38,580 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:21:03,599 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:21:03,601 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:21:28,607 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:21:28,610 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:21:53,620 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:21:53,621 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:22:18,628 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:22:18,634 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:22:43,639 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:22:43,641 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:23:08,633 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:23:08,634 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:23:33,652 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:23:33,655 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:23:58,664 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:23:58,668 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:24:23,662 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:24:23,665 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:24:48,672 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:24:48,674 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:25:13,693 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:25:13,698 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:25:38,692 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:25:38,694 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:26:03,712 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:26:03,716 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:26:28,724 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:26:28,727 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:26:53,745 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Sending packet PING data None
+2025-06-05 02:26:53,747 - engineio.server - INFO - gaerZfOBohvZg6SlAAAE: Received packet PONG data 
+2025-06-05 02:26:58,526 - __main__ - INFO - [DEBUG] Received scan request for URL: https://thethrone.in
+2025-06-05 02:26:58,527 - __main__ - INFO - [DEBUG] Current active challenges: {}
+2025-06-05 02:27:07,068 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Sending packet OPEN data {'sid': 'WLE5D1tq-ItdnSQqAAAG', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:27:07,069 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Received request to upgrade to websocket
+2025-06-05 02:27:07,070 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Upgrade to websocket successful
+2025-06-05 02:27:07,206 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Received packet MESSAGE data 0
+2025-06-05 02:27:07,207 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Sending packet MESSAGE data 0{"sid":"Fxfs1EZBT7DKPqhcAAAH"}
+2025-06-05 02:27:10,188 - __main__ - INFO - [DEBUG] Received scan request for URL: https://thethrone.in
+2025-06-05 02:27:10,189 - __main__ - INFO - [DEBUG] Current active challenges: {}
+2025-06-05 02:27:32,074 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Sending packet PING data None
+2025-06-05 02:27:32,077 - engineio.server - INFO - WLE5D1tq-ItdnSQqAAAG: Received packet PONG data 
+2025-06-05 02:27:40,360 - engineio.server - INFO - Y5wyD9uBb6-fGiRtAAAI: Sending packet OPEN data {'sid': 'Y5wyD9uBb6-fGiRtAAAI', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:27:40,362 - engineio.server - INFO - Y5wyD9uBb6-fGiRtAAAI: Received request to upgrade to websocket
+2025-06-05 02:27:40,364 - engineio.server - INFO - Y5wyD9uBb6-fGiRtAAAI: Upgrade to websocket successful
+2025-06-05 02:27:40,382 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Sending packet OPEN data {'sid': '_rmIX_V3gGYzb9KzAAAJ', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:27:40,383 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Received request to upgrade to websocket
+2025-06-05 02:27:40,385 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Upgrade to websocket successful
+2025-06-05 02:27:40,655 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Received packet MESSAGE data 0
+2025-06-05 02:27:40,657 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Sending packet MESSAGE data 0{"sid":"pWUysQibiJe22bEwAAAK"}
+2025-06-05 02:27:46,770 - __main__ - INFO - [DEBUG] Received scan request for URL: https://thethrone.in
+2025-06-05 02:27:46,770 - __main__ - INFO - [DEBUG] Current active challenges: {}
+2025-06-05 02:28:05,404 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Sending packet PING data None
+2025-06-05 02:28:05,406 - engineio.server - INFO - _rmIX_V3gGYzb9KzAAAJ: Received packet PONG data 
+2025-06-05 02:28:24,057 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:28:24,979 - engineio.server - INFO - jolnjMPPIWQvMtzWAAAA: Sending packet OPEN data {'sid': 'jolnjMPPIWQvMtzWAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:28:24,980 - engineio.server - INFO - jolnjMPPIWQvMtzWAAAA: Received request to upgrade to websocket
+2025-06-05 02:28:24,982 - engineio.server - INFO - jolnjMPPIWQvMtzWAAAA: Upgrade to websocket successful
+2025-06-05 02:28:24,986 - engineio.server - INFO - jolnjMPPIWQvMtzWAAAA: Received packet MESSAGE data 0
+2025-06-05 02:28:24,988 - engineio.server - INFO - jolnjMPPIWQvMtzWAAAA: Sending packet MESSAGE data 0{"sid":"ffjON0oY-i9JnXCDAAAB"}
+2025-06-05 02:28:37,048 - engineio.server - INFO - YL1L5D5wgAqKCHp0AAAC: Sending packet OPEN data {'sid': 'YL1L5D5wgAqKCHp0AAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:28:37,049 - engineio.server - INFO - YL1L5D5wgAqKCHp0AAAC: Received request to upgrade to websocket
+2025-06-05 02:28:37,049 - engineio.server - INFO - YL1L5D5wgAqKCHp0AAAC: Upgrade to websocket successful
+2025-06-05 02:28:37,067 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet OPEN data {'sid': '1jTelRHLRfxsQZ_sAAAD', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:28:37,068 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received request to upgrade to websocket
+2025-06-05 02:28:37,070 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Upgrade to websocket successful
+2025-06-05 02:28:37,441 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet MESSAGE data 0
+2025-06-05 02:28:37,442 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 0{"sid":"c9-IH_EVA-7GIAdoAAAE"}
+2025-06-05 02:28:39,513 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): thethrone.in:443
+2025-06-05 02:28:41,595 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET / HTTP/1.1" 302 0
+2025-06-05 02:28:42,295 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET /password HTTP/1.1" 200 43672
+2025-06-05 02:28:42,302 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:42,620 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/newContext/?contextName=context_6b763408-2dda-438c-8b79-a46575fbd56a HTTP/1.1" 200 17
+2025-06-05 02:28:42,623 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:42,689 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/includeInContext/?contextName=context_6b763408-2dda-438c-8b79-a46575fbd56a&regex=.%2Ahttps%3A%2F%2Fthethrone.in.%2A HTTP/1.1" 200 15
+2025-06-05 02:28:42,692 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:42,780 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/scan/?url=https%3A%2F%2Fthethrone.in&contextName=context_6b763408-2dda-438c-8b79-a46575fbd56a HTTP/1.1" 200 12
+2025-06-05 02:28:42,785 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:42,801 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=0 HTTP/1.1" 200 14
+2025-06-05 02:28:42,805 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:42,827 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=0 HTTP/1.1" 200 14
+2025-06-05 02:28:42,829 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:42,830 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Discovering site structure...","progress":0,"phase":"Spider Scan"}]
+2025-06-05 02:28:44,841 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:44,851 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=0 HTTP/1.1" 200 15
+2025-06-05 02:28:44,854 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:44,867 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/enableAllScanners/ HTTP/1.1" 200 15
+2025-06-05 02:28:44,869 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:44,880 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:44,882 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:44,892 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:44,893 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:44,894 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Analyzing responses...","progress":59,"phase":"Passive Scan"}]
+2025-06-05 02:28:46,908 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:46,921 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:46,923 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:46,934 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:46,935 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:46,936 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-05 02:28:48,942 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:48,957 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:48,959 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:48,974 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:48,974 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:48,976 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-05 02:28:50,995 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:51,004 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:51,007 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:51,015 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:28:51,017 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:51,018 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-05 02:28:53,023 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:53,029 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 02:28:53,032 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:53,039 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 02:28:53,039 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:53,041 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Analyzing responses...","progress":94,"phase":"Passive Scan"}]
+2025-06-05 02:28:55,046 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:55,062 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 02:28:55,063 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:55,380 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/core/view/alerts/ HTTP/1.1" 200 546105
+2025-06-05 02:28:55,484 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:57,757 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET /JSON/reports/action/generate/?apikey=n9reqbm7ih7vh81e76e6cfrdce&title=Vulnerability+Scan+Report+-+https%3A%2F%2Fthethrone.in&template=risk-confidence-html&sites=https%3A%2F%2Fthethrone.in HTTP/1.1" 200 72
+2025-06-05 02:28:57,845 - socketio.server - INFO - emitting event "scan_completed" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:28:57,846 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_completed",{"scan_id":"6b763408-2dda-438c-8b79-a46575fbd56a","message":"Scan Completed!","result":{"summary":{"Informational":5,"Low":5,"Medium":5},"vulnerabilities_by_type":[{"risk":"Medium","alert_type":"CSP: Failure to Define Directive with No Fallback (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests;","description":"The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":35,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 32 more"]},{"risk":"Medium","alert_type":"CSP: style-src unsafe-inline (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests;","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":35,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/admin","...and 32 more"]},{"risk":"Low","alert_type":"Timestamp Disclosure - Unix (1)","alert_tags":"CWE-497, OWASP 2021 A13","parameter":"","evidence":"1729863339","description":"A timestamp was disclosed by the application/web server. - Unix","solution":"Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.","count":56,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 53 more"]},{"risk":"Informational","alert_type":"Re-examine Cache-control Directives (1)","alert_tags":"CWE-525, OWASP 2021 A13","parameter":"cache-control","evidence":"","description":"The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.","solution":"For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".","count":3,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/apple-app-site-association"]},{"risk":"Low","alert_type":"Cookie No HttpOnly Flag (1)","alert_tags":"CWE-1004, OWASP 2021 A13","parameter":"_shopify_s","evidence":"set-cookie: _shopify_s","description":"A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.","solution":"Ensure that the HttpOnly flag is set for all cookies.","count":5,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/checkout","...and 2 more"]},{"risk":"Low","alert_type":"Cookie Without Secure Flag (1)","alert_tags":"CWE-614, OWASP 2021 A13","parameter":"_shopify_s","evidence":"set-cookie: _shopify_s","description":"A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections.","solution":"Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted channel. Ensure that the secure flag is set for cookies containing such sensitive information.","count":5,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 2 more"]},{"risk":"Low","alert_type":"Cross-Domain JavaScript Source File Inclusion (1)","alert_tags":"CWE-829, OWASP 2021 A15","parameter":"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js","evidence":"<script src=\"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js\" type=\"text/javascript\" defer=\"defer\"></script>","description":"The page includes one or more script files from a third-party domain.","solution":"Ensure JavaScript source files are loaded from only trusted sources, and the sources can't be controlled by end users of the application.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Strict-Transport-Security Header Not Set (1)","alert_tags":"CWE-319, OWASP 2021 A15","parameter":"","evidence":"","description":"HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.","count":2,"affected_urls":["https://thethrone.in/checkouts/","https://thethrone.in/.well-known/shopify/monorail"]},{"risk":"Medium","alert_type":"Absence of Anti-CSRF Tokens (1)","alert_tags":"CWE-352, OWASP 2021 A09","parameter":"","evidence":"<form method=\"post\" action=\"/password\" id=\"login_form\" accept-charset=\"UTF-8\" class=\"password-form\">","description":"No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.","solution":"Phase: Architecture and Design\nUse a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid.\nFor example, use anti-CSRF packages such as the OWASP CSRFGuard.\n\nPhase: Implementation\nEnsure that your application is free of cross-site scripting issues, because most CSRF defenses can be bypassed using attacker-controlled script.\n\nPhase: Architecture and Design\nGenerate a unique nonce for each form, place the nonce into the form, and verify the nonce upon receipt of the form. Be sure that the nonce is not predictable (CWE-330).\nNote that this can be bypassed using XSS.\n\nIdentify especially dangerous operations. When the user performs a dangerous operation, send a separate confirmation request to ensure that the user intended to perform that operation.\nNote that this can be bypassed using XSS.\n\nUse the ESAPI Session Management control.\nThis control includes a component for CSRF.\n\nDo not use the GET method for any request that triggers a state change.\n\nPhase: Implementation\nCheck the HTTP Referer header to see if the request originated from an expected page. This could break legitimate functionality, because users or proxies may have disabled sending the Referer for privacy reasons.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Informational","alert_type":"Session Management Response Identified (1)","alert_tags":"CWE--1","parameter":"_shopify_y","evidence":"2EF71897-f9ef-4C4B-802b-0f480e5ade1e","description":"The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.","solution":"This is an informational alert rather than a vulnerability and so there is nothing to fix.","count":5,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 2 more"]},{"risk":"Informational","alert_type":"Information Disclosure - Suspicious Comments (1)","alert_tags":"CWE-615, OWASP 2021 A13","parameter":"","evidence":"from","description":"The response appears to contain suspicious comments which may help an attacker.","solution":"Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.","count":4,"affected_urls":["https://thethrone.in/password","https://thethrone.in/cdn/shopifycloud/shopify/assets/storefront/load_feature-c354cc1bc6f1fafc3e06e39f4fb0e1d9abdf763072ca394d606ca9f6f241e68a.js","https://thethrone.in/cdn/shopifycloud/perf-kit/shopify-perf-kit-1.6.5.min.js","...and 1 more"]},{"risk":"Medium","alert_type":"Cross-Domain Misconfiguration (1)","alert_tags":"CWE-264, OWASP 2021 A14","parameter":"","evidence":"Access-Control-Allow-Origin: *","description":"Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.","solution":"Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).\nConfigure the \"Access-Control-Allow-Origin\" HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.","count":22,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/checkouts/internal/preloads.js?locale=en-IN","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","...and 19 more"]},{"risk":"Informational","alert_type":"Retrieved from Cache (1)","alert_tags":"CWE--1","parameter":"","evidence":"Age: 1723","description":"The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.","solution":"Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:\nCache-Control: no-cache, no-store, must-revalidate, private\nPragma: no-cache\nExpires: 0\nThis configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.","count":10,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","https://thethrone.in/cdn/shop/t/2/assets/details-modal.js?v=4511761896672669691729854643","...and 7 more"]},{"risk":"Medium","alert_type":"Content Security Policy (CSP) Header Not Set (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"","evidence":"","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.","count":1,"affected_urls":["https://thethrone.in/cdn/wpm/*.js"]},{"risk":"Informational","alert_type":"User Controllable HTML Element Attribute (Potential XSS) (1)","alert_tags":"CWE-20, OWASP 2021 A20","parameter":"form_type","evidence":"","description":"This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.","solution":"Validate all input and sanitize output it before writing to any HTML attributes.","count":1,"affected_urls":["https://thethrone.in/password"]}]},"report_url":"/reports/6b763408-2dda-438c-8b79-a46575fbd56a_https_thethrone.in.html"}]
+2025-06-05 02:28:57,866 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:28:57,891 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_6b763408-2dda-438c-8b79-a46575fbd56a HTTP/1.1" 200 15
+2025-06-05 02:29:02,066 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:29:02,070 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:29:27,081 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:29:27,082 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:29:52,097 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:29:52,101 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:30:17,112 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:30:17,116 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:30:42,122 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:30:42,125 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:31:07,136 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:31:07,139 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:31:32,145 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:31:32,147 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:31:54,696 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): https:443
+2025-06-05 02:31:57,148 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:31:57,149 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:31:57,848 - urllib3.connectionpool - DEBUG - https://https:443 "GET /thethrone.in HTTP/1.1" 502 266
+2025-06-05 02:31:57,850 - socketio.server - INFO - emitting event "scan_error" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:31:57,851 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_error",{"scan_id":"d73e38c6-e388-4a86-a555-d6e4d9e2fe9e","error":"Target URL is not accessible: Target returned status code: 502"}]
+2025-06-05 02:32:13,651 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): thethrone.in:443
+2025-06-05 02:32:14,140 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET / HTTP/1.1" 302 0
+2025-06-05 02:32:14,680 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET /password HTTP/1.1" 200 43672
+2025-06-05 02:32:14,685 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:14,788 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/newContext/?contextName=context_6a084107-2eda-45b8-afbe-db9c77d1967a HTTP/1.1" 200 17
+2025-06-05 02:32:14,790 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:14,813 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/includeInContext/?contextName=context_6a084107-2eda-45b8-afbe-db9c77d1967a&regex=.%2Ahttps%3A%2F%2Fthethrone.in.%2A HTTP/1.1" 200 15
+2025-06-05 02:32:14,817 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:14,822 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/scan/?url=https%3A%2F%2Fthethrone.in&contextName=context_6a084107-2eda-45b8-afbe-db9c77d1967a HTTP/1.1" 200 12
+2025-06-05 02:32:14,826 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:14,831 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=1 HTTP/1.1" 200 14
+2025-06-05 02:32:14,835 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:14,841 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=1 HTTP/1.1" 200 14
+2025-06-05 02:32:14,842 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:32:14,842 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6a084107-2eda-45b8-afbe-db9c77d1967a","message":"Discovering site structure...","progress":0,"phase":"Spider Scan"}]
+2025-06-05 02:32:16,859 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:16,864 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=1 HTTP/1.1" 200 15
+2025-06-05 02:32:16,867 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:16,872 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/enableAllScanners/ HTTP/1.1" 200 15
+2025-06-05 02:32:16,874 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:16,880 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 23
+2025-06-05 02:32:16,883 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:16,890 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 23
+2025-06-05 02:32:16,891 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:32:16,892 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6a084107-2eda-45b8-afbe-db9c77d1967a","message":"Analyzing responses...","progress":50,"phase":"Passive Scan"}]
+2025-06-05 02:32:18,905 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:18,910 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:32:18,912 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:18,918 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:32:18,920 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:32:18,920 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6a084107-2eda-45b8-afbe-db9c77d1967a","message":"Analyzing responses...","progress":82,"phase":"Passive Scan"}]
+2025-06-05 02:32:20,924 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:20,929 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:32:20,931 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:20,936 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:32:20,937 - socketio.server - INFO - emitting event "scan_progress" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:32:20,938 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"6a084107-2eda-45b8-afbe-db9c77d1967a","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-05 02:32:22,169 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:32:22,171 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:32:22,944 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:22,961 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 02:32:22,962 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:23,404 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/core/view/alerts/ HTTP/1.1" 200 1017311
+2025-06-05 02:32:23,498 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:24,050 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET /JSON/reports/action/generate/?apikey=n9reqbm7ih7vh81e76e6cfrdce&title=Vulnerability+Scan+Report+-+https%3A%2F%2Fthethrone.in&template=risk-confidence-html&sites=https%3A%2F%2Fthethrone.in HTTP/1.1" 200 72
+2025-06-05 02:32:24,151 - socketio.server - INFO - emitting event "scan_completed" to c9-IH_EVA-7GIAdoAAAE [/]
+2025-06-05 02:32:24,159 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet MESSAGE data 2["scan_completed",{"scan_id":"6a084107-2eda-45b8-afbe-db9c77d1967a","message":"Scan Completed!","result":{"summary":{"Informational":5,"Low":6,"Medium":5},"vulnerabilities_by_type":[{"risk":"Medium","alert_type":"CSP: Failure to Define Directive with No Fallback (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=not_found&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=70a26706-fd3d-4e0e-8c08-3f67942a4b30-1749070936; report-to shopify-csp","description":"The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":52,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 49 more"]},{"risk":"Medium","alert_type":"CSP: style-src unsafe-inline (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=not_found&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=70a26706-fd3d-4e0e-8c08-3f67942a4b30-1749070936; report-to shopify-csp","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":52,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/admin","...and 49 more"]},{"risk":"Low","alert_type":"Timestamp Disclosure - Unix (1)","alert_tags":"CWE-497, OWASP 2021 A13","parameter":"","evidence":"1749070937","description":"A timestamp was disclosed by the application/web server. - Unix","solution":"Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.","count":91,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 88 more"]},{"risk":"Informational","alert_type":"Re-examine Cache-control Directives (1)","alert_tags":"CWE-525, OWASP 2021 A13","parameter":"cache-control","evidence":"","description":"The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.","solution":"For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".","count":3,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/apple-app-site-association"]},{"risk":"Low","alert_type":"Cookie No HttpOnly Flag (1)","alert_tags":"CWE-1004, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.","solution":"Ensure that the HttpOnly flag is set for all cookies.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/checkout","...and 5 more"]},{"risk":"Low","alert_type":"Cookie Without Secure Flag (1)","alert_tags":"CWE-614, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections.","solution":"Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted channel. Ensure that the secure flag is set for cookies containing such sensitive information.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 5 more"]},{"risk":"Low","alert_type":"Cross-Domain JavaScript Source File Inclusion (1)","alert_tags":"CWE-829, OWASP 2021 A15","parameter":"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js","evidence":"<script src=\"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js\" type=\"text/javascript\" defer=\"defer\"></script>","description":"The page includes one or more script files from a third-party domain.","solution":"Ensure JavaScript source files are loaded from only trusted sources, and the sources can't be controlled by end users of the application.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Strict-Transport-Security Header Not Set (1)","alert_tags":"CWE-319, OWASP 2021 A15","parameter":"","evidence":"","description":"HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.","count":7,"affected_urls":["https://thethrone.in/checkouts/","https://thethrone.in/.well-known/shopify/monorail","https://thethrone.in/cdn/fonts/itc_conduit","...and 4 more"]},{"risk":"Medium","alert_type":"Absence of Anti-CSRF Tokens (1)","alert_tags":"CWE-352, OWASP 2021 A09","parameter":"","evidence":"<form method=\"post\" action=\"/password\" id=\"login_form\" accept-charset=\"UTF-8\" class=\"password-form\">","description":"No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.","solution":"Phase: Architecture and Design\nUse a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid.\nFor example, use anti-CSRF packages such as the OWASP CSRFGuard.\n\nPhase: Implementation\nEnsure that your application is free of cross-site scripting issues, because most CSRF defenses can be bypassed using attacker-controlled script.\n\nPhase: Architecture and Design\nGenerate a unique nonce for each form, place the nonce into the form, and verify the nonce upon receipt of the form. Be sure that the nonce is not predictable (CWE-330).\nNote that this can be bypassed using XSS.\n\nIdentify especially dangerous operations. When the user performs a dangerous operation, send a separate confirmation request to ensure that the user intended to perform that operation.\nNote that this can be bypassed using XSS.\n\nUse the ESAPI Session Management control.\nThis control includes a component for CSRF.\n\nDo not use the GET method for any request that triggers a state change.\n\nPhase: Implementation\nCheck the HTTP Referer header to see if the request originated from an expected page. This could break legitimate functionality, because users or proxies may have disabled sending the Referer for privacy reasons.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Informational","alert_type":"Session Management Response Identified (1)","alert_tags":"CWE--1","parameter":"_shopify_y","evidence":"56e6458b-1692-416d-8932-edebe877a478","description":"The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.","solution":"This is an informational alert rather than a vulnerability and so there is nothing to fix.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 5 more"]},{"risk":"Informational","alert_type":"Information Disclosure - Suspicious Comments (1)","alert_tags":"CWE-615, OWASP 2021 A13","parameter":"","evidence":"from","description":"The response appears to contain suspicious comments which may help an attacker.","solution":"Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.","count":4,"affected_urls":["https://thethrone.in/password","https://thethrone.in/cdn/shopifycloud/shopify/assets/storefront/load_feature-c354cc1bc6f1fafc3e06e39f4fb0e1d9abdf763072ca394d606ca9f6f241e68a.js","https://thethrone.in/cdn/shopifycloud/perf-kit/shopify-perf-kit-1.6.5.min.js","...and 1 more"]},{"risk":"Medium","alert_type":"Cross-Domain Misconfiguration (1)","alert_tags":"CWE-264, OWASP 2021 A14","parameter":"","evidence":"Access-Control-Allow-Origin: *","description":"Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.","solution":"Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).\nConfigure the \"Access-Control-Allow-Origin\" HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.","count":36,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/checkouts/internal/preloads.js?locale=en-IN","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","...and 33 more"]},{"risk":"Informational","alert_type":"Retrieved from Cache (1)","alert_tags":"CWE--1","parameter":"","evidence":"Age: 211","description":"The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.","solution":"Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:\nCache-Control: no-cache, no-store, must-revalidate, private\nPragma: no-cache\nExpires: 0\nThis configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.","count":17,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","https://thethrone.in/cdn/shop/t/2/assets/details-modal.js?v=4511761896672669691729854643","...and 14 more"]},{"risk":"Medium","alert_type":"Content Security Policy (CSP) Header Not Set (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"","evidence":"","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.","count":14,"affected_urls":["https://thethrone.in/cdn/wpm/*.js","https://thethrone.in/cdn/fonts","https://thethrone.in/cdn/shop/t/2/assets","...and 11 more"]},{"risk":"Informational","alert_type":"User Controllable HTML Element Attribute (Potential XSS) (1)","alert_tags":"CWE-20, OWASP 2021 A20","parameter":"form_type","evidence":"","description":"This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.","solution":"Validate all input and sanitize output it before writing to any HTML attributes.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Cookie without SameSite Attribute (1)","alert_tags":"CWE-1275, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.","solution":"Ensure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.","count":2,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt"]}]},"report_url":"/reports/6a084107-2eda-45b8-afbe-db9c77d1967a_https_thethrone.in.html"}]
+2025-06-05 02:32:24,177 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:32:24,206 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_6a084107-2eda-45b8-afbe-db9c77d1967a HTTP/1.1" 200 15
+2025-06-05 02:32:47,178 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:32:47,180 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:33:12,180 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:33:12,182 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:33:37,194 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:33:37,196 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:34:02,209 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:34:02,212 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:34:27,215 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:34:27,218 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:34:52,224 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:34:52,226 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:35:17,237 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:35:17,239 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:35:42,245 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:35:42,248 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:36:07,245 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:36:07,250 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:36:32,262 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:36:32,263 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:36:57,270 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:36:57,275 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:37:22,290 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:37:22,294 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:37:47,294 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:37:47,296 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:38:12,309 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:38:12,312 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:38:37,315 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:38:37,317 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:39:02,322 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:39:02,325 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:39:27,335 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:39:27,338 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:39:52,354 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:39:52,357 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:40:17,358 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:40:17,362 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:40:42,383 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:40:42,386 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:41:07,398 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:41:07,401 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:41:32,405 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:41:32,409 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:41:57,413 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:41:57,416 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:42:22,431 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:42:22,433 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:42:47,443 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:42:47,445 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Received packet PONG data 
+2025-06-05 02:43:12,467 - engineio.server - INFO - 1jTelRHLRfxsQZ_sAAAD: Sending packet PING data None
+2025-06-05 02:43:16,156 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:43:17,198 - engineio.server - INFO - 8TS7572oY6icT0qfAAAA: Sending packet OPEN data {'sid': '8TS7572oY6icT0qfAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:43:17,200 - engineio.server - INFO - 8TS7572oY6icT0qfAAAA: Received request to upgrade to websocket
+2025-06-05 02:43:17,200 - engineio.server - INFO - 8TS7572oY6icT0qfAAAA: Upgrade to websocket successful
+2025-06-05 02:43:17,204 - engineio.server - INFO - 8TS7572oY6icT0qfAAAA: Received packet MESSAGE data 0
+2025-06-05 02:43:17,206 - engineio.server - INFO - 8TS7572oY6icT0qfAAAA: Sending packet MESSAGE data 0{"sid":"dcTHORzndUL3NQl_AAAB"}
+2025-06-05 02:43:29,334 - engineio.server - INFO - AIsq9jtOzVW6seFhAAAC: Sending packet OPEN data {'sid': 'AIsq9jtOzVW6seFhAAAC', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:43:29,334 - engineio.server - INFO - AIsq9jtOzVW6seFhAAAC: Received request to upgrade to websocket
+2025-06-05 02:43:29,336 - engineio.server - INFO - AIsq9jtOzVW6seFhAAAC: Upgrade to websocket successful
+2025-06-05 02:43:29,349 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet OPEN data {'sid': 'CbW7kv4fS7JVJZGDAAAD', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:43:29,351 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Received request to upgrade to websocket
+2025-06-05 02:43:29,352 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Upgrade to websocket successful
+2025-06-05 02:43:29,625 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Received packet MESSAGE data 0
+2025-06-05 02:43:29,626 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet MESSAGE data 0{"sid":"jW7SM8v_RBf8lBslAAAE"}
+2025-06-05 02:43:54,357 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet PING data None
+2025-06-05 02:43:54,359 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Received packet PONG data 
+2025-06-05 02:44:19,358 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet PING data None
+2025-06-05 02:44:19,361 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Received packet PONG data 
+2025-06-05 02:44:20,329 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): https:443
+2025-06-05 02:44:23,197 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:44:23,204 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/stopAllScans/ HTTP/1.1" 200 15
+2025-06-05 02:44:23,208 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:44:23,217 - urllib3.connectionpool - DEBUG - https://https:443 "GET /thethrone.in HTTP/1.1" 502 266
+2025-06-05 02:44:23,219 - socketio.server - INFO - emitting event "scan_error" to jW7SM8v_RBf8lBslAAAE [/]
+2025-06-05 02:44:23,221 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet MESSAGE data 2["scan_error",{"scan_id":"4ebb2af9-925f-4d24-aeee-a27a1d1e744d","error":"Target URL is not accessible: Target returned status code: 502"}]
+2025-06-05 02:44:23,223 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/ascan/action/stopAllScans/ HTTP/1.1" 200 15
+2025-06-05 02:44:23,225 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:44:23,240 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/disableAllScanners/ HTTP/1.1" 200 15
+2025-06-05 02:44:23,245 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:44:23,279 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_4ebb2af9-925f-4d24-aeee-a27a1d1e744d HTTP/1.1" 400 52
+2025-06-05 02:44:23,281 - socketio.server - INFO - emitting event "scan_stopped" to jW7SM8v_RBf8lBslAAAE [/]
+2025-06-05 02:44:23,282 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet MESSAGE data 2["scan_stopped",{"scan_id":"4ebb2af9-925f-4d24-aeee-a27a1d1e744d","message":"Scan stopped by user","status":"stopped"}]
+2025-06-05 02:44:44,387 - engineio.server - INFO - CbW7kv4fS7JVJZGDAAAD: Sending packet PING data None
+2025-06-05 02:44:50,280 - engineio.server - INFO - Server initialized for eventlet.
+2025-06-05 02:44:59,581 - engineio.server - INFO - nbsqVEcjb2U7mwXFAAAA: Sending packet OPEN data {'sid': 'nbsqVEcjb2U7mwXFAAAA', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:44:59,582 - engineio.server - INFO - nbsqVEcjb2U7mwXFAAAA: Received request to upgrade to websocket
+2025-06-05 02:44:59,583 - engineio.server - INFO - nbsqVEcjb2U7mwXFAAAA: Upgrade to websocket successful
+2025-06-05 02:44:59,604 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet OPEN data {'sid': 'wENwjRD__QNNpb8BAAAB', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:44:59,606 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Received request to upgrade to websocket
+2025-06-05 02:44:59,607 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Upgrade to websocket successful
+2025-06-05 02:44:59,909 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Received packet MESSAGE data 0
+2025-06-05 02:44:59,911 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet MESSAGE data 0{"sid":"I5GGd9ekyZGPkO6UAAAC"}
+2025-06-05 02:45:02,905 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): thethrone.in:443
+2025-06-05 02:45:03,553 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET / HTTP/1.1" 302 0
+2025-06-05 02:45:04,302 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET /password HTTP/1.1" 200 43672
+2025-06-05 02:45:04,310 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:04,425 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/newContext/?contextName=context_0562a0ee-0d8c-4b8a-9f9c-3a119112dd91 HTTP/1.1" 200 17
+2025-06-05 02:45:04,429 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:04,442 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/includeInContext/?contextName=context_0562a0ee-0d8c-4b8a-9f9c-3a119112dd91&regex=.%2Ahttps%3A%2F%2Fthethrone.in.%2A HTTP/1.1" 200 15
+2025-06-05 02:45:04,446 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:04,450 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/scan/?url=https%3A%2F%2Fthethrone.in&contextName=context_0562a0ee-0d8c-4b8a-9f9c-3a119112dd91 HTTP/1.1" 200 12
+2025-06-05 02:45:04,452 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:04,457 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 14
+2025-06-05 02:45:04,461 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:04,466 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 14
+2025-06-05 02:45:04,468 - socketio.server - INFO - emitting event "scan_progress" to I5GGd9ekyZGPkO6UAAAC [/]
+2025-06-05 02:45:04,468 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"0562a0ee-0d8c-4b8a-9f9c-3a119112dd91","message":"Discovering site structure...","progress":0,"phase":"Spider Scan"}]
+2025-06-05 02:45:06,482 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:06,488 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=2 HTTP/1.1" 200 15
+2025-06-05 02:45:06,490 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:06,497 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/enableAllScanners/ HTTP/1.1" 200 15
+2025-06-05 02:45:06,500 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:06,505 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 23
+2025-06-05 02:45:06,509 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:06,516 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 23
+2025-06-05 02:45:06,517 - socketio.server - INFO - emitting event "scan_progress" to I5GGd9ekyZGPkO6UAAAC [/]
+2025-06-05 02:45:06,519 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"0562a0ee-0d8c-4b8a-9f9c-3a119112dd91","message":"Analyzing responses...","progress":50,"phase":"Passive Scan"}]
+2025-06-05 02:45:08,526 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:08,531 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:45:08,533 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:08,538 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 02:45:08,539 - socketio.server - INFO - emitting event "scan_progress" to I5GGd9ekyZGPkO6UAAAC [/]
+2025-06-05 02:45:08,540 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"0562a0ee-0d8c-4b8a-9f9c-3a119112dd91","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-05 02:45:10,553 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:10,556 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 02:45:10,556 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:11,183 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/core/view/alerts/ HTTP/1.1" 200 1263700
+2025-06-05 02:45:11,323 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:11,782 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET /JSON/reports/action/generate/?apikey=n9reqbm7ih7vh81e76e6cfrdce&title=Vulnerability+Scan+Report+-+https%3A%2F%2Fthethrone.in&template=risk-confidence-html&sites=https%3A%2F%2Fthethrone.in HTTP/1.1" 200 72
+2025-06-05 02:45:12,105 - socketio.server - INFO - emitting event "scan_completed" to I5GGd9ekyZGPkO6UAAAC [/]
+2025-06-05 02:45:12,106 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet MESSAGE data 2["scan_completed",{"scan_id":"0562a0ee-0d8c-4b8a-9f9c-3a119112dd91","message":"Scan Completed!","result":{"summary":{"Low":6,"Informational":5,"Medium":5},"vulnerabilities_by_type":[{"risk":"Medium","alert_type":"CSP: Failure to Define Directive with No Fallback (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=not_found&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=469b41d6-495b-4d71-b307-fc3def39c00b-1749071705; report-to shopify-csp","description":"The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":52,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 49 more"]},{"risk":"Medium","alert_type":"CSP: style-src unsafe-inline (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=not_found&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=469b41d6-495b-4d71-b307-fc3def39c00b-1749071705; report-to shopify-csp","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":52,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/admin","...and 49 more"]},{"risk":"Low","alert_type":"Timestamp Disclosure - Unix (1)","alert_tags":"CWE-497, OWASP 2021 A13","parameter":"","evidence":"1749071706","description":"A timestamp was disclosed by the application/web server. - Unix","solution":"Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.","count":91,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 88 more"]},{"risk":"Informational","alert_type":"Re-examine Cache-control Directives (1)","alert_tags":"CWE-525, OWASP 2021 A13","parameter":"cache-control","evidence":"","description":"The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.","solution":"For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".","count":3,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/apple-app-site-association"]},{"risk":"Low","alert_type":"Cookie No HttpOnly Flag (1)","alert_tags":"CWE-1004, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.","solution":"Ensure that the HttpOnly flag is set for all cookies.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/checkout","...and 5 more"]},{"risk":"Low","alert_type":"Cookie Without Secure Flag (1)","alert_tags":"CWE-614, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections.","solution":"Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted channel. Ensure that the secure flag is set for cookies containing such sensitive information.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 5 more"]},{"risk":"Low","alert_type":"Cross-Domain JavaScript Source File Inclusion (1)","alert_tags":"CWE-829, OWASP 2021 A15","parameter":"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js","evidence":"<script src=\"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js\" type=\"text/javascript\" defer=\"defer\"></script>","description":"The page includes one or more script files from a third-party domain.","solution":"Ensure JavaScript source files are loaded from only trusted sources, and the sources can't be controlled by end users of the application.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Strict-Transport-Security Header Not Set (1)","alert_tags":"CWE-319, OWASP 2021 A15","parameter":"","evidence":"","description":"HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.","count":7,"affected_urls":["https://thethrone.in/checkouts/","https://thethrone.in/.well-known/shopify/monorail","https://thethrone.in/cdn/fonts/itc_conduit","...and 4 more"]},{"risk":"Medium","alert_type":"Absence of Anti-CSRF Tokens (1)","alert_tags":"CWE-352, OWASP 2021 A09","parameter":"","evidence":"<form method=\"post\" action=\"/password\" id=\"login_form\" accept-charset=\"UTF-8\" class=\"password-form\">","description":"No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.","solution":"Phase: Architecture and Design\nUse a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid.\nFor example, use anti-CSRF packages such as the OWASP CSRFGuard.\n\nPhase: Implementation\nEnsure that your application is free of cross-site scripting issues, because most CSRF defenses can be bypassed using attacker-controlled script.\n\nPhase: Architecture and Design\nGenerate a unique nonce for each form, place the nonce into the form, and verify the nonce upon receipt of the form. Be sure that the nonce is not predictable (CWE-330).\nNote that this can be bypassed using XSS.\n\nIdentify especially dangerous operations. When the user performs a dangerous operation, send a separate confirmation request to ensure that the user intended to perform that operation.\nNote that this can be bypassed using XSS.\n\nUse the ESAPI Session Management control.\nThis control includes a component for CSRF.\n\nDo not use the GET method for any request that triggers a state change.\n\nPhase: Implementation\nCheck the HTTP Referer header to see if the request originated from an expected page. This could break legitimate functionality, because users or proxies may have disabled sending the Referer for privacy reasons.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Informational","alert_type":"Session Management Response Identified (1)","alert_tags":"CWE--1","parameter":"_shopify_y","evidence":"470FD646-d104-4497-8067-46a2efdaddce","description":"The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.","solution":"This is an informational alert rather than a vulnerability and so there is nothing to fix.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 5 more"]},{"risk":"Informational","alert_type":"Information Disclosure - Suspicious Comments (1)","alert_tags":"CWE-615, OWASP 2021 A13","parameter":"","evidence":"from","description":"The response appears to contain suspicious comments which may help an attacker.","solution":"Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.","count":4,"affected_urls":["https://thethrone.in/password","https://thethrone.in/cdn/shopifycloud/shopify/assets/storefront/load_feature-c354cc1bc6f1fafc3e06e39f4fb0e1d9abdf763072ca394d606ca9f6f241e68a.js","https://thethrone.in/cdn/shopifycloud/perf-kit/shopify-perf-kit-1.6.5.min.js","...and 1 more"]},{"risk":"Medium","alert_type":"Cross-Domain Misconfiguration (1)","alert_tags":"CWE-264, OWASP 2021 A14","parameter":"","evidence":"Access-Control-Allow-Origin: *","description":"Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.","solution":"Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).\nConfigure the \"Access-Control-Allow-Origin\" HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.","count":36,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/checkouts/internal/preloads.js?locale=en-IN","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","...and 33 more"]},{"risk":"Informational","alert_type":"Retrieved from Cache (1)","alert_tags":"CWE--1","parameter":"","evidence":"Age: 138353","description":"The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.","solution":"Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:\nCache-Control: no-cache, no-store, must-revalidate, private\nPragma: no-cache\nExpires: 0\nThis configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.","count":19,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","https://thethrone.in/cdn/shop/t/2/assets/details-modal.js?v=4511761896672669691729854643","...and 16 more"]},{"risk":"Medium","alert_type":"Content Security Policy (CSP) Header Not Set (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"","evidence":"","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.","count":14,"affected_urls":["https://thethrone.in/cdn/wpm/*.js","https://thethrone.in/cdn/fonts","https://thethrone.in/cdn/shop/t/2/assets","...and 11 more"]},{"risk":"Informational","alert_type":"User Controllable HTML Element Attribute (Potential XSS) (1)","alert_tags":"CWE-20, OWASP 2021 A20","parameter":"form_type","evidence":"","description":"This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.","solution":"Validate all input and sanitize output it before writing to any HTML attributes.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Cookie without SameSite Attribute (1)","alert_tags":"CWE-1275, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.","solution":"Ensure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.","count":2,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt"]}]},"report_url":"/reports/0562a0ee-0d8c-4b8a-9f9c-3a119112dd91_https_thethrone.in.html"}]
+2025-06-05 02:45:12,114 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 02:45:12,136 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_0562a0ee-0d8c-4b8a-9f9c-3a119112dd91 HTTP/1.1" 200 15
+2025-06-05 02:45:24,606 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet PING data None
+2025-06-05 02:45:24,613 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Received packet PONG data 
+2025-06-05 02:45:49,629 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet PING data None
+2025-06-05 02:45:49,631 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Received packet PONG data 
+2025-06-05 02:46:14,632 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Sending packet PING data None
+2025-06-05 02:46:14,634 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Received packet PONG data 
+2025-06-05 02:46:30,685 - engineio.server - INFO - wENwjRD__QNNpb8BAAAB: Received packet MESSAGE data 1
+2025-06-05 02:46:37,078 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-05 02:46:37,198 - networkscan - ERROR - Error getting active scans: 'DatabaseHandler' object does not support the context manager protocol
+2025-06-05 02:46:37,200 - networkscan - DEBUG - Generated new scan ID: 1bc3c200-b5a3-4968-98ef-75247fe001a6
+2025-06-05 02:46:37,200 - database - INFO - Creating new scan record for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6
+2025-06-05 02:46:37,296 - database - INFO - Successfully created scan record for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6
+2025-06-05 02:46:37,297 - networkscan - INFO - Starting scan task for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6, ip: 8.8.8.8
+2025-06-05 02:46:37,297 - database - INFO - Updating scan status for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6 to running
+2025-06-05 02:46:37,392 - database - INFO - Successfully updated scan status for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6
+2025-06-05 02:46:37,393 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-05 02:46:37,395 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-05 02:46:37,396 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-05 02:48:12,341 - database - ERROR - Database connection error: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2025-06-05 02:48:12,342 - database - ERROR - Error getting scan by ID: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2025-06-05 02:48:12,360 - networkscan - DEBUG - Raw Nmap output:
+2025-06-05 02:48:12,361 - networkscan - DEBUG - Starting Nmap 7.97 ( https://nmap.org ) at 2025-06-05 02:46 +0530
+Nmap scan report for dns.google (8.8.8.8)
+Host is up (0.059s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT    STATE SERVICE    VERSION
+53/tcp  open  tcpwrapped
+443/tcp open  ssl/https?
+| ssl-cert: Subject: commonName=dns.google
+| Subject Alternative Name: DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64
+| Not valid before: 2025-05-12T08:44:48
+|_Not valid after:  2025-08-04T08:44:47
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 94.43 seconds
+
+2025-06-05 02:48:12,363 - networkscan - DEBUG - Nmap scan completed successfully
+2025-06-05 02:48:12,363 - networkscan - DEBUG - Parsing Nmap output
+2025-06-05 02:48:12,366 - networkscan - DEBUG - Parsed 1 hosts, 1 up
+2025-06-05 02:48:12,366 - networkscan - DEBUG - Parsed results:
+2025-06-05 02:48:12,367 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-05T02:48:12.365495"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.059"
+    }
+  ],
+  "scan_time": "94.43s"
+}
+2025-06-05 02:48:12,369 - networkscan - DEBUG - Parsed scan results:
+2025-06-05 02:48:12,370 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-05T02:48:12.365495"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.059"
+    }
+  ],
+  "scan_time": "94.43s"
+}
+2025-06-05 02:48:12,371 - database - INFO - Updating scan status for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6 to completed
+2025-06-05 02:48:12,555 - database - INFO - Successfully updated scan status for scan_id: 1bc3c200-b5a3-4968-98ef-75247fe001a6
+2025-06-05 02:48:49,536 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet OPEN data {'sid': '67BKTwaLQ53XiQGhAAAD', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:48:49,537 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received request to upgrade to websocket
+2025-06-05 02:48:49,537 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Upgrade to websocket successful
+2025-06-05 02:48:49,546 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet MESSAGE data 0
+2025-06-05 02:48:49,547 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet MESSAGE data 0{"sid":"s78D9iurvdYAIJ6pAAAE"}
+2025-06-05 02:49:14,551 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:49:14,553 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:49:39,565 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:49:39,567 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:50:04,582 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:50:04,583 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:50:29,608 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:50:29,610 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:50:54,615 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:50:54,618 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:51:19,620 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:51:19,623 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:51:44,628 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:51:44,631 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:52:09,655 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:52:09,659 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:52:34,679 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Sending packet PING data None
+2025-06-05 02:52:34,682 - engineio.server - INFO - 67BKTwaLQ53XiQGhAAAD: Received packet PONG data 
+2025-06-05 02:52:49,289 - engineio.server - INFO - m-BmFhsjCrn4XUG0AAAF: Sending packet OPEN data {'sid': 'm-BmFhsjCrn4XUG0AAAF', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:52:49,291 - engineio.server - INFO - m-BmFhsjCrn4XUG0AAAF: Received request to upgrade to websocket
+2025-06-05 02:52:49,293 - engineio.server - INFO - m-BmFhsjCrn4XUG0AAAF: Upgrade to websocket successful
+2025-06-05 02:52:49,308 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Sending packet OPEN data {'sid': 'ahXLUZQwI1aZVmCwAAAG', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:52:49,309 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Received request to upgrade to websocket
+2025-06-05 02:52:49,311 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Upgrade to websocket successful
+2025-06-05 02:52:49,702 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Received packet MESSAGE data 0
+2025-06-05 02:52:49,704 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Sending packet MESSAGE data 0{"sid":"ECw36U6oQJzXxtUXAAAH"}
+2025-06-05 02:53:14,300 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Sending packet PING data None
+2025-06-05 02:53:14,304 - engineio.server - INFO - ahXLUZQwI1aZVmCwAAAG: Received packet PONG data 
+2025-06-05 02:53:34,799 - engineio.server - INFO - ehU3iWrzKuhSkjoIAAAI: Sending packet OPEN data {'sid': 'ehU3iWrzKuhSkjoIAAAI', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:53:34,800 - engineio.server - INFO - ehU3iWrzKuhSkjoIAAAI: Received request to upgrade to websocket
+2025-06-05 02:53:34,802 - engineio.server - INFO - ehU3iWrzKuhSkjoIAAAI: Upgrade to websocket successful
+2025-06-05 02:53:34,815 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Sending packet OPEN data {'sid': 'fLtCZGnUAtzczl2yAAAJ', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:53:34,816 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Received request to upgrade to websocket
+2025-06-05 02:53:34,818 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Upgrade to websocket successful
+2025-06-05 02:53:35,255 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Received packet MESSAGE data 0
+2025-06-05 02:53:35,257 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Sending packet MESSAGE data 0{"sid":"djreTfy3pzZj9wLQAAAK"}
+2025-06-05 02:53:59,822 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Sending packet PING data None
+2025-06-05 02:53:59,826 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Received packet PONG data 
+2025-06-05 02:54:24,839 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Sending packet PING data None
+2025-06-05 02:54:24,842 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Received packet PONG data 
+2025-06-05 02:54:41,106 - engineio.server - INFO - fLtCZGnUAtzczl2yAAAJ: Received packet MESSAGE data 1
+2025-06-05 02:54:41,117 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Sending packet OPEN data {'sid': 'DcjUHu6B7SxKQRUMAAAL', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:54:41,118 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Received request to upgrade to websocket
+2025-06-05 02:54:41,120 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Upgrade to websocket successful
+2025-06-05 02:54:41,124 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Received packet MESSAGE data 0
+2025-06-05 02:54:41,126 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Sending packet MESSAGE data 0{"sid":"dIVIEvcmqTgdUfzGAAAM"}
+2025-06-05 02:55:06,132 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Sending packet PING data None
+2025-06-05 02:55:06,137 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Received packet PONG data 
+2025-06-05 02:55:31,152 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Sending packet PING data None
+2025-06-05 02:55:31,158 - engineio.server - INFO - DcjUHu6B7SxKQRUMAAAL: Received packet PONG data 
+2025-06-05 02:55:52,737 - engineio.server - INFO - E4VRIoKqiZ9jeGGFAAAN: Sending packet OPEN data {'sid': 'E4VRIoKqiZ9jeGGFAAAN', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:55:52,738 - engineio.server - INFO - E4VRIoKqiZ9jeGGFAAAN: Received request to upgrade to websocket
+2025-06-05 02:55:52,739 - engineio.server - INFO - E4VRIoKqiZ9jeGGFAAAN: Upgrade to websocket successful
+2025-06-05 02:55:52,755 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Sending packet OPEN data {'sid': 'WLv3hZTE1_BFl_v4AAAO', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:55:52,757 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Received request to upgrade to websocket
+2025-06-05 02:55:52,758 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Upgrade to websocket successful
+2025-06-05 02:55:53,195 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Received packet MESSAGE data 0
+2025-06-05 02:55:53,198 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Sending packet MESSAGE data 0{"sid":"EBa7pQiZb7Gym7XLAAAP"}
+2025-06-05 02:56:17,755 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Sending packet PING data None
+2025-06-05 02:56:17,758 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Received packet PONG data 
+2025-06-05 02:56:42,768 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Sending packet PING data None
+2025-06-05 02:56:42,771 - engineio.server - INFO - WLv3hZTE1_BFl_v4AAAO: Received packet PONG data 
+2025-06-05 02:56:54,248 - engineio.server - INFO - HuLkCFAuAUNu9TLaAAAQ: Sending packet OPEN data {'sid': 'HuLkCFAuAUNu9TLaAAAQ', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:56:54,249 - engineio.server - INFO - HuLkCFAuAUNu9TLaAAAQ: Received request to upgrade to websocket
+2025-06-05 02:56:54,250 - engineio.server - INFO - HuLkCFAuAUNu9TLaAAAQ: Upgrade to websocket successful
+2025-06-05 02:56:54,265 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Sending packet OPEN data {'sid': 'pil48X0NnJkoFLrYAAAR', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:56:54,267 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Received request to upgrade to websocket
+2025-06-05 02:56:54,268 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Upgrade to websocket successful
+2025-06-05 02:56:54,664 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Received packet MESSAGE data 0
+2025-06-05 02:56:54,665 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Sending packet MESSAGE data 0{"sid":"IbefURCVeT-ub5hWAAAS"}
+2025-06-05 02:57:19,281 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Sending packet PING data None
+2025-06-05 02:57:19,284 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Received packet PONG data 
+2025-06-05 02:57:44,300 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Sending packet PING data None
+2025-06-05 02:57:44,303 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Received packet PONG data 
+2025-06-05 02:58:09,321 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Sending packet PING data None
+2025-06-05 02:58:09,323 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Received packet PONG data 
+2025-06-05 02:58:34,341 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Sending packet PING data None
+2025-06-05 02:58:34,345 - engineio.server - INFO - pil48X0NnJkoFLrYAAAR: Received packet PONG data 
+2025-06-05 02:58:45,278 - engineio.server - INFO - C_NcolEU4ymhxNqVAAAT: Sending packet OPEN data {'sid': 'C_NcolEU4ymhxNqVAAAT', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:58:45,280 - engineio.server - INFO - C_NcolEU4ymhxNqVAAAT: Received request to upgrade to websocket
+2025-06-05 02:58:45,281 - engineio.server - INFO - C_NcolEU4ymhxNqVAAAT: Upgrade to websocket successful
+2025-06-05 02:58:45,303 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Sending packet OPEN data {'sid': 'H1Z-BtK3nx-6nB8YAAAU', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:58:45,304 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Received request to upgrade to websocket
+2025-06-05 02:58:45,305 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Upgrade to websocket successful
+2025-06-05 02:58:45,638 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Received packet MESSAGE data 0
+2025-06-05 02:58:45,640 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Sending packet MESSAGE data 0{"sid":"eIiymO4-hkHY7zfNAAAV"}
+2025-06-05 02:59:10,305 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Sending packet PING data None
+2025-06-05 02:59:10,306 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Received packet PONG data 
+2025-06-05 02:59:35,316 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Sending packet PING data None
+2025-06-05 02:59:35,319 - engineio.server - INFO - H1Z-BtK3nx-6nB8YAAAU: Received packet PONG data 
+2025-06-05 02:59:51,260 - engineio.server - INFO - HPPUSnINPN6OeijhAAAW: Sending packet OPEN data {'sid': 'HPPUSnINPN6OeijhAAAW', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:59:51,261 - engineio.server - INFO - HPPUSnINPN6OeijhAAAW: Received request to upgrade to websocket
+2025-06-05 02:59:51,262 - engineio.server - INFO - HPPUSnINPN6OeijhAAAW: Upgrade to websocket successful
+2025-06-05 02:59:51,283 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet OPEN data {'sid': 't7PlLi8hgAuzmEW1AAAX', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 02:59:51,284 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received request to upgrade to websocket
+2025-06-05 02:59:51,286 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Upgrade to websocket successful
+2025-06-05 02:59:51,817 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet MESSAGE data 0
+2025-06-05 02:59:51,818 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 0{"sid":"7u95-j5D_KdyUKNjAAAY"}
+2025-06-05 03:00:12,939 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): thethrone.in:443
+2025-06-05 03:00:16,303 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:00:16,306 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:00:16,998 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET / HTTP/1.1" 302 0
+2025-06-05 03:00:17,549 - urllib3.connectionpool - DEBUG - https://thethrone.in:443 "GET /password HTTP/1.1" 200 43672
+2025-06-05 03:00:17,560 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:17,893 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/newContext/?contextName=context_7d0b5a0b-203f-4fbd-b251-321038747b98 HTTP/1.1" 200 17
+2025-06-05 03:00:17,898 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:17,918 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/includeInContext/?contextName=context_7d0b5a0b-203f-4fbd-b251-321038747b98&regex=.%2Ahttps%3A%2F%2Fthethrone.in.%2A HTTP/1.1" 200 15
+2025-06-05 03:00:17,922 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:17,933 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/scan/?url=https%3A%2F%2Fthethrone.in&contextName=context_7d0b5a0b-203f-4fbd-b251-321038747b98 HTTP/1.1" 200 12
+2025-06-05 03:00:17,936 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:17,942 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=3 HTTP/1.1" 200 14
+2025-06-05 03:00:17,945 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:17,951 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=3 HTTP/1.1" 200 14
+2025-06-05 03:00:17,953 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:00:17,954 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"7d0b5a0b-203f-4fbd-b251-321038747b98","message":"Discovering site structure...","progress":0,"phase":"Spider Scan"}]
+2025-06-05 03:00:19,958 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:19,963 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=3 HTTP/1.1" 200 15
+2025-06-05 03:00:19,965 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:19,970 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/enableAllScanners/ HTTP/1.1" 200 15
+2025-06-05 03:00:19,973 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:19,978 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 03:00:19,982 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:19,986 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 03:00:19,987 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:00:19,988 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"7d0b5a0b-203f-4fbd-b251-321038747b98","message":"Analyzing responses...","progress":83,"phase":"Passive Scan"}]
+2025-06-05 03:00:21,998 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:22,003 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 03:00:22,006 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:22,012 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 22
+2025-06-05 03:00:22,013 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:00:22,015 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"7d0b5a0b-203f-4fbd-b251-321038747b98","message":"Analyzing responses...","progress":84,"phase":"Passive Scan"}]
+2025-06-05 03:00:24,033 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:24,038 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 03:00:24,040 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:24,045 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 03:00:24,046 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:00:24,047 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"7d0b5a0b-203f-4fbd-b251-321038747b98","message":"Analyzing responses...","progress":95,"phase":"Passive Scan"}]
+2025-06-05 03:00:26,062 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:26,066 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 03:00:26,068 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:26,833 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/core/view/alerts/ HTTP/1.1" 200 1519311
+2025-06-05 03:00:26,986 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:27,307 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET /JSON/reports/action/generate/?apikey=n9reqbm7ih7vh81e76e6cfrdce&title=Vulnerability+Scan+Report+-+https%3A%2F%2Fthethrone.in&template=risk-confidence-html&sites=https%3A%2F%2Fthethrone.in HTTP/1.1" 200 72
+2025-06-05 03:00:27,664 - socketio.server - INFO - emitting event "scan_completed" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:00:27,667 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_completed",{"scan_id":"7d0b5a0b-203f-4fbd-b251-321038747b98","message":"Scan Completed!","result":{"summary":{"Low":6,"Informational":5,"Medium":5},"vulnerabilities_by_type":[{"risk":"Medium","alert_type":"CSP: Failure to Define Directive with No Fallback (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=not_found&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=66ea3316-5a09-42f2-833f-d7ff53a8d68b-1749072619; report-to shopify-csp","description":"The Content Security Policy fails to define one of the directives that has no fallback. Missing/excluding them is the same as allowing anything.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":52,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 49 more"]},{"risk":"Medium","alert_type":"CSP: style-src unsafe-inline (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"content-security-policy","evidence":"block-all-mixed-content; frame-ancestors 'none'; upgrade-insecure-requests; report-uri /csp-report?source%5Baction%5D=not_found&source%5Bapp%5D=Shopify&source%5Bcontroller%5D=storefront_section%2Fshop&source%5Bsection%5D=storefront&source%5Buuid%5D=66ea3316-5a09-42f2-833f-d7ff53a8d68b-1749072619; report-to shopify-csp","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks. Including (but not limited to) Cross Site Scripting (XSS), and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is properly configured to set the Content-Security-Policy header.","count":52,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/admin","...and 49 more"]},{"risk":"Low","alert_type":"Timestamp Disclosure - Unix (1)","alert_tags":"CWE-497, OWASP 2021 A13","parameter":"","evidence":"1749072620","description":"A timestamp was disclosed by the application/web server. - Unix","solution":"Manually confirm that the timestamp data is not sensitive, and that the data cannot be aggregated to disclose exploitable patterns.","count":91,"affected_urls":["https://thethrone.in/","https://thethrone.in/password","https://thethrone.in/sitemap.xml","...and 88 more"]},{"risk":"Informational","alert_type":"Re-examine Cache-control Directives (1)","alert_tags":"CWE-525, OWASP 2021 A13","parameter":"cache-control","evidence":"","description":"The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.","solution":"For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".","count":3,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/apple-app-site-association"]},{"risk":"Low","alert_type":"Cookie No HttpOnly Flag (1)","alert_tags":"CWE-1004, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the HttpOnly flag, which means that the cookie can be accessed by JavaScript. If a malicious script can be run on this page then the cookie will be accessible and can be transmitted to another site. If this is a session cookie then session hijacking may be possible.","solution":"Ensure that the HttpOnly flag is set for all cookies.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/checkout","...and 5 more"]},{"risk":"Low","alert_type":"Cookie Without Secure Flag (1)","alert_tags":"CWE-614, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the secure flag, which means that the cookie can be accessed via unencrypted connections.","solution":"Whenever a cookie contains sensitive information or is a session token, then it should always be passed using an encrypted channel. Ensure that the secure flag is set for cookies containing such sensitive information.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 5 more"]},{"risk":"Low","alert_type":"Cross-Domain JavaScript Source File Inclusion (1)","alert_tags":"CWE-829, OWASP 2021 A15","parameter":"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js","evidence":"<script src=\"https://cdn.shopify.com/extensions/e6c5fec5-4d9b-4eb0-80ab-1580a8c69cf2/essential-countdown-29/assets/countdown_timer_essential_apps.min.js\" type=\"text/javascript\" defer=\"defer\"></script>","description":"The page includes one or more script files from a third-party domain.","solution":"Ensure JavaScript source files are loaded from only trusted sources, and the sources can't be controlled by end users of the application.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Strict-Transport-Security Header Not Set (1)","alert_tags":"CWE-319, OWASP 2021 A15","parameter":"","evidence":"","description":"HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.","count":7,"affected_urls":["https://thethrone.in/checkouts/","https://thethrone.in/.well-known/shopify/monorail","https://thethrone.in/cdn/fonts/itc_conduit","...and 4 more"]},{"risk":"Medium","alert_type":"Absence of Anti-CSRF Tokens (1)","alert_tags":"CWE-352, OWASP 2021 A09","parameter":"","evidence":"<form method=\"post\" action=\"/password\" id=\"login_form\" accept-charset=\"UTF-8\" class=\"password-form\">","description":"No Anti-CSRF tokens were found in a HTML submission form.\nA cross-site request forgery is an attack that involves forcing a victim to send an HTTP request to a target destination without their knowledge or intent in order to perform an action as the victim. The underlying cause is application functionality using predictable URL/form actions in a repeatable way. The nature of the attack is that CSRF exploits the trust that a web site has for a user. By contrast, cross-site scripting (XSS) exploits the trust that a user has for a web site. Like XSS, CSRF attacks are not necessarily cross-site, but they can be. Cross-site request forgery is also known as CSRF, XSRF, one-click attack, session riding, confused deputy, and sea surf.\n\nCSRF attacks are effective in a number of situations, including:\n    * The victim has an active session on the target site.\n    * The victim is authenticated via HTTP auth on the target site.\n    * The victim is on the same local network as the target site.\n\nCSRF has primarily been used to perform an action against a target site using the victim's privileges, but recent techniques have been discovered to disclose information by gaining access to the response. The risk of information disclosure is dramatically increased when the target site is vulnerable to XSS, because XSS can be used as a platform for CSRF, allowing the attack to operate within the bounds of the same-origin policy.","solution":"Phase: Architecture and Design\nUse a vetted library or framework that does not allow this weakness to occur or provides constructs that make this weakness easier to avoid.\nFor example, use anti-CSRF packages such as the OWASP CSRFGuard.\n\nPhase: Implementation\nEnsure that your application is free of cross-site scripting issues, because most CSRF defenses can be bypassed using attacker-controlled script.\n\nPhase: Architecture and Design\nGenerate a unique nonce for each form, place the nonce into the form, and verify the nonce upon receipt of the form. Be sure that the nonce is not predictable (CWE-330).\nNote that this can be bypassed using XSS.\n\nIdentify especially dangerous operations. When the user performs a dangerous operation, send a separate confirmation request to ensure that the user intended to perform that operation.\nNote that this can be bypassed using XSS.\n\nUse the ESAPI Session Management control.\nThis control includes a component for CSRF.\n\nDo not use the GET method for any request that triggers a state change.\n\nPhase: Implementation\nCheck the HTTP Referer header to see if the request originated from an expected page. This could break legitimate functionality, because users or proxies may have disabled sending the Referer for privacy reasons.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Informational","alert_type":"Session Management Response Identified (1)","alert_tags":"CWE--1","parameter":"_shopify_y","evidence":"11F9EDA0-5086-450E-a88f-4ea46c1edc95","description":"The given response has been identified as containing a session management token. The 'Other Info' field contains a set of header tokens that can be used in the Header Based Session Management Method. If the request is in a context which has a Session Management Method set to \"Auto-Detect\" then this rule will change the session management to use the tokens identified.","solution":"This is an informational alert rather than a vulnerability and so there is nothing to fix.","count":8,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt","https://thethrone.in/90059702582/checkouts","...and 5 more"]},{"risk":"Informational","alert_type":"Information Disclosure - Suspicious Comments (1)","alert_tags":"CWE-615, OWASP 2021 A13","parameter":"","evidence":"from","description":"The response appears to contain suspicious comments which may help an attacker.","solution":"Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.","count":4,"affected_urls":["https://thethrone.in/password","https://thethrone.in/cdn/shopifycloud/shopify/assets/storefront/load_feature-c354cc1bc6f1fafc3e06e39f4fb0e1d9abdf763072ca394d606ca9f6f241e68a.js","https://thethrone.in/cdn/shopifycloud/perf-kit/shopify-perf-kit-1.6.5.min.js","...and 1 more"]},{"risk":"Medium","alert_type":"Cross-Domain Misconfiguration (1)","alert_tags":"CWE-264, OWASP 2021 A14","parameter":"","evidence":"Access-Control-Allow-Origin: *","description":"Web browser data loading may be possible, due to a Cross Origin Resource Sharing (CORS) misconfiguration on the web server.","solution":"Ensure that sensitive data is not available in an unauthenticated manner (using IP address white-listing, for instance).\nConfigure the \"Access-Control-Allow-Origin\" HTTP header to a more restrictive set of domains, or remove all CORS headers entirely, to allow the web browser to enforce the Same Origin Policy (SOP) in a more restrictive manner.","count":36,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/checkouts/internal/preloads.js?locale=en-IN","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","...and 33 more"]},{"risk":"Informational","alert_type":"Retrieved from Cache (1)","alert_tags":"CWE--1","parameter":"","evidence":"Age: 1895","description":"The content was retrieved from a shared cache. If the response data is sensitive, personal or user-specific, this may result in sensitive information being leaked. In some cases, this may even result in a user gaining complete control of the session of another user, depending on the configuration of the caching components in use in their environment. This is primarily an issue where caching servers such as \"proxy\" caches are configured on the local network. This configuration is typically found in corporate or educational environments, for instance.","solution":"Validate that the response does not contain sensitive, personal or user-specific information. If it does, consider the use of the following HTTP response headers, to limit, or prevent the content being stored and retrieved from the cache by another user:\nCache-Control: no-cache, no-store, must-revalidate, private\nPragma: no-cache\nExpires: 0\nThis configuration directs both HTTP 1.0 and HTTP 1.1 compliant caching servers to not store the response, and to not retrieve the response (without validation) from the cache, in response to a similar request.","count":21,"affected_urls":["https://thethrone.in/cdn/fonts/itc_conduit/itcconduit_n4.74d701728622389ea87b0cb5e6601dcabf9ce553.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=30f48bf621c63efb09c61e9f77daddad8256838f83e3610329142ed33768ea4a","https://thethrone.in/cdn/fonts/oswald/oswald_n4.a5ee385bde39969d807f7f1297bf51d73fbf3c1e.woff2?h1=ZDAxZXYwLWpqLmFjY291bnQubXlzaG9waWZ5LmNvbQ&h2=dGhldGhyb25lLmlu&hmac=d8da3437ca33029e228d4550a48ef1d23da8d2faed4c4013df773bd222543136","https://thethrone.in/cdn/shop/t/2/assets/details-modal.js?v=4511761896672669691729854643","...and 18 more"]},{"risk":"Medium","alert_type":"Content Security Policy (CSP) Header Not Set (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"","evidence":"","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.","count":14,"affected_urls":["https://thethrone.in/cdn/wpm/*.js","https://thethrone.in/cdn/fonts","https://thethrone.in/cdn/shop/t/2/assets","...and 11 more"]},{"risk":"Informational","alert_type":"User Controllable HTML Element Attribute (Potential XSS) (1)","alert_tags":"CWE-20, OWASP 2021 A20","parameter":"form_type","evidence":"","description":"This check looks at user-supplied input in query string parameters and POST data to identify where certain HTML attribute values might be controlled. This provides hot-spot detection for XSS (cross-site scripting) that will require further review by a security analyst to determine exploitability.","solution":"Validate all input and sanitize output it before writing to any HTML attributes.","count":1,"affected_urls":["https://thethrone.in/password"]},{"risk":"Low","alert_type":"Cookie without SameSite Attribute (1)","alert_tags":"CWE-1275, OWASP 2021 A13","parameter":"localization","evidence":"set-cookie: localization","description":"A cookie has been set without the SameSite attribute, which means that the cookie can be sent as a result of a 'cross-site' request. The SameSite attribute is an effective counter measure to cross-site request forgery, cross-site script inclusion, and timing attacks.","solution":"Ensure that the SameSite attribute is set to either 'lax' or ideally 'strict' for all cookies.","count":2,"affected_urls":["https://thethrone.in/password","https://thethrone.in/robots.txt"]}]},"report_url":"/reports/7d0b5a0b-203f-4fbd-b251-321038747b98_https_thethrone.in.html"}]
+2025-06-05 03:00:27,676 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:00:27,698 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_7d0b5a0b-203f-4fbd-b251-321038747b98 HTTP/1.1" 200 15
+2025-06-05 03:00:41,310 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:00:41,317 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:01:06,334 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:01:06,338 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:01:31,349 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:01:31,353 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:01:56,361 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:01:56,364 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:02:21,379 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:02:21,382 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:02:33,344 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): vas.virtuelity.com:443
+2025-06-05 03:02:34,941 - urllib3.connectionpool - DEBUG - https://vas.virtuelity.com:443 "GET / HTTP/1.1" 200 464
+2025-06-05 03:02:34,944 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:35,065 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/newContext/?contextName=context_dbf574da-0874-4a8a-a24d-c62aed69b001 HTTP/1.1" 200 17
+2025-06-05 03:02:35,071 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:35,084 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/includeInContext/?contextName=context_dbf574da-0874-4a8a-a24d-c62aed69b001&regex=.%2Ahttps%3A%2F%2Fvas.virtuelity.com.%2A HTTP/1.1" 200 15
+2025-06-05 03:02:35,088 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:35,093 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/action/scan/?url=https%3A%2F%2Fvas.virtuelity.com&contextName=context_dbf574da-0874-4a8a-a24d-c62aed69b001 HTTP/1.1" 200 12
+2025-06-05 03:02:35,095 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:35,099 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=4 HTTP/1.1" 200 14
+2025-06-05 03:02:35,104 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:35,110 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=4 HTTP/1.1" 200 14
+2025-06-05 03:02:35,110 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:02:35,113 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"dbf574da-0874-4a8a-a24d-c62aed69b001","message":"Discovering site structure...","progress":0,"phase":"Spider Scan"}]
+2025-06-05 03:02:37,126 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:37,129 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=4 HTTP/1.1" 200 15
+2025-06-05 03:02:37,132 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:37,136 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=4 HTTP/1.1" 200 15
+2025-06-05 03:02:37,137 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:02:37,138 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"dbf574da-0874-4a8a-a24d-c62aed69b001","message":"Discovering site structure...","progress":57,"phase":"Spider Scan"}]
+2025-06-05 03:02:39,140 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:39,145 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/spider/view/status/?scanId=4 HTTP/1.1" 200 15
+2025-06-05 03:02:39,148 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:39,173 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/action/enableAllScanners/ HTTP/1.1" 200 15
+2025-06-05 03:02:39,177 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:39,184 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 03:02:39,187 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:39,191 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 03:02:39,192 - socketio.server - INFO - emitting event "scan_progress" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:02:39,193 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_progress",{"scan_id":"dbf574da-0874-4a8a-a24d-c62aed69b001","message":"Analyzing responses...","progress":95,"phase":"Passive Scan"}]
+2025-06-05 03:02:41,207 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:41,211 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/pscan/view/recordsToScan/ HTTP/1.1" 200 21
+2025-06-05 03:02:41,213 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:41,876 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/core/view/alerts/ HTTP/1.1" 200 1568792
+2025-06-05 03:02:42,010 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:42,146 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET /JSON/reports/action/generate/?apikey=n9reqbm7ih7vh81e76e6cfrdce&title=Vulnerability+Scan+Report+-+https%3A%2F%2Fvas.virtuelity.com&template=risk-confidence-html&sites=https%3A%2F%2Fvas.virtuelity.com HTTP/1.1" 200 78
+2025-06-05 03:02:42,264 - socketio.server - INFO - emitting event "scan_completed" to 7u95-j5D_KdyUKNjAAAY [/]
+2025-06-05 03:02:42,265 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet MESSAGE data 2["scan_completed",{"scan_id":"dbf574da-0874-4a8a-a24d-c62aed69b001","message":"Scan Completed!","result":{"summary":{"Low":2,"Informational":3,"Medium":2},"vulnerabilities_by_type":[{"risk":"Medium","alert_type":"Missing Anti-clickjacking Header (1)","alert_tags":"CWE-1021, OWASP 2021 A15","parameter":"x-frame-options","evidence":"","description":"The response does not protect against 'ClickJacking' attacks. It should include either Content-Security-Policy with 'frame-ancestors' directive or X-Frame-Options.","solution":"Modern Web browsers support the Content-Security-Policy and X-Frame-Options HTTP headers. Ensure one of them is set on all web pages returned by your site/app.\nIf you expect the page to be framed only by pages on your server (e.g. it's part of a FRAMESET) then you'll want to use SAMEORIGIN, otherwise if you never expect the page to be framed, you should use DENY. Alternatively consider implementing Content Security Policy's \"frame-ancestors\" directive.","count":4,"affected_urls":["https://vas.virtuelity.com/","https://vas.virtuelity.com/sitemap.xml","https://vas.virtuelity.com","...and 1 more"]},{"risk":"Informational","alert_type":"Re-examine Cache-control Directives (1)","alert_tags":"CWE-525, OWASP 2021 A13","parameter":"cache-control","evidence":"","description":"The cache-control header has not been set properly or is missing, allowing the browser and proxies to cache content. For static assets like css, js, or image files this might be intended, however, the resources should be reviewed to ensure that no sensitive content will be cached.","solution":"For secure content, ensure the cache-control HTTP header is set with \"no-cache, no-store, must-revalidate\". If an asset should be cached consider setting the directives \"public, max-age, immutable\".","count":4,"affected_urls":["https://vas.virtuelity.com/","https://vas.virtuelity.com/robots.txt","https://vas.virtuelity.com/sitemap.xml","...and 1 more"]},{"risk":"Medium","alert_type":"Content Security Policy (CSP) Header Not Set (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"","evidence":"","description":"Content Security Policy (CSP) is an added layer of security that helps to detect and mitigate certain types of attacks, including Cross Site Scripting (XSS) and data injection attacks. These attacks are used for everything from data theft to site defacement or distribution of malware. CSP provides a set of standard HTTP headers that allow website owners to declare approved sources of content that browsers should be allowed to load on that page \u2014 covered types are JavaScript, CSS, HTML frames, fonts, images and embeddable objects such as Java applets, ActiveX, audio and video files.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to set the Content-Security-Policy header.","count":4,"affected_urls":["https://vas.virtuelity.com/","https://vas.virtuelity.com/sitemap.xml","https://vas.virtuelity.com","...and 1 more"]},{"risk":"Informational","alert_type":"Modern Web Application (1)","alert_tags":"CWE--1","parameter":"","evidence":"<script type=\"module\" crossorigin src=\"/assets/index-Bn7bp2XH.js\"></script>","description":"The application appears to be a modern web application. If you need to explore it automatically then the Ajax Spider may well be more effective than the standard one.","solution":"This is an informational alert and so no changes are required.","count":4,"affected_urls":["https://vas.virtuelity.com/","https://vas.virtuelity.com","https://vas.virtuelity.com/robots.txt","...and 1 more"]},{"risk":"Low","alert_type":"Strict-Transport-Security Header Not Set (1)","alert_tags":"CWE-319, OWASP 2021 A15","parameter":"","evidence":"","description":"HTTP Strict Transport Security (HSTS) is a web security policy mechanism whereby a web server declares that complying user agents (such as a web browser) are to interact with it using only secure HTTPS connections (i.e. HTTP layered over TLS/SSL). HSTS is an IETF standards track protocol and is specified in RFC 6797.","solution":"Ensure that your web server, application server, load balancer, etc. is configured to enforce Strict-Transport-Security.","count":8,"affected_urls":["https://vas.virtuelity.com/","https://vas.virtuelity.com","https://vas.virtuelity.com/robots.txt","...and 5 more"]},{"risk":"Low","alert_type":"X-Content-Type-Options Header Missing (1)","alert_tags":"CWE-693, OWASP 2021 A15","parameter":"x-content-type-options","evidence":"","description":"The Anti-MIME-Sniffing header X-Content-Type-Options was not set to 'nosniff'. This allows older versions of Internet Explorer and Chrome to perform MIME-sniffing on the response body, potentially causing the response body to be interpreted and displayed as a content type other than the declared content type. Current (early 2014) and legacy versions of Firefox will use the declared content type (if one is set), rather than performing MIME-sniffing.","solution":"Ensure that the application/web server sets the Content-Type header appropriately, and that it sets the X-Content-Type-Options header to 'nosniff' for all web pages.\nIf possible, ensure that the end user uses a standards-compliant and modern web browser that does not perform MIME-sniffing at all, or that can be directed by the web application/web server to not perform MIME-sniffing.","count":7,"affected_urls":["https://vas.virtuelity.com/","https://vas.virtuelity.com/sitemap.xml","https://vas.virtuelity.com","...and 4 more"]},{"risk":"Informational","alert_type":"Information Disclosure - Suspicious Comments (1)","alert_tags":"CWE-615, OWASP 2021 A13","parameter":"","evidence":"select","description":"The response appears to contain suspicious comments which may help an attacker.","solution":"Remove all comments that return information that may help an attacker and fix any underlying problems they refer to.","count":1,"affected_urls":["https://vas.virtuelity.com/assets/index-Bn7bp2XH.js"]}]},"report_url":"/reports/dbf574da-0874-4a8a-a24d-c62aed69b001_https_vas.virtuelity.com.html"}]
+2025-06-05 03:02:42,269 - urllib3.connectionpool - DEBUG - Starting new HTTP connection (1): 127.0.0.1:8080
+2025-06-05 03:02:42,288 - urllib3.connectionpool - DEBUG - http://127.0.0.1:8080 "GET http://zap/JSON/context/action/removeContext/?contextName=context_dbf574da-0874-4a8a-a24d-c62aed69b001 HTTP/1.1" 200 15
+2025-06-05 03:02:46,405 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Sending packet PING data None
+2025-06-05 03:02:46,408 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet PONG data 
+2025-06-05 03:03:10,775 - engineio.server - INFO - t7PlLi8hgAuzmEW1AAAX: Received packet MESSAGE data 1
+2025-06-05 03:03:10,785 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Sending packet OPEN data {'sid': 'LBCRXFVre-bx8J94AAAZ', 'upgrades': [], 'pingTimeout': 60000, 'pingInterval': 25000, 'maxPayload': 1000000}
+2025-06-05 03:03:10,786 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Received request to upgrade to websocket
+2025-06-05 03:03:10,787 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Upgrade to websocket successful
+2025-06-05 03:03:10,792 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Received packet MESSAGE data 0
+2025-06-05 03:03:10,794 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Sending packet MESSAGE data 0{"sid":"N_eSSsBDxqnFFBaLAAAa"}
+2025-06-05 03:03:35,799 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Sending packet PING data None
+2025-06-05 03:03:35,801 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Received packet PONG data 
+2025-06-05 03:04:00,822 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Sending packet PING data None
+2025-06-05 03:04:00,825 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Received packet PONG data 
+2025-06-05 03:04:08,255 - engineio.server - INFO - LBCRXFVre-bx8J94AAAZ: Received packet MESSAGE data 1
+2025-06-05 03:04:22,799 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-05 03:04:22,965 - networkscan - ERROR - Error getting active scans: 'DatabaseHandler' object does not support the context manager protocol
+2025-06-05 03:04:22,966 - networkscan - DEBUG - Generated new scan ID: 51d35025-dd55-4914-b6b7-9236a3703ea1
+2025-06-05 03:04:22,967 - database - INFO - Creating new scan record for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1
+2025-06-05 03:04:23,131 - database - INFO - Successfully created scan record for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1
+2025-06-05 03:04:23,132 - networkscan - INFO - Starting scan task for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1, ip: 8.8.8.8
+2025-06-05 03:04:23,133 - database - INFO - Updating scan status for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1 to running
+2025-06-05 03:04:23,203 - database - INFO - Successfully updated scan status for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1
+2025-06-05 03:04:23,205 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-05 03:04:23,205 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-05 03:04:23,206 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-05 03:05:53,970 - database - ERROR - Database connection error: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2025-06-05 03:05:53,972 - database - ERROR - Error getting scan by ID: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2025-06-05 03:05:53,988 - networkscan - DEBUG - Raw Nmap output:
+2025-06-05 03:05:53,990 - networkscan - DEBUG - Starting Nmap 7.97 ( https://nmap.org ) at 2025-06-05 03:04 +0530
+Nmap scan report for dns.google (8.8.8.8)
+Host is up (0.058s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT    STATE SERVICE    VERSION
+53/tcp  open  tcpwrapped
+443/tcp open  ssl/https?
+| ssl-cert: Subject: commonName=dns.google
+| Subject Alternative Name: DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64
+| Not valid before: 2025-05-12T08:44:48
+|_Not valid after:  2025-08-04T08:44:47
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 90.14 seconds
+
+2025-06-05 03:05:53,990 - networkscan - DEBUG - Nmap scan completed successfully
+2025-06-05 03:05:53,991 - networkscan - DEBUG - Parsing Nmap output
+2025-06-05 03:05:53,992 - networkscan - DEBUG - Parsed 1 hosts, 1 up
+2025-06-05 03:05:53,992 - networkscan - DEBUG - Parsed results:
+2025-06-05 03:05:53,992 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-05T03:05:53.992973"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.058"
+    }
+  ],
+  "scan_time": "90.14s"
+}
+2025-06-05 03:05:53,995 - networkscan - DEBUG - Parsed scan results:
+2025-06-05 03:05:53,996 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-05T03:05:53.992973"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.058"
+    }
+  ],
+  "scan_time": "90.14s"
+}
+2025-06-05 03:05:53,997 - database - INFO - Updating scan status for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1 to completed
+2025-06-05 03:05:54,152 - database - INFO - Successfully updated scan status for scan_id: 51d35025-dd55-4914-b6b7-9236a3703ea1

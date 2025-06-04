@@ -711,7 +711,7 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
           </div>
 
           <NetworkScannerForm
-            onSubmit={async (ip, token) => {
+            onSubmit={async (ip, recaptchaToken) => {
               resetScanState();
               
               try {
@@ -719,9 +719,11 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
-                    'X-Captcha-Token': token,
                   },
-                  body: JSON.stringify({ ip }),
+                  body: JSON.stringify({ 
+                    ip,
+                    recaptcha_token: recaptchaToken 
+                  }),
                 });
 
                 if (!response.ok) {
