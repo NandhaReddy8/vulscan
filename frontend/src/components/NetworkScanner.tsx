@@ -78,11 +78,11 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [isRateLimited, setIsRateLimited] = useState(false);
+  const [isRateLimited, setIsRateLimited] = useState<boolean>(false);
   const [retryAfter, setRetryAfter] = useState<number | null>(null);
-  const [scanProgress, setScanProgress] = useState(0);
+  const [scanProgress, setScanProgress] = useState<number>(0);
   const [scanResult, setScanResult] = useState<ScanResult | null>(null);
   const [currentScanId, setCurrentScanId] = useState<string | null>(null);
   const [scanningMessage, setScanningMessage] = useState<string>("Initializing scan...");
@@ -152,87 +152,104 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
 
   // Update the polling effect to handle real progress
   useEffect(() => {
-    if (activeScanId) {
-      const pollScanStatus = async () => {
-        try {
-          // If rate limited, check if we can retry
-          if (isRateLimited && retryAfter) {
-            const now = Date.now();
-            if (now < retryAfter) {
-              return; // Still rate limited, wait
-            }
-            // Reset rate limit state
-            setIsRateLimited(false);
-            setRetryAfter(null);
-          }
+    let pollInterval: NodeJS.Timeout | null = null;
+    let isPolling = true;
 
-          const response = await fetch(`${BACKEND_URL}/api/network/scan/${activeScanId}`);
-          
-          if (response.status === 429) {
-            // Handle rate limiting
-            const retryAfterHeader = response.headers.get('Retry-After');
-            const retryAfterSeconds = retryAfterHeader ? parseInt(retryAfterHeader, 10) : 5;
-            setIsRateLimited(true);
-            setRetryAfter(Date.now() + (retryAfterSeconds * 1000));
+    const pollScanStatus = async () => {
+      if (!isPolling || !activeScanId) return;
+
+      try {
+        // If rate limited, check if we can retry
+        if (isRateLimited && retryAfter) {
+          const now = Date.now();
+          if (now < retryAfter) {
+            return; // Still rate limited, wait
+          }
+          // Reset rate limit state
+          setIsRateLimited(false);
+          setRetryAfter(null);
+        }
+
+        const response = await fetch(`${BACKEND_URL}/api/network/scan/${activeScanId}`);
+        
+        if (response.status === 429) {
+          // Handle rate limiting
+          const retryAfterHeader = response.headers.get('Retry-After');
+          const retryAfterSeconds = retryAfterHeader ? parseInt(retryAfterHeader, 10) : 5;
+          setIsRateLimited(true);
+          setRetryAfter(Date.now() + (retryAfterSeconds * 1000));
+          return;
+        }
+
+        if (!response.ok) {
+          const error = await response.json();
+          // If we have results, just log the error but don't throw
+          if (activeScanResult?.results) {
             return;
           }
-
-          if (!response.ok) {
-            const error = await response.json();
-            // If we have results, just log the error but don't throw
-            if (activeScanResult?.results) {
-              return;
-            }
-            // If we don't have results and it's a 404, it might be a temporary error
-            if (response.status === 404) {
-              return;
-            }
-            throw new Error(error.error || 'Failed to fetch scan results');
+          // If we don't have results and it's a 404, it might be a temporary error
+          if (response.status === 404) {
+            return;
+          }
+          throw new Error(error.error || 'Failed to fetch scan results');
+        }
+        
+        const data = await response.json();
+        
+        const newScanResult: ScanResult = {
+          status: data.scan_status,
+          results: data.scan_results,
+          error: data.error_message
+        };
+        
+        // Update scan result state
+        setScanResult(newScanResult);
+        
+        // Update loading state based on scan status
+        if (data.scan_status === 'pending' || data.scan_status === 'running') {
+          setIsLoading(true);
+        } else if (['completed', 'failed', 'stopped'].includes(data.scan_status)) {
+          setIsLoading(false);
+          
+          // Stop polling when scan is complete
+          isPolling = false;
+          if (pollInterval) {
+            clearInterval(pollInterval);
+            pollInterval = null;
           }
           
-          const data = await response.json();
-          
-          const newScanResult = {
-            status: data.scan_status,
-            results: data.scan_results,
-            error: data.error_message
-          };
-          
-          // Update scan result state
-          setScanResult(newScanResult);
-          
-          // Update loading state based on scan status
-          if (data.scan_status === 'pending' || data.scan_status === 'running') {
-            setIsLoading(true);
-          } else if (['completed', 'failed', 'stopped'].includes(data.scan_status)) {
-            setIsLoading(false);
-            
-            // Only notify completion after a delay if the scan actually completed
-            if (data.scan_status === 'completed') {
-              setTimeout(() => {
-                if (!externalScanId) {
-                  setCurrentScanId(null);
-                }
-                onScanComplete(newScanResult);
-              }, 1000);
+          // Handle completion
+          if (data.scan_status === 'completed') {
+            if (!externalScanId) {
+              setCurrentScanId(null);
             }
-          }
-        } catch (error) {
-          if (!activeScanResult?.results) {
-            if (error instanceof Error) {
-              setError(error.message);
-              setIsLoading(false);
-            }
+            onScanComplete(newScanResult);
           }
         }
-      };
+      } catch (error) {
+        if (!activeScanResult?.results) {
+          if (error instanceof Error) {
+            setError(error.message);
+            setIsLoading(false);
+          }
+        }
+      }
+    };
 
+    if (activeScanId) {
       // Initial poll
       pollScanStatus();
 
       // Set up polling interval
-      const pollInterval = setInterval(pollScanStatus, 2000);
-      return () => clearInterval(pollInterval);
+      pollInterval = setInterval(pollScanStatus, 2000);
+
+      // Cleanup function
+      return () => {
+        isPolling = false;
+        if (pollInterval) {
+          clearInterval(pollInterval);
+        }
+      };
     } else {
       setScanResult(null);
       setScanProgress(0);

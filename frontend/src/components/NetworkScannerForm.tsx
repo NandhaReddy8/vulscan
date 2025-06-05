@@ -167,7 +167,7 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
 
         {/* Error Display - Only show if there's an actual error */}
         {(error || externalError) && (
-          <div className="text-red-400 text-sm mt-2 text-center">
+          <div className="text-gray-300 text-sm mt-2 text-center">
             {error || externalError}
           </div>
         )}

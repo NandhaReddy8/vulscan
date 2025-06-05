@@ -204,7 +204,7 @@ const Scanner: React.FC<ScannerProps> = ({
 
           {/* Error Display - Only show if there's an actual error */}
           {error && (
-            <div className="text-red-400 text-sm mt-2 text-center">{error}</div>
+            <div className="text-gray-300 text-sm mt-2 text-center">{error}</div>
           )}
 
           {/* Submit Button */}
