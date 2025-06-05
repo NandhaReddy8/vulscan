@@ -529,15 +529,15 @@ def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
     try:
         with DatabaseHandler() as db:
             query = """
-                SELECT * FROM network_scans 
+                SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                FROM network_scan_results 
                 WHERE ip_address = %s 
                 AND requester_ip = %s 
-                AND scan_timestamp > NOW() - INTERVAL %s MINUTE
-                ORDER BY scan_timestamp DESC
+                AND created_at > NOW() - INTERVAL %s MINUTE
+                ORDER BY created_at DESC
             """
             db.cursor.execute(query, (ip_address, requester_ip, minutes))
-            columns = [desc[0] for desc in db.cursor.description]
-            return [dict(zip(columns, row)) for row in db.cursor.fetchall()]
+            return db.cursor.fetchall()
     except Exception as e:
         logger.error(f"Error getting recent scans: {str(e)}")
         return []
@@ -547,7 +547,8 @@ def get_active_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
     try:
         with DatabaseHandler() as db:
             query = """
-                SELECT * FROM network_scans 
+                SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                FROM network_scan_results 
                 WHERE ip_address = %s 
                 AND requester_ip = %s 
                 AND created_at > NOW() - INTERVAL %s MINUTE
@@ -555,8 +556,7 @@ def get_active_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
                 ORDER BY created_at DESC
             """
             db.cursor.execute(query, (ip_address, requester_ip, minutes))
-            columns = [desc[0] for desc in db.cursor.description]
-            return [dict(zip(columns, row)) for row in db.cursor.fetchall()]
+            return db.cursor.fetchall()
     except Exception as e:
         logger.error(f"Error getting active scans: {str(e)}")
         return []

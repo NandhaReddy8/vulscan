@@ -35,6 +35,27 @@ class DatabaseHandler:
             port=os.getenv("DB_PORT", "5432")
         )
         self.initialize_tables()
+        self.conn = None
+        self.cursor = None
+
+    def __enter__(self):
+        """Enter the context manager - get a connection and cursor"""
+        self.conn = self.get_connection()
+        self.cursor = self.conn.cursor(cursor_factory=DictCursor)
+        return self
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        """Exit the context manager - close cursor and return connection to pool"""
+        if self.cursor:
+            self.cursor.close()
+        if self.conn:
+            if exc_type is not None:
+                self.conn.rollback()
+            else:
+                self.conn.commit()
+            self.put_connection(self.conn)
+        self.conn = None
+        self.cursor = None
 
     def get_connection(self):
         return self.pool.getconn()
