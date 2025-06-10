@@ -481,32 +481,47 @@ def start_network_scan(target: str, requester_ip: str) -> Tuple[bool, str, Optio
         request_cache[cache_key] = current_time
         
     try:
-        # Check for existing active scans
-        active = get_active_scans(target_address, requester_ip)
-        if active:
-            logger.warning(f"Found active scan for {target_address} from {requester_ip}")
-            return False, "A scan is already in progress for this target", None
+        # Check for existing active scans with better error handling
+        try:
+            active = get_active_scans(target_address, requester_ip)
+            if active:
+                logger.warning(f"Found active scan for {target_address} from {requester_ip}")
+                return False, "A scan is already in progress for this target", None
+        except Exception as e:
+            logger.error(f"Error checking active scans: {str(e)}")
+            # Continue with scan creation rather than failing completely
+            logger.info("Proceeding with scan creation despite active scan check failure")
             
         # Generate new scan ID
         scan_id = str(uuid.uuid4())
         logger.debug(f"Generated new scan ID: {scan_id}")
         
         # Create initial scan record
-        if not db.create_scan_record(scan_id, target_address, requester_ip):
-            return False, "Failed to create scan record", None
+        try:
+            if not db.create_scan_record(scan_id, target_address, requester_ip):
+                return False, "Failed to create scan record", None
+        except Exception as e:
+            logger.error(f"Error creating scan record: {str(e)}")
+            return False, f"Failed to create scan record: {str(e)}", None
             
         # Start scan task in background
-        thread = threading.Thread(
-            target=run_scan_task,
-            args=(scan_id, target_address, requester_ip),
-            daemon=True
-        )
-        thread.start()
+        try:
+            thread = threading.Thread(
+                target=run_scan_task,
+                args=(scan_id, target_address, requester_ip),
+                daemon=True
+            )
+            thread.start()
+        except Exception as e:
+            logger.error(f"Error starting scan thread: {str(e)}")
+            return False, f"Failed to start scan thread: {str(e)}", None
         
         return True, "Scan started successfully", scan_id
         
     except Exception as e:
         logger.error(f"Error starting network scan: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return False, str(e), None
 
 def get_scan_status(scan_id: str, requester_ip: str) -> Tuple[bool, dict]:
@@ -551,25 +566,47 @@ def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
 def get_active_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> List[Dict]:
     """Get active scans for an IP address from a specific requester."""
     try:
-        # Get scans by status (queued and running)
-        queued_scans = db.get_scans_by_status('queued', requester_ip, limit=25)
-        running_scans = db.get_scans_by_status('running', requester_ip, limit=25)
+        logger.debug(f"Checking for active scans for {ip_address} from {requester_ip}")
+        
+        # Get scans by status (queued and running) with better error handling
+        queued_scans = []
+        running_scans = []
+        
+        try:
+            queued_scans = db.get_scans_by_status('queued', requester_ip, limit=25)
+            logger.debug(f"Found {len(queued_scans)} queued scans")
+        except Exception as e:
+            logger.error(f"Error getting queued scans: {str(e)}")
+            
+        try:
+            running_scans = db.get_scans_by_status('running', requester_ip, limit=25)
+            logger.debug(f"Found {len(running_scans)} running scans")
+        except Exception as e:
+            logger.error(f"Error getting running scans: {str(e)}")
         
         # Combine both status types
         all_active_scans = list(queued_scans) + list(running_scans)
+        logger.debug(f"Total active scans found: {len(all_active_scans)}")
         
         # Filter by IP address and time
         cutoff_time = datetime.datetime.now() - timedelta(minutes=minutes)
         
         active_scans = []
         for scan in all_active_scans:
-            if scan['ip_address'] == ip_address and scan['created_at'] > cutoff_time:
-                active_scans.append(dict(scan))
+            try:
+                if scan['ip_address'] == ip_address and scan['created_at'] > cutoff_time:
+                    active_scans.append(dict(scan))
+            except Exception as e:
+                logger.error(f"Error processing scan record: {str(e)}")
+                continue
                 
+        logger.debug(f"Active scans for {ip_address}: {len(active_scans)}")
         return active_scans
         
     except Exception as e:
         logger.error(f"Error getting active scans: {str(e)}")
+        import traceback
+        logger.error(f"Traceback: {traceback.format_exc()}")
         return []
 
 # Example usage

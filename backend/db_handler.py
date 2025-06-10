@@ -36,7 +36,9 @@ class DatabaseHandler:
             user=os.getenv("DB_USER", "postgres"),
             password=os.getenv("DB_PASSWORD", "postgres"),
             host=os.getenv("DB_HOST", "localhost"),
-            port=os.getenv("DB_PORT", "5432")
+            port=os.getenv("DB_PORT", "5432"),
+            connect_timeout=10,  # 10 second connection timeout
+            options='-c statement_timeout=30000'  # 30 second statement timeout
         )
         self.initialize_tables()
         self._conn = None  # Add connection attribute for context manager
@@ -545,23 +547,37 @@ class DatabaseHandler:
 
     def get_scans_by_status(self, status, requester_ip, limit=10):
         """Get scans by status"""
+        conn = None
         try:
             conn = self.get_connection()
-            try:
-                with conn.cursor(cursor_factory=DictCursor) as cur:
-                    cur.execute("""
-                        SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
-                        FROM network_scan_results
-                        WHERE scan_status = %s AND requester_ip = %s
-                        ORDER BY created_at DESC
-                        LIMIT %s
-                    """, (status, requester_ip, limit))
-                    return cur.fetchall()
-            finally:
-                self.put_connection(conn)
+            if not conn:
+                print(f"[ERROR] Failed to get database connection for status query")
+                return []
+                
+            with conn.cursor(cursor_factory=DictCursor) as cur:
+                # Set a query timeout to prevent hanging
+                cur.execute("SET statement_timeout = '30s'")
+                cur.execute("""
+                    SELECT scan_id, ip_address, scan_status, scan_results, error_message, created_at, updated_at
+                    FROM network_scan_results
+                    WHERE scan_status = %s AND requester_ip = %s
+                    ORDER BY created_at DESC
+                    LIMIT %s
+                """, (status, requester_ip, limit))
+                result = cur.fetchall()
+                print(f"[DEBUG] Found {len(result)} scans with status '{status}' for requester {requester_ip}")
+                return result
         except Exception as e:
-            print(f"[ERROR] Failed to get scans by status: {str(e)}")
+            print(f"[ERROR] Failed to get scans by status '{status}': {str(e)}")
+            import traceback
+            print(f"[ERROR] Traceback: {traceback.format_exc()}")
             return []
+        finally:
+            if conn:
+                try:
+                    self.put_connection(conn)
+                except Exception as e:
+                    print(f"[ERROR] Failed to return connection to pool: {str(e)}")
 
     def get_scans_by_time_range(self, start_time, end_time, requester_ip, limit=10):
         """Get scans within a time range"""

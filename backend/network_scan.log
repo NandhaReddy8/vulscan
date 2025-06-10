@@ -261,3 +261,9 @@ Nmap done: 1 IP address (1 host up) scanned in 91.94 seconds
   ],
   "scan_time": "91.94s"
 }
+2025-06-11 01:42:38,342 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-06-11 01:42:38,973 - urllib3.connectionpool - DEBUG - https://www.google.com:443 "POST /recaptcha/api/siteverify HTTP/1.1" 200 None
+2025-06-11 01:42:39,027 - __main__ - WARNING - reCAPTCHA verification failed: ['invalid-input-response']
+2025-06-11 01:43:18,711 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-06-11 01:43:19,120 - urllib3.connectionpool - DEBUG - https://www.google.com:443 "POST /recaptcha/api/siteverify HTTP/1.1" 200 None
+2025-06-11 01:43:19,186 - __main__ - WARNING - reCAPTCHA verification failed: ['invalid-input-response']
