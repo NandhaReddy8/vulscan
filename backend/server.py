@@ -173,13 +173,13 @@ def expired_token_callback(jwt_header, jwt_payload):
     return jsonify({"error": "Token has expired"}), 401
 
 # Configure Rate Limiting
-limiter = Limiter(
-    app=app,
-    key_func=get_remote_address,
-    default_limits=[RATELIMIT_DEFAULT],
-    storage_uri=RATELIMIT_STORAGE_URL,
-    strategy=RATELIMIT_STRATEGY
-)
+# limiter = Limiter(
+#     app=app,
+#     key_func=get_remote_address,
+#     default_limits=[RATELIMIT_DEFAULT],
+#     storage_uri=RATELIMIT_STORAGE_URL,
+#     strategy=RATELIMIT_STRATEGY
+# )
 
 # Configure Socket.IO with explicit settings
 socketio = SocketIO(

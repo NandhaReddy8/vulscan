@@ -155,3 +155,109 @@ Nmap done: 1 IP address (1 host up) scanned in 100.91 seconds
 2025-06-11 00:19:21,061 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
 2025-06-11 00:19:21,061 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
 2025-06-11 00:19:21,064 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-11 00:20:53,157 - networkscan - DEBUG - Raw Nmap output:
+2025-06-11 00:20:53,158 - networkscan - DEBUG - Starting Nmap 7.97 ( https://nmap.org ) at 2025-06-11 00:19 +0530
+Nmap scan report for dns.google (8.8.8.8)
+Host is up (0.059s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT    STATE SERVICE    VERSION
+53/tcp  open  tcpwrapped
+443/tcp open  ssl/https?
+| ssl-cert: Subject: commonName=dns.google
+| Subject Alternative Name: DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64
+| Not valid before: 2025-05-12T08:44:48
+|_Not valid after:  2025-08-04T08:44:47
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 91.94 seconds
+
+2025-06-11 00:20:53,158 - networkscan - DEBUG - Nmap scan completed successfully
+2025-06-11 00:20:53,160 - networkscan - DEBUG - Parsing Nmap output
+2025-06-11 00:20:53,161 - networkscan - DEBUG - Parsed 1 hosts, 1 up
+2025-06-11 00:20:53,161 - networkscan - DEBUG - Parsed results:
+2025-06-11 00:20:53,163 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-11T00:20:53.160030"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.059"
+    }
+  ],
+  "scan_time": "91.94s"
+}
+2025-06-11 00:20:53,163 - networkscan - DEBUG - Parsed scan results:
+2025-06-11 00:20:53,164 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-11T00:20:53.160030"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.059"
+    }
+  ],
+  "scan_time": "91.94s"
+}
