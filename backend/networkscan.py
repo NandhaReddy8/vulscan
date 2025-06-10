@@ -291,19 +291,40 @@ def run_nmap_scan(ip: str) -> Tuple[bool, str, Optional[dict]]:
         # -Pn: Skip host discovery (treat all hosts as online)
         # --min-rate 100: Minimum packet rate
         # --max-retries 2: Fewer retries but still reliable
-        cmd = [
-            nmap_path,
-            "-T3",           # Normal timing
-            "-sV",           # Version detection
-            "-sS",           # TCP SYN scan
-            "-O",            # OS detection
-            "-Pn",           # Skip host discovery
-            "--min-rate", "100",
-            "--max-retries", "2",
-            "--script", "default",
-            "--script-timeout", "30s",
-            ip
-        ]
+        # Use different scan options based on OS
+        import platform
+        is_windows = platform.system().lower() == 'windows'
+        
+        if is_windows:
+            # Windows-specific scan (unprivileged)
+            cmd = [
+                nmap_path,
+                "-T3",           # Normal timing
+                "-sV",           # Version detection
+                "-sT",           # TCP connect scan (instead of SYN for unprivileged)
+                "-Pn",           # Skip host discovery
+                "--unprivileged", # Use unprivileged mode on Windows
+                "--min-rate", "100",
+                "--max-retries", "2",
+                "--script", "default",
+                "--script-timeout", "30s",
+                ip
+            ]
+        else:
+            # Linux/Unix scan (privileged)
+            cmd = [
+                nmap_path,
+                "-T3",           # Normal timing
+                "-sV",           # Version detection
+                "-sS",           # TCP SYN scan
+                "-O",            # OS detection
+                "-Pn",           # Skip host discovery
+                "--min-rate", "100",
+                "--max-retries", "2",
+                "--script", "default",
+                "--script-timeout", "30s",
+                ip
+            ]
         
         logger.debug(f"Running Nmap command: {' '.join(cmd)}")
         process = subprocess.Popen(

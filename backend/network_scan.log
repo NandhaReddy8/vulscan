@@ -267,3 +267,45 @@ Nmap done: 1 IP address (1 host up) scanned in 91.94 seconds
 2025-06-11 01:43:18,711 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google.com:443
 2025-06-11 01:43:19,120 - urllib3.connectionpool - DEBUG - https://www.google.com:443 "POST /recaptcha/api/siteverify HTTP/1.1" 200 None
 2025-06-11 01:43:19,186 - __main__ - WARNING - reCAPTCHA verification failed: ['invalid-input-response']
+2025-06-11 02:00:20,138 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-11 02:00:20,147 - networkscan - DEBUG - Checking for active scans for 8.8.8.8 from 127.0.0.1
+2025-06-11 02:00:20,227 - networkscan - DEBUG - Found 0 queued scans
+2025-06-11 02:00:20,231 - networkscan - DEBUG - Found 0 running scans
+2025-06-11 02:00:20,231 - networkscan - DEBUG - Total active scans found: 0
+2025-06-11 02:00:20,231 - networkscan - DEBUG - Active scans for 8.8.8.8: 0
+2025-06-11 02:00:20,232 - networkscan - DEBUG - Generated new scan ID: be98c331-a00b-429a-9cc1-1f00d1cb2881
+2025-06-11 02:00:20,258 - networkscan - INFO - Starting scan task for scan_id: be98c331-a00b-429a-9cc1-1f00d1cb2881, ip: 8.8.8.8
+2025-06-11 02:00:20,274 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-11 02:00:20,275 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-11 02:00:20,275 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-11 02:00:40,985 - networkscan - ERROR - Nmap scan failed with return code 1: Only ethernet devices can be used for raw scans on Windows, and
+"unk0" is not an ethernet device. Use the --unprivileged option
+for this scan.
+QUITTING!
+
+2025-06-11 02:00:40,988 - networkscan - ERROR - Scan failed for 8.8.8.8: Only ethernet devices can be used for raw scans on Windows, and
+"unk0" is not an ethernet device. Use the --unprivileged option
+for this scan.
+QUITTING!
+
+2025-06-11 02:00:53,868 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-11 02:00:53,869 - networkscan - DEBUG - Checking for active scans for 8.8.8.8 from 127.0.0.1
+2025-06-11 02:00:53,875 - networkscan - DEBUG - Found 0 queued scans
+2025-06-11 02:00:53,883 - networkscan - DEBUG - Found 0 running scans
+2025-06-11 02:00:53,884 - networkscan - DEBUG - Total active scans found: 0
+2025-06-11 02:00:53,884 - networkscan - DEBUG - Active scans for 8.8.8.8: 0
+2025-06-11 02:00:53,884 - networkscan - DEBUG - Generated new scan ID: 2aa96516-8145-4808-beef-3f67d851abed
+2025-06-11 02:00:53,891 - networkscan - INFO - Starting scan task for scan_id: 2aa96516-8145-4808-beef-3f67d851abed, ip: 8.8.8.8
+2025-06-11 02:00:53,900 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-11 02:00:53,900 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-11 02:00:53,902 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-11 02:01:01,650 - networkscan - ERROR - Nmap scan failed with return code 1: Only ethernet devices can be used for raw scans on Windows, and
+"unk0" is not an ethernet device. Use the --unprivileged option
+for this scan.
+QUITTING!
+
+2025-06-11 02:01:01,651 - networkscan - ERROR - Scan failed for 8.8.8.8: Only ethernet devices can be used for raw scans on Windows, and
+"unk0" is not an ethernet device. Use the --unprivileged option
+for this scan.
+QUITTING!
+

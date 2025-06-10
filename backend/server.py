@@ -702,11 +702,11 @@ def start_network_scan_endpoint():
             print("Missing IP address in request data")
             return jsonify({"error": "Missing IP address"}), 400
 
-        # Verify reCAPTCHA - TEMPORARILY DISABLED FOR TESTING
-        # is_captcha_valid, captcha_error = verify_recaptcha(recaptcha_token)
-        # if not is_captcha_valid:
-        #     print(f"[!] reCAPTCHA verification failed: {captcha_error}")
-        #     return jsonify({"error": f"reCAPTCHA verification failed: {captcha_error}"}), 400
+        # Verify reCAPTCHA
+        is_captcha_valid, captcha_error = verify_recaptcha(recaptcha_token)
+        if not is_captcha_valid:
+            print(f"[!] reCAPTCHA verification failed: {captcha_error}")
+            return jsonify({"error": f"reCAPTCHA verification failed: {captcha_error}"}), 400
 
         requester_ip = get_client_ip(request)
         print(f"IP Address: {ip_address}, Requester IP: {requester_ip}")
