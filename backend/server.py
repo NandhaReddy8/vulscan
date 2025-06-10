@@ -445,7 +445,7 @@ def stop_scan():
         return jsonify({"error": str(e)}), 500
 
 @app.route("/api/auth/login", methods=["POST", "OPTIONS"])
-@limiter.limit("5 per minute")
+# @limiter.limit("5 per minute")
 def login():
     if request.method == "OPTIONS":
         response = app.make_default_options_response()
