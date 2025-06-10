@@ -13,11 +13,14 @@ import re
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Optional, Tuple, List
-from database import (create_scan_record,update_scan_status,get_scan_by_id)
+
 import logging
 import time
 from db_handler import DatabaseHandler
 from config import FLASK_DEBUG
+
+# Initialize database handler
+db = DatabaseHandler()
 
 # Configure logging
 logging.basicConfig(
@@ -351,25 +354,25 @@ def run_scan_task(scan_id: str, ip: str, requester_ip: str):
             }
             
         # Update status to running
-        update_scan_status(scan_id, "running")
+        db.update_scan_status(scan_id, "running")
         
         # Run the Nmap scan
         success, output, results = run_nmap_scan(ip)
         
         if not success:
             logger.error(f"Scan failed for {ip}: {output}")
-            update_scan_status(scan_id, "failed", error=output)
+            db.update_scan_status(scan_id, "failed", error=output)
             return
             
         # Save results
         if results:
-            update_scan_status(scan_id, "completed", results=results)
+            db.update_scan_status(scan_id, "completed", results=results)
         else:
-            update_scan_status(scan_id, "failed", error="No results returned from scan")
+            db.update_scan_status(scan_id, "failed", error="No results returned from scan")
             
     except Exception as e:
         logger.error(f"Error in scan task: {str(e)}")
-        update_scan_status(scan_id, "failed", error=str(e))
+        db.update_scan_status(scan_id, "failed", error=str(e))
     finally:
         # Cleanup
         with scan_lock:
@@ -489,7 +492,7 @@ def start_network_scan(target: str, requester_ip: str) -> Tuple[bool, str, Optio
         logger.debug(f"Generated new scan ID: {scan_id}")
         
         # Create initial scan record
-        if not create_scan_record(scan_id, target_address, requester_ip):
+        if not db.create_scan_record(scan_id, target_address, requester_ip):
             return False, "Failed to create scan record", None
             
         # Start scan task in background
@@ -509,7 +512,7 @@ def start_network_scan(target: str, requester_ip: str) -> Tuple[bool, str, Optio
 def get_scan_status(scan_id: str, requester_ip: str) -> Tuple[bool, dict]:
     """Get current status of a scan."""
     try:
-        scan = get_scan_by_id(scan_id, requester_ip)
+        scan = db.get_scan_by_id(scan_id, requester_ip)
         if not scan:
             return False, {"error": "Scan not found"}
             
@@ -528,7 +531,6 @@ def get_scan_status(scan_id: str, requester_ip: str) -> Tuple[bool, dict]:
 def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> List[Dict]:
     """Get recent scans for an IP address from a specific requester."""
     try:
-        db = DatabaseHandler()
         # Use the existing method to get scans by IP
         scans = db.get_scans_by_ip(ip_address, requester_ip, limit=50)  # Get more scans to filter by time
         
@@ -549,7 +551,6 @@ def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
 def get_active_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> List[Dict]:
     """Get active scans for an IP address from a specific requester."""
     try:
-        db = DatabaseHandler()
         # Get scans by status (queued and running)
         queued_scans = db.get_scans_by_status('queued', requester_ip, limit=25)
         running_scans = db.get_scans_by_status('running', requester_ip, limit=25)

@@ -141,3 +141,17 @@ Nmap done: 1 IP address (1 host up) scanned in 100.91 seconds
 }
 2025-06-10 23:44:29,924 - database - INFO - Updating scan status for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1 to completed
 2025-06-10 23:44:30,060 - database - INFO - Successfully updated scan status for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1
+2025-06-11 00:15:15,704 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-06-11 00:15:16,103 - urllib3.connectionpool - DEBUG - https://www.google.com:443 "POST /recaptcha/api/siteverify HTTP/1.1" 200 None
+2025-06-11 00:15:16,106 - __main__ - INFO - reCAPTCHA verification successful, score: 0.5
+2025-06-11 00:15:16,112 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-11 00:15:16,139 - networkscan - WARNING - Found active scan for 8.8.8.8 from 127.0.0.1
+2025-06-11 00:19:20,657 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-06-11 00:19:20,998 - urllib3.connectionpool - DEBUG - https://www.google.com:443 "POST /recaptcha/api/siteverify HTTP/1.1" 200 None
+2025-06-11 00:19:21,001 - __main__ - INFO - reCAPTCHA verification successful, score: 0.5
+2025-06-11 00:19:21,004 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-11 00:19:21,024 - networkscan - DEBUG - Generated new scan ID: ceb6f0e5-2c40-4a7c-8a48-6a3715a73dcf
+2025-06-11 00:19:21,046 - networkscan - INFO - Starting scan task for scan_id: ceb6f0e5-2c40-4a7c-8a48-6a3715a73dcf, ip: 8.8.8.8
+2025-06-11 00:19:21,061 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-11 00:19:21,061 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-11 00:19:21,064 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8

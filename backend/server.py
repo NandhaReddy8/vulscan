@@ -11,7 +11,7 @@ import threading
 import uuid
 import secrets
 import requests
-from database import save_scan_request, save_report_request
+
 from zap_scan import scan_target, zap, sanitize_url
 from datetime import datetime, timedelta
 from config import (
@@ -36,7 +36,6 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = JWT_SECRET_KEY
 
 # Initialize database
-from database import DatabaseHandler
 db = DatabaseHandler()
 
 # Global dictionaries to track scans
@@ -258,7 +257,7 @@ def scan():
 
         # Save scan request to database with scan_id
         try:
-            save_scan_request(target_url, user_ip, timestamp, scan_id=scan_id)
+            db.save_scan_request(target_url, user_ip, timestamp, scan_id=scan_id)
             print(f"[+] Scan request saved to database with scan_id: {scan_id}")
         except Exception as e:
             print(f"[ERROR] Failed to save scan request: {str(e)}")
@@ -336,7 +335,7 @@ def handle_report_request():
         # Save report request with the correct protocol
         try:
             timestamp = datetime.now()
-            save_report_request(
+            db.save_report_request(
                 data['name'],
                 data['email'],
                 data.get('phone', ''),
