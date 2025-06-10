@@ -173,11 +173,11 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
         )}
 
         {/* Rate Limit Warning */}
-        {isRateLimited && retryAfter && (
+        {/* {isRateLimited && retryAfter && (
           <div className="text-yellow-400 text-sm mt-2 text-center">
             Rate limit exceeded. Please try again in {Math.ceil((retryAfter - Date.now()) / 1000)} seconds.
           </div>
-        )}
+        )} */}
 
         {/* Submit Button */}
         <div className="flex justify-center mt-6">
