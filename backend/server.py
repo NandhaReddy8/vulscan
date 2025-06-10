@@ -22,6 +22,7 @@ from config import (
     RECAPTCHA_SECRET_KEY
 )
 from db_handler import DatabaseHandler
+from psycopg2.extras import DictCursor
 import logging
 import json
 from networkscan import start_network_scan, get_scan_status
@@ -744,15 +745,32 @@ def get_network_scan_endpoint(scan_id):
         requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
         print(f"Retrieving scan results for {scan_id} from {requester_ip}")
         
-        success, results = get_scan_status(scan_id, requester_ip)
-        if not success:
-            return jsonify({"error": results.get("error", "Scan not found")}), 404
+        # Use DatabaseHandler directly for consistency
+        db_handler = DatabaseHandler()
+        scan = db_handler.get_scan_by_id(scan_id, requester_ip)
+        
+        if not scan:
+            print(f"Scan not found: {scan_id} for requester {requester_ip}")
+            return jsonify({"error": "Scan not found"}), 404
 
-        # Return just the results object, not the tuple
-        return jsonify(results)
+        # Convert to proper response format
+        response_data = {
+            "scan_id": scan['scan_id'],
+            "ip_address": scan['ip_address'],
+            "scan_status": scan['scan_status'],
+            "scan_results": scan['scan_results'],
+            "error_message": scan['error_message'],
+            "created_at": scan['created_at'].isoformat() if scan['created_at'] else None,
+            "updated_at": scan['updated_at'].isoformat() if scan['updated_at'] else None
+        }
+        
+        print(f"Successfully retrieved scan data for {scan_id}")
+        return jsonify(response_data)
 
     except Exception as e:
         print(f"Error retrieving scan results: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": "Internal server error"}), 500
 
 @app.route("/api/network/scans", methods=["GET"])
@@ -760,35 +778,52 @@ def list_network_scans():
     """List all network scans for the current requester."""
     try:
         requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
+        print(f"Listing network scans for requester: {requester_ip}")
         
-        # Get scans from database
-        conn = db.get_connection()
+        # Use DatabaseHandler for consistency
+        db_handler = DatabaseHandler()
+        
+        # Get all scans for this requester (combining different methods)
         try:
-            with conn.cursor() as cur:
-                cur.execute("""
-                    SELECT scan_id, ip_address, scan_timestamp, scan_status, 
-                           created_at, updated_at
-                    FROM network_scan_results
-                    WHERE requester_ip = %s
-                    ORDER BY scan_timestamp DESC
-                    LIMIT 50
-                """, (requester_ip,))
-                scans = []
-                for row in cur.fetchall():
-                    scans.append({
-                        "scan_id": row[0],
-                        "ip_address": row[1],
-                        "scan_timestamp": row[2].isoformat(),
-                        "scan_status": row[3],
-                        "created_at": row[4].isoformat(),
-                        "updated_at": row[5].isoformat()
-                    })
-                return jsonify({"scans": scans})
-        finally:
-            db.put_connection(conn)
+            conn = db_handler.get_connection()
+            try:
+                with conn.cursor(cursor_factory=DictCursor) as cur:
+                    cur.execute("""
+                        SELECT scan_id, ip_address, scan_status, scan_results, 
+                               error_message, created_at, updated_at
+                        FROM network_scan_results
+                        WHERE requester_ip = %s
+                        ORDER BY created_at DESC
+                        LIMIT 50
+                    """, (requester_ip,))
+                    
+                    scans = []
+                    for row in cur.fetchall():
+                        scans.append({
+                            "scan_id": row['scan_id'],
+                            "ip_address": row['ip_address'],
+                            "scan_status": row['scan_status'],
+                            "scan_results": row['scan_results'],
+                            "error_message": row['error_message'],
+                            "created_at": row['created_at'].isoformat() if row['created_at'] else None,
+                            "updated_at": row['updated_at'].isoformat() if row['updated_at'] else None
+                        })
+                    
+                    print(f"Found {len(scans)} scans for requester {requester_ip}")
+                    return jsonify({"scans": scans})
+            finally:
+                db_handler.put_connection(conn)
+                
+        except Exception as e:
+            print(f"Database error listing scans: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            return jsonify({"error": "Database error"}), 500
 
     except Exception as e:
         print(f"Error listing network scans: {str(e)}")
+        import traceback
+        traceback.print_exc()
         return jsonify({"error": "Internal server error"}), 500
 
 # Add IP range check middleware for marketing routes

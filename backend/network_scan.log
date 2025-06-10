@@ -8,3 +8,136 @@
 2025-06-10 23:33:05,686 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
 2025-06-10 23:33:05,687 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
 2025-06-10 23:33:05,688 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-10 23:42:47,415 - urllib3.connectionpool - DEBUG - Starting new HTTPS connection (1): www.google.com:443
+2025-06-10 23:42:47,922 - urllib3.connectionpool - DEBUG - https://www.google.com:443 "POST /recaptcha/api/siteverify HTTP/1.1" 200 None
+2025-06-10 23:42:47,926 - __main__ - INFO - reCAPTCHA verification successful, score: 0.5
+2025-06-10 23:42:47,931 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-10 23:42:48,210 - networkscan - ERROR - Error getting active scans: 'DatabaseHandler' object has no attribute 'cursor'
+2025-06-10 23:42:48,214 - networkscan - DEBUG - Generated new scan ID: 64eba12d-1610-42e6-bb9c-fad03a641bb1
+2025-06-10 23:42:48,214 - database - INFO - Creating new scan record for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1
+2025-06-10 23:42:48,371 - database - INFO - Successfully created scan record for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1
+2025-06-10 23:42:48,373 - networkscan - INFO - Starting scan task for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1, ip: 8.8.8.8
+2025-06-10 23:42:48,376 - database - INFO - Updating scan status for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1 to running
+2025-06-10 23:42:48,498 - database - INFO - Successfully updated scan status for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1
+2025-06-10 23:42:48,501 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-10 23:42:48,502 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-10 23:42:48,502 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
+2025-06-10 23:44:29,892 - database - ERROR - Database connection error: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2025-06-10 23:44:29,893 - database - ERROR - Error getting scan by ID: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+2025-06-10 23:44:29,906 - networkscan - DEBUG - Raw Nmap output:
+2025-06-10 23:44:29,906 - networkscan - DEBUG - Starting Nmap 7.97 ( https://nmap.org ) at 2025-06-10 23:42 +0530
+Nmap scan report for dns.google (8.8.8.8)
+Host is up (0.060s latency).
+Not shown: 998 filtered tcp ports (no-response)
+PORT    STATE SERVICE    VERSION
+53/tcp  open  tcpwrapped
+443/tcp open  ssl/https?
+| ssl-cert: Subject: commonName=dns.google
+| Subject Alternative Name: DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64
+| Not valid before: 2025-05-12T08:44:48
+|_Not valid after:  2025-08-04T08:44:47
+|_http-title: Google Public DNS
+Warning: OSScan results may be unreliable because we could not find at least 1 open and 1 closed port
+OS fingerprint not ideal because: Missing a closed TCP port so results incomplete
+No OS matches for host
+
+OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 100.91 seconds
+
+2025-06-10 23:44:29,906 - networkscan - DEBUG - Nmap scan completed successfully
+2025-06-10 23:44:29,907 - networkscan - DEBUG - Parsing Nmap output
+2025-06-10 23:44:29,915 - networkscan - DEBUG - Parsed 1 hosts, 1 up
+2025-06-10 23:44:29,917 - networkscan - DEBUG - Parsed results:
+2025-06-10 23:44:29,917 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-10T23:44:29.909500"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47",
+            "_http-title": "Google Public DNS"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.060"
+    }
+  ],
+  "scan_time": "100.91s"
+}
+2025-06-10 23:44:29,921 - networkscan - DEBUG - Parsed scan results:
+2025-06-10 23:44:29,922 - networkscan - DEBUG - {
+  "summary": {
+    "total_hosts": 1,
+    "up_hosts": 1,
+    "scan_timestamp": "2025-06-10T23:44:29.909500"
+  },
+  "hosts": [
+    {
+      "hostname": "dns.google (8.8.8.8)",
+      "ip": "8.8.8.8",
+      "status": "up",
+      "os_info": {},
+      "ports": [
+        {
+          "port": "53",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "tcpwrapped",
+          "version": null,
+          "scripts": {}
+        },
+        {
+          "port": "443",
+          "protocol": "tcp",
+          "state": "open",
+          "service": "ssl/https?",
+          "version": null,
+          "scripts": {
+            "ssl-cert": "Subject: commonName=dns.google",
+            "Subject Alternative Name": "DNS:dns.google, DNS:dns.google.com, DNS:*.dns.google.com, DNS:8888.google, DNS:dns64.dns.google, IP Address:8.8.8.8, IP Address:8.8.4.4, IP Address:2001:4860:4860:0:0:0:0:8888, IP Address:2001:4860:4860:0:0:0:0:8844, IP Address:2001:4860:4860:0:0:0:0:6464, IP Address:2001:4860:4860:0:0:0:0:64",
+            "Not valid before": "2025-05-12T08:44:48",
+            "_Not valid after": "2025-08-04T08:44:47",
+            "_http-title": "Google Public DNS"
+          }
+        }
+      ],
+      "filtered_ports": 998,
+      "latency": "0.060"
+    }
+  ],
+  "scan_time": "100.91s"
+}
+2025-06-10 23:44:29,924 - database - INFO - Updating scan status for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1 to completed
+2025-06-10 23:44:30,060 - database - INFO - Successfully updated scan status for scan_id: 64eba12d-1610-42e6-bb9c-fad03a641bb1
