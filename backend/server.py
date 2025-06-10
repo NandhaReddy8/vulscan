@@ -741,7 +741,7 @@ def get_network_scan_endpoint(scan_id):
     """Get the status and results of a network scan."""
     try:
         # Get requester IP from header or fallback to remote_addr
-        requester_ip = request.headers.get('X-Requester-IP', request.remote_addr)
+        requester_ip = get_client_ip(request)
         print(f"Retrieving scan results for {scan_id} from {requester_ip}")
         
         # Use DatabaseHandler directly for consistency
