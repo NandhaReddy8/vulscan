@@ -135,11 +135,14 @@ CORS(app, resources={
     r"/api/stop-scan": scanner_cors,
     r"/api/network/*": scanner_cors,
     r"/socket.io/*": scanner_cors,
+    r"/api/network/start-scan": scanner_cors,
+    r"/api/scan-report-summary": scanner_cors,
+    r"/api/report-request": scanner_cors,
     
     # Marketing routes - restricted origins
     r"/api/auth/*": marketing_cors,
-    r"/api/scan-report-summary": marketing_cors,
-    r"/api/report-request": marketing_cors
+    # r"/api/scan-report-summary": marketing_cors,
+    # r"/api/report-request": marketing_cors
 }, supports_credentials=True)  # Enable credentials support globally
 
 # Configure JWT
@@ -185,8 +188,8 @@ socketio = SocketIO(
     async_mode='eventlet',
     ping_timeout=60,
     ping_interval=25,
-    logger=True,
-    engineio_logger=True,
+    logger=False,
+    engineio_logger=False,
     always_connect=True,
     path='/socket.io/'
 )
