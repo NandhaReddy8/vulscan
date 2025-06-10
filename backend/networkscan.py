@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import datetime
+from datetime import timedelta
 import ipaddress
 import os
 import json
@@ -12,7 +13,7 @@ import re
 import requests
 from concurrent.futures import ThreadPoolExecutor
 from typing import Dict, Optional, Tuple, List
-from database import (create_scan_record,update_scan_status,get_scan_by_id,get_active_scans,get_recent_scans)
+from database import (create_scan_record,update_scan_status,get_scan_by_id)
 import logging
 import time
 from db_handler import DatabaseHandler
@@ -527,17 +528,20 @@ def get_scan_status(scan_id: str, requester_ip: str) -> Tuple[bool, dict]:
 def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> List[Dict]:
     """Get recent scans for an IP address from a specific requester."""
     try:
-        with DatabaseHandler() as db:
-            query = """
-                SELECT * FROM network_scans 
-                WHERE ip_address = %s 
-                AND requester_ip = %s 
-                AND scan_timestamp > NOW() - INTERVAL %s MINUTE
-                ORDER BY scan_timestamp DESC
-            """
-            db.cursor.execute(query, (ip_address, requester_ip, minutes))
-            columns = [desc[0] for desc in db.cursor.description]
-            return [dict(zip(columns, row)) for row in db.cursor.fetchall()]
+        db = DatabaseHandler()
+        # Use the existing method to get scans by IP
+        scans = db.get_scans_by_ip(ip_address, requester_ip, limit=50)  # Get more scans to filter by time
+        
+        # Filter by time (minutes)
+        cutoff_time = datetime.datetime.now() - timedelta(minutes=minutes)
+        
+        recent_scans = []
+        for scan in scans:
+            if scan['created_at'] > cutoff_time:
+                recent_scans.append(dict(scan))
+                
+        return recent_scans
+        
     except Exception as e:
         logger.error(f"Error getting recent scans: {str(e)}")
         return []
@@ -545,18 +549,24 @@ def get_recent_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> Li
 def get_active_scans(ip_address: str, requester_ip: str, minutes: int = 5) -> List[Dict]:
     """Get active scans for an IP address from a specific requester."""
     try:
-        with DatabaseHandler() as db:
-            query = """
-                SELECT * FROM network_scans 
-                WHERE ip_address = %s 
-                AND requester_ip = %s 
-                AND created_at > NOW() - INTERVAL %s MINUTE
-                AND scan_status IN ('queued', 'running')
-                ORDER BY created_at DESC
-            """
-            db.cursor.execute(query, (ip_address, requester_ip, minutes))
-            columns = [desc[0] for desc in db.cursor.description]
-            return [dict(zip(columns, row)) for row in db.cursor.fetchall()]
+        db = DatabaseHandler()
+        # Get scans by status (queued and running)
+        queued_scans = db.get_scans_by_status('queued', requester_ip, limit=25)
+        running_scans = db.get_scans_by_status('running', requester_ip, limit=25)
+        
+        # Combine both status types
+        all_active_scans = list(queued_scans) + list(running_scans)
+        
+        # Filter by IP address and time
+        cutoff_time = datetime.datetime.now() - timedelta(minutes=minutes)
+        
+        active_scans = []
+        for scan in all_active_scans:
+            if scan['ip_address'] == ip_address and scan['created_at'] > cutoff_time:
+                active_scans.append(dict(scan))
+                
+        return active_scans
+        
     except Exception as e:
         logger.error(f"Error getting active scans: {str(e)}")
         return []

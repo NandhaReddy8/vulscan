@@ -1,0 +1,10 @@
+2025-06-10 23:33:05,144 - networkscan - DEBUG - Starting network scan for target: 8.8.8.8 from 127.0.0.1
+2025-06-10 23:33:05,372 - networkscan - DEBUG - Generated new scan ID: 1cc270eb-e8dc-4981-81bc-20242c15e05a
+2025-06-10 23:33:05,375 - database - INFO - Creating new scan record for scan_id: 1cc270eb-e8dc-4981-81bc-20242c15e05a
+2025-06-10 23:33:05,527 - database - INFO - Successfully created scan record for scan_id: 1cc270eb-e8dc-4981-81bc-20242c15e05a
+2025-06-10 23:33:05,531 - networkscan - INFO - Starting scan task for scan_id: 1cc270eb-e8dc-4981-81bc-20242c15e05a, ip: 8.8.8.8
+2025-06-10 23:33:05,536 - database - INFO - Updating scan status for scan_id: 1cc270eb-e8dc-4981-81bc-20242c15e05a to running
+2025-06-10 23:33:05,686 - database - INFO - Successfully updated scan status for scan_id: 1cc270eb-e8dc-4981-81bc-20242c15e05a
+2025-06-10 23:33:05,686 - networkscan - DEBUG - Starting Nmap scan for 8.8.8.8
+2025-06-10 23:33:05,687 - networkscan - INFO - Found Nmap at path: C:\Program Files (x86)\Nmap\nmap.exe
+2025-06-10 23:33:05,688 - networkscan - DEBUG - Running Nmap command: C:\Program Files (x86)\Nmap\nmap.exe -T3 -sV -sS -O -Pn --min-rate 100 --max-retries 2 --script default --script-timeout 30s 8.8.8.8
