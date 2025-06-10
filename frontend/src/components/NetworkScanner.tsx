@@ -231,7 +231,7 @@ const NetworkScanner: React.FC<NetworkScannerProps> = ({
       pollScanStatus();
 
       // Set up polling interval
-      const pollInterval = setInterval(pollScanStatus, 2000);
+      const pollInterval = setInterval(pollScanStatus, 10000);
       return () => clearInterval(pollInterval);
     } else {
       setScanResult(null);
