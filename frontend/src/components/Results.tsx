@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, AlertTriangle, Check, X, Shield } from "lucide-react";
 import ReportRequestDialog from "./ReportRequestDialog";
 
 interface Vulnerability {
@@ -129,6 +129,7 @@ const Results: React.FC<ResultsProps> = ({
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Left column - Vulnerability details */}
           <div className="lg:col-span-2">
             <h3 className="text-xl font-semibold mb-4 text-gray-100">
               Vulnerability Findings
@@ -223,25 +224,143 @@ const Results: React.FC<ResultsProps> = ({
             </div>
           </div>
 
-          <div className="bg-gradient-to-br from-blue-800 to-blue-600 rounded-lg p-6 text-white h-fit sticky top-6 border border-blue-500/30">
-            <div className="bg-white/20 rounded-full w-12 h-12 flex items-center justify-center mb-4">
-              <AlertCircle className="h-6 w-6" />
+          {/* Right column - Report request & comparison cards */}
+          <div className="lg:col-span-1 space-y-6"> {/* Added space-y-6 for consistent spacing */}
+            {/* Report Request Box */}
+            <div className="bg-gradient-to-br from-blue-800 to-blue-600 rounded-lg p-6 text-white border border-blue-500/30">
+              <div className="bg-white/20 rounded-full w-12 h-12 flex items-center justify-center mb-4">
+                <AlertCircle className="h-6 w-6" />
+              </div>
+              <h4 className="text-xl font-semibold mb-3">
+                For detailed Report !
+              </h4>
+              <p className="mb-6 opacity-90">
+                Your scan has identified additional security concerns that require
+                attention. Access our comprehensive security report for complete
+                vulnerability analysis.
+              </p>
+              <button
+                onClick={() => setIsDialogOpen(true)}
+                className="w-full bg-white/15 hover:bg-white/25 transition-colors rounded-lg py-3 px-4 flex items-center justify-between"
+              >
+                <span>View Complete Report</span>
+                <span>→</span>
+              </button>
             </div>
-            <h4 className="text-xl font-semibold mb-3">
-              For detailed Report !
-            </h4>
-            <p className="mb-6 opacity-90">
-              Your scan has identified additional security concerns that require
-              attention. Access our comprehensive security report for complete
-              vulnerability analysis.
-            </p>
-            <button
-              onClick={() => setIsDialogOpen(true)}
-              className="w-full bg-white/15 hover:bg-white/25 transition-colors rounded-lg py-3 px-4 flex items-center justify-between"
-            >
-              <span>View Complete Report</span>
-              <span>→</span>
-            </button>
+
+            {/* Combined Info & Comparison Card */}
+            <div className="bg-gray-800 border border-gray-700 rounded-lg p-6">
+              {/* Coverage Info Section */}
+                <div className="mb-6">
+                <div className="flex items-center gap-3 mb-3">
+                  <AlertTriangle className="h-6 w-6 text-yellow-400" />
+                  <h3 className="text-2xl font-bold text-white">
+                  Light Scan <span className="text-yellow-400">vs</span> Deep Scan
+                  </h3>
+                </div>
+                <div className="bg-yellow-900/20 border border-yellow-700 rounded-lg p-4">
+                  <p className="text-lg text-yellow-100 font-semibold text-center">
+                  <span className="text-yellow-300">Light Scan</span> provides a quick overview of basic vulnerabilities.<br />
+                  <span className="text-blue-300">Deep Scan</span> delivers comprehensive, in-depth security analysis for maximum protection.
+                  </p>
+                </div>
+                </div>
+              <p className="text-gray-300 text-sm mb-8 border-b border-gray-700 pb-6">
+                Your free scan covers basic security checks (~20% of total
+                vulnerabilities). 
+                For comprehensive protection, upgrade to our Deep Scan.
+              </p>
+
+              {/* Comparison Section */}
+              <div className="grid grid-cols-3 gap-4 text-sm">
+                <div className="font-medium text-gray-300">Testing Features</div>
+                <div className="font-medium text-gray-400 text-center">
+                  Free Scan
+                </div>
+                <div className="font-medium text-blue-400 text-center">
+                  Deep Scan
+                </div>
+
+                {[
+                  {
+                    feature: "Basic Vulnerability Detection",
+                    free: true,
+                    deep: true,
+                  },
+                  {
+                    feature: "Common Configuration Issues",
+                    free: true,
+                    deep: true,
+                  },
+                  {
+                    feature: "Version-based Detection",
+                    free: true,
+                    deep: true,
+                  },
+                  {
+                    feature: "SQL Injection Testing",
+                    free: false,
+                    deep: true,
+                  },
+                  {
+                    feature: "XSS (Cross-Site Scripting)",
+                    free: false,
+                    deep: true,
+                  },
+                  {
+                    feature: "Authentication Testing",
+                    free: false,
+                    deep: true,
+                  },
+                  {
+                    feature: "Directory Traversal",
+                    free: false,
+                    deep: true,
+                  },
+                  {
+                    feature: "Server-Side Request Forgery",
+                    free: false,
+                    deep: true,
+                  },
+                  {
+                    feature: "Remote Code Execution",
+                    free: false,
+                    deep: true,
+                  },
+                  {
+                    feature: "Advanced Security Headers",
+                    free: false,
+                    deep: true,
+                  },
+                ].map((item, i) => (
+                  <React.Fragment key={i}>
+                    <div className="py-2 text-gray-300">{item.feature}</div>
+                    <div className="flex justify-center py-2">
+                      {item.free ? (
+                        <Check className="h-5 w-5 text-green-500" />
+                      ) : (
+                        <X className="h-5 w-5 text-red-500" />
+                      )}
+                    </div>
+                    <div className="flex justify-center py-2">
+                      <Check className="h-5 w-5 text-green-500" />
+                    </div>
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <div className="mt-8 flex justify-center">
+                <a
+                  href="https://virtuestech.com/contact"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium"
+                >
+                  <Shield className="h-4 w-4" />
+                  Upgrade to Deep Scan
+                </a>
+              </div>
+            </div>
           </div>
         </div>
       </section>
