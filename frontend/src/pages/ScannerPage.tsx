@@ -8,9 +8,6 @@ import Scanner from "@/components/Scanner";
 import Results from "@/components/Results";
 import scannerBg from '@/components/assets/gif.webm';
 import virtuesLogo from '@/components/assets/virtuesTech_Logo.png';
-import { Card, CardContent } from "@/components/ui/card";
-import { AlertTriangle } from "lucide-react";
-
 interface ScanStats {
   high: number;
   medium: number;

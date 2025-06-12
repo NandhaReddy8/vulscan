@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Loader, StopCircle, Check, X, Shield, AlertTriangle } from "lucide-react";
+import { Loader, StopCircle } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Card, CardContent } from "@/components/ui/card";
 
 interface ScannerProps {
   onScanSubmit: (url: string, recaptchaToken: string) => void;
@@ -105,6 +104,10 @@ const Scanner: React.FC<ScannerProps> = ({
     // Proceed with the scan
     const fullUrl = `${protocol}${url}`;
     onScanSubmit(fullUrl, recaptchaToken);
+
+    // Clear input and reset protocol immediately after scan starts
+    setUrl("");
+    setProtocol("https://");
   };
 
   // Don't render if no reCAPTCHA site key is configured

@@ -14,7 +14,6 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
   onSubmit,
   isLoading,
   isRateLimited,
-  retryAfter,
   error: externalError
 }) => {
   const [ip, setIp] = useState("");
