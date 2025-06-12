@@ -32,7 +32,8 @@ const Scanner: React.FC<ScannerProps> = ({
   // Reset form when scan completes
   useEffect(() => {
     if (!isLoading) {
-      // Don't reset URL as it's needed for report requests
+      // Strip any protocol from the URL when scan completes
+      setUrl(url.replace(/^https?:\/\//, ''));
       setError(null);
       setRecaptchaToken(null);
       // Reset reCAPTCHA
@@ -40,7 +41,7 @@ const Scanner: React.FC<ScannerProps> = ({
         recaptchaRef.current.reset();
       }
     }
-  }, [isLoading, setUrl]);
+  }, [isLoading, url, setUrl]);
 
   // Validate input whenever it changes
   useEffect(() => {
@@ -69,10 +70,9 @@ const Scanner: React.FC<ScannerProps> = ({
   };
 
   const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const input = e.target.value;
-    // Remove any protocol prefix if present
-    const cleanUrl = input.replace(/^https?:\/\//, '');
-    setUrl(cleanUrl);
+    // Always strip protocol from input
+    const input = e.target.value.replace(/^https?:\/\//, '');
+    setUrl(input);
   };
 
   const handleRecaptchaChange = (token: string | null) => {
@@ -101,13 +101,9 @@ const Scanner: React.FC<ScannerProps> = ({
       return;
     }
 
-    // Proceed with the scan
+    // Combine protocol and url for submission
     const fullUrl = `${protocol}${url}`;
     onScanSubmit(fullUrl, recaptchaToken);
-
-    // Clear input and reset protocol immediately after scan starts
-    setUrl("");
-    setProtocol("https://");
   };
 
   // Don't render if no reCAPTCHA site key is configured
