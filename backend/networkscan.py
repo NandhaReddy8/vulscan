@@ -479,15 +479,30 @@ def validate_target(target: str) -> Tuple[bool, str, Optional[str]]:
 def start_network_scan(target: str, requester_ip: str) -> Tuple[bool, str, Optional[str]]:
     """Start a new network scan with proper request deduplication."""
     logger.debug(f"Starting network scan for target: {target} from {requester_ip}")
-    
+
     # Just validate and strip protocol
     is_valid, message, clean_target = validate_target(target)
     if not is_valid:
         return False, message, None
-        
+
     # Use the cleaned target directly
     target_address = clean_target if clean_target else target
-    
+
+    # Check if it's an IP address
+    try:
+        ip_obj = ipaddress.ip_address(target_address)
+        if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_reserved:
+            return False, "Scanning private, loopback, or reserved IP addresses is not allowed.", None
+    except ValueError:
+        # Not an IP, try to resolve as domain
+        try:
+            resolved_ip = socket.gethostbyname(target_address)
+            ip_obj = ipaddress.ip_address(resolved_ip)
+            if ip_obj.is_private or ip_obj.is_loopback or ip_obj.is_reserved:
+                return False, "Domain resolves to a private, loopback, or reserved IP address. Only public IPs are allowed.", None
+        except Exception:
+            return False, "Invalid target: cannot resolve domain to IP address.", None
+
     # Check for duplicate requests
     with request_lock:
         cache_key = f"{target_address}:{requester_ip}"

@@ -50,33 +50,47 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
     if (!input.trim()) {
       return "Please enter an IP address or domain name";
     }
-    
-    // Remove any protocol prefix if present
-    input = input.replace('http://', '').replace('https://', '').trim();
-    
+
+    // Remove protocol prefix
+    input = input.replace(/^https?:\/\//, '').trim();
+
+    // Block localhost
+    if (input.toLowerCase() === "localhost") {
+      return "Scanning localhost is not allowed.";
+    }
+
     // Check if it's a domain name
     const domainRegex = /^([a-zA-Z0-9]([a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+[a-zA-Z]{2,}$/;
     if (domainRegex.test(input)) {
-      return null; // Valid domain name
+      return null; // Valid domain name (let backend resolve if it's public)
     }
-    
+
     // Check if it's an IP address
     const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
     if (!ipRegex.test(input)) {
       return "Please enter a valid IP address (e.g., 8.8.8.8) or domain name (e.g., example.com)";
     }
-    
+
     // Validate each octet
-    const octets = input.split('.');
-    const isValid = octets.every(octet => {
-      const num = parseInt(octet);
-      return num >= 0 && num <= 255;
-    });
-    
-    if (!isValid) {
+    const octets = input.split('.').map(Number);
+    if (octets.some(num => num < 0 || num > 255)) {
       return "Each number in the IP address must be between 0 and 255";
     }
-    
+
+    // Block private, loopback, reserved IPs
+    if (
+      octets[0] === 10 ||
+      (octets[0] === 192 && octets[1] === 168) ||
+      (octets[0] === 172 && octets[1] >= 16 && octets[1] <= 31) ||
+      octets[0] === 127 ||
+      octets[0] === 169 ||
+      octets[0] === 0 ||
+      octets[0] === 100 ||
+      octets[0] === 198
+    ) {
+      return "Scanning private, loopback, or reserved IP addresses is not allowed.";
+    }
+
     return null;
   };
 
@@ -205,4 +219,4 @@ const NetworkScannerForm: React.FC<NetworkScannerFormProps> = ({
   );
 };
 
-export default NetworkScannerForm; 
+export default NetworkScannerForm;
