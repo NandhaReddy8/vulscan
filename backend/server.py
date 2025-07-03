@@ -907,3 +907,11 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"[ERROR] Failed to start server: {str(e)}")
         raise
+
+@app.after_request
+def set_security_headers(response):
+    response.headers["X-Frame-Options"] = "DENY"
+    # Only set HSTS if running over HTTPS
+    if request.is_secure:
+        response.headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains; preload"
+    return response
