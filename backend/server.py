@@ -911,6 +911,7 @@ if __name__ == "__main__":
 @app.after_request
 def set_security_headers(response):
     response.headers["X-Frame-Options"] = "DENY"
+    response.headers["Content-Security-Policy"] = "frame-ancestors 'none';"
     # Only set HSTS if running over HTTPS
     if request.is_secure:
         response.headers["Strict-Transport-Security"] = "max-age=63072000; includeSubDomains; preload"
