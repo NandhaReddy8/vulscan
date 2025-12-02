@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# PostgreSQL Configuration
+# test PostgreSQL Configuration
 DB_NAME="webscanner"
-DB_USER="postgres"
-DB_PASSWORD="admin"
+DB_USER="postgres" #db user
+DB_PASSWORD="admin" #your password
 DB_HOST="localhost"
-DB_PORT="5432"
+DB_PORT="5432" #change this port
 TABLE_NAME="scan_requests"
 
 # Export password for non-interactive authentication
